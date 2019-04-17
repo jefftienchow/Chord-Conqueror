@@ -1,3 +1,8 @@
+from kivy.graphics import Color, Rectangle
+
+
+color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
+
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class Player(object):
@@ -15,6 +20,7 @@ class Player(object):
         self.done = False
         self.max_streak = 0
         self.hits = 0
+        self.chords = {}
 
     def get_score(self):
         return self.score
@@ -38,12 +44,12 @@ class Player(object):
         return self.hits * 100 /len(self.gem_data)
 
     # called by MainWidget
-    def on_button_down(self, lane):
-        self.display.on_button_down(lane, None)
+    def on_button_down(self, chord):
+        self.display.on_button_down(color_mapping[chord + 1], None)
         if self.idx < len(self.gem_data):
             if self.time >= self.gem_data[self.idx][0] - self.interval and self.time <= self.gem_data[self.idx][0] + self.interval:
                 # a correct note is hit
-                if lane + 1 == self.gem_data[self.idx][1]:
+                if chord + 1 == self.gem_data[self.idx][1]:
                     self.display.gem_hit(self.idx)
                     self.controller.set_mute(False)
                     self.idx += 1
@@ -77,8 +83,8 @@ class Player(object):
         self.streak = 0
 
     # called by MainWidget
-    def on_button_up(self, lane):
-        self.display.on_button_up(lane)
+    def on_button_up(self):
+        self.display.on_button_up()
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
@@ -93,3 +99,41 @@ class Player(object):
             self.idx += 1
             self.controller.set_mute(True)
             self.deduct()
+
+    def generate_chord(self, root, quality, seventh):
+        notes = [root, root + 7]
+        if quality == "Maj":
+            notes.append(root + 4)
+            if seventh:
+                notes.append(root + 11)
+        if quality == "min":
+            notes.append(root + 3)
+            if seventh:
+                notes.append(root + 10)
+        if quality == "Dom":
+            notes.append(root + 4)
+            if seventh:
+                notes.append(root + 10)
+
+        name = quality + str(root)
+        if seventh:
+            name += "sev"
+        self.chords[name] = notes
+
+    def detect_chord(self, notes):
+        for chord in self.chords:
+            chord_matched = True
+            for correct_note in chord:
+                match = False
+                for cur_note in notes:
+                    if correct_note % 12 == cur_note % 12:
+                        match = True
+                        break
+                if not match:
+                    chord_matched = False
+            if chord_matched:
+                return chord
+        return None
+
+
+

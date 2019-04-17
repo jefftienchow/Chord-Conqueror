@@ -17,6 +17,7 @@ class Note(InstructionGroup):
         self.add(self.color)
         # adds a translation and rotation and another translation to the note
         self.add(PushMatrix())
+
         self.translate = Translate(*self.pos)
         self.add(self.translate)
 

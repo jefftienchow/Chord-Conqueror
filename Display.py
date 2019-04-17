@@ -37,16 +37,13 @@ class BeatMatchDisplay(InstructionGroup):
         self.add(self.nowbar)
 
         # creates buttons
-        self.buttons = []
-        for i in range(1,6):
-            color = Color(*color_mapping[i])
-            color.a = .5
-            pos = (100*i, nowbar_height)
+        color = Color(1,1,1)
+        color.a = .5
+        pos = (100, nowbar_height)
 
-            button = ButtonDisplay(pos,color)
+        self.button = ButtonDisplay(pos,color)
 
-            self.add(button)
-            self.buttons.append(button)
+        self.add(self.button)
 
     def reset(self):
         for gem in self.gems:
@@ -61,12 +58,12 @@ class BeatMatchDisplay(InstructionGroup):
         self.gems[gem_idx].on_pass()
 
     # called by Player. Causes the right thing to happen
-    def on_button_down(self, lane, hit):
-        self.buttons[lane].on_down(hit)
+    def on_button_down(self, color, hit):
+        self.button.on_down(color, hit)
 
     # called by Player. Causes the right thing to happen
-    def on_button_up(self, lane):
-        self.buttons[lane].on_up()
+    def on_button_up(self):
+        self.button.on_up()
 
     # call every frame to make gems and barlines flow down the screen
     def on_update(self, time):
@@ -113,9 +110,9 @@ class GemDisplay(InstructionGroup):
         self.color.a = .7
         self.add(self.color)
 
-        self.xpos = self.type * 100
+        self.xpos = 100
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (50, 10))
+        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (600, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -151,7 +148,6 @@ class GemDisplay(InstructionGroup):
         for note in self.notes:
             note.on_update(dt)
 
-
 # Displays one button on the nowbar
 class ButtonDisplay(InstructionGroup):
     def __init__(self, pos, color):
@@ -159,14 +155,13 @@ class ButtonDisplay(InstructionGroup):
         self.color = color
         self.pos = pos
         self.add(color)
-        self.button = Rectangle(pos=pos, size=(50, 20))
+        self.button = Rectangle(pos=pos, size=(600, 20))
         self.add(self.button)
 
     # displays when button is down (and if it hit a gem)
-    def on_down(self, hit):
-        self.color.a = 1
-
+    def on_down(self, color, hit):
+        self.color.rgb = color
 
     # back to normal state
     def on_up(self):
-        self.color.a = .5
+        self.color.rgb = (1,1,1)

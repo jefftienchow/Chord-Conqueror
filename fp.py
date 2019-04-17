@@ -62,7 +62,7 @@ class MainWidget(BaseWidget) :
         # button up
         button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
         if button_idx is not None:
-            self.player.on_button_up(button_idx)
+            self.player.on_button_up()
 
     def on_update(self) :
         frame = self.controller.on_update()
@@ -89,9 +89,5 @@ class MainWidget(BaseWidget) :
 
             self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
             self.label.text += "Press \"R\" to restart"
-
-
-
-
 
 run(MainWidget)
