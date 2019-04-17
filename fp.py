@@ -1,5 +1,8 @@
 #fp.py
 
+from common.core import *
+from common.gfxutil import *
+
 from Audio import AudioController
 from Display import *
 from Player import Player
