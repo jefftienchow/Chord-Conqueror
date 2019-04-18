@@ -1,8 +1,4 @@
-#!/usr/bin/env python
-#
-# test_midiin_poll.py
-#
-"""Show how to receive MIDI input by polling an input port."""
+"""REMEMBER TO INSTALL THE PACKAGE WITH pip install python-rtmidi"""
 
 from __future__ import print_function
 
