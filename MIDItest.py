@@ -16,7 +16,7 @@ class MainWidget(BaseWidget) :
     def __init__(self):
         super(MainWidget, self).__init__()
         #creates MIDI listener object
-        self.MIDI = MIDIInput(1)
+        self.MIDI = MIDIInput()
 
         self.label = topleft_label()
         self.add_widget(self.label)

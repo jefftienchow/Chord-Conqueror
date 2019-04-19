@@ -9,14 +9,12 @@ import time
 from rtmidi.midiutil import open_midiinput
 
 class MIDIInput(object):
-    def __init__(self, port = 0):
-
+    def __init__(self,  callback = print):
+        self.callback = callback
         self.last_note = 0
         self.current_notes = set()
-
-
         try:
-            self.midiin, port_name = open_midiinput(port)
+            self.midiin, port_name = open_midiinput(0)
         except:
             sys.exit()
 
@@ -33,12 +31,18 @@ class MIDIInput(object):
                 timer += deltatime
 
                 #separate message into Note and velocity
+                note_on = message[0] == 144
                 midiNote = message[1]
                 velocity = message[2]
-                print(midiNote, velocity)
-                if velocity != 0:
+
+                print(message)
+
+                #means a note is actually being played, so we want to add to active notes
+                if note_on:
                     self.current_notes.add(midiNote)
                     self.last_note = midiNote
+                    self.callback(str(self.last_note))
+                #note not being played, so don't add/remove from active notes
                 else:
                     if midiNote in self.current_notes:
                         self.current_notes.remove(midiNote)
