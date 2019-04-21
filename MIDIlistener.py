@@ -35,7 +35,7 @@ class MIDIInput(object):
                 midiNote = message[1]
                 velocity = message[2]
 
-                print(message)
+                #print(message)
 
                 #means a note is actually being played, so we want to add to active notes
                 if note_on:
