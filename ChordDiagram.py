@@ -22,16 +22,34 @@ class MainWidget(BaseWidget) :
     def __init__(self):
         super(MainWidget, self).__init__()
 
-        self.diagram = ChordDiagram()
-        self.canvas.add(self.diagram)
+
+        chords=['G','C','D', [-1,2,4,2,3,2]]
+        for index, chord in enumerate(chords):
+        	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
 
     def on_update(self):
     	pass
 
 
-class ChordDiagram(InstructionGroup):
+class Mute(InstructionGroup):
+	def __init__(self, size=20, pos=(100,100), color=Color(50/255,1,0)):
+		super(Mute, self).__init__()
+		x1 = pos[0] - size/2
+		x2 = pos[0] + size/2
+		y1 = pos[1] - size/2
+		y2 = pos[1] + size/2
+		self.x = InstructionGroup()
+		self.x.add(color)
+		line1 = Line(points=[x1,y2,x2,y1], width=size*.15, cap='square')
+		line2 = Line(points=[x1,y1,x2,y2], width=size*.15, cap='square')
+		self.x.add(line1)
+		self.x.add(line2)
+		self.add(self.x)
 
+
+class ChordDiagram(InstructionGroup):
 	Chords = {'G':[3,2,0,0,0,3],
+			'A':[-1,0,2,2,2,0],
 			'am':[-1,0,2,2,1,0],
 			'bm':[-1,2,4,4,3,2],
 			'C':[-1,3,2,0,1,0],
@@ -39,7 +57,7 @@ class ChordDiagram(InstructionGroup):
 			'D7':[-1,-1,0,2,1,2],
 			'em':[0,2,2,0,0,0]}
 
-	def __init__(self, size=400, pos=(100,100), chord='em'):
+	def __init__(self, size=400, pos=(100,100), chord='G'):
 		super(ChordDiagram, self).__init__()
 		self.size = size
 		self.x, self.y = pos
@@ -104,21 +122,31 @@ class ChordDiagram(InstructionGroup):
 		self.add(nut)
 
 		# chord fingering
-		indices = self.Chords[chord]
+		# if chord is hard-coded, get the frets from the dict.  else, use the passed-in list of frets
+		try:
+			indices = self.Chords[chord]
+		except:
+			indices = chord
+
 		for index, fret in enumerate(indices):
-			
-			# TO DO: handle muted strings
-			if fret == -1:
-				pass
 			
 			finger = InstructionGroup()
 			finger.add(Color(50/255,1,0))
-			dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
-			finger.add(dot)
+			# TO DO: handle muted strings
+			if fret == -1:
+				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]))
+				finger.add(x)
+			else:
+				dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
+				finger.add(dot)
 			self.add(finger)
 
-
-
-
+		# border
+		border = InstructionGroup()
+		border.add(Color(1,1,1))
+		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
+							 width=self.size/100, joint='miter', close=True)
+		border.add(line)
+		self.add(border)
 
 run(MainWidget)
