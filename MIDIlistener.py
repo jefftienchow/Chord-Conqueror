@@ -31,7 +31,7 @@ class MIDIInput(object):
                 timer += deltatime
 
                 #separate message into Note and velocity
-                note_on = message[0] == 144
+                note_on = message[2] > 0
                 midiNote = message[1]
                 velocity = message[2]
 
