@@ -24,6 +24,11 @@ class Player(object):
         self.chords = {}
         self.cur_notes = []
         self.detecting = False
+        self.time = 0
+
+        self.strumming = False
+        self.strum_time = 0
+        self.hold = False
 
     def get_score(self):
         return self.score
@@ -48,12 +53,19 @@ class Player(object):
 
     def on_strum(self, note):
         #if self.detecting:
-        self.cur_notes.append(note)
-        if len(self.cur_notes) >= 3:
-            chord = self.detect_chord(self.cur_notes)
-            if chord:
-                self.on_button_down(chord)
-                self.cur_notes = []
+        if not self.strumming:
+            self.cur_notes.append(note)
+            self.strum_time = 0
+            self.strumming = True
+            print(note)
+        else:
+            self.cur_notes.append(note)
+            if len(self.cur_notes) >= 4:
+                chord = self.detect_chord(self.cur_notes)
+                if chord:
+                    self.on_button_down(chord)
+                    self.cur_notes = []
+                    self.hold = True
 
     # called by MainWidget
     def on_button_down(self, chord):
@@ -104,6 +116,7 @@ class Player(object):
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
+        dt = time - self.time
         self.time = time
         # done
         if self.idx == len(self.gem_data):
@@ -118,7 +131,19 @@ class Player(object):
 
         if time > self.gem_data[self.idx][0] - self.interval:
             self.detecting = True
+
+        if self.hold:
+            self.strum_time += dt
+
+        if self.strum_time > .2:
+            self.strum_time = 0
+            self.display.on_button_up()
+            self.strumming = False
             self.cur_notes = []
+            self.hold = False
+            print('is this happening')
+
+
 
 
     def add_chord(self, root, quality, seventh):

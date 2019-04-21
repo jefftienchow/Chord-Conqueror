@@ -66,12 +66,12 @@ class MainWidget(BaseWidget) :
 
         print(keycode[1])
 
-
     def on_key_up(self, keycode):
+        pass
         # button up
-        button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
-        if button_idx is not None:
-            self.player.on_button_up()
+        # button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
+        # if button_idx is not None:
+        #     self.player.on_button_up()
 
     def on_update(self) :
         frame = self.controller.on_update()
