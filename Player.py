@@ -25,6 +25,7 @@ class Player(object):
         self.cur_notes = []
         self.detecting = False
         self.time = 0
+        self.hold_time = 0
 
         self.strumming = False
         self.strum_time = 0
@@ -52,7 +53,6 @@ class Player(object):
         return self.hits * 100 /len(self.gem_data)
 
     def on_strum(self, note):
-        #if self.detecting:
         if not self.strumming:
             self.cur_notes.append(note)
             self.strum_time = 0
@@ -64,8 +64,10 @@ class Player(object):
                 chord = self.detect_chord(self.cur_notes)
                 if chord:
                     self.on_button_down(chord)
-                    self.cur_notes = []
                     self.hold = True
+                    self.cur_notes = []
+                    self.hold_time = 0
+
 
     # called by MainWidget
     def on_button_down(self, chord):
@@ -133,14 +135,21 @@ class Player(object):
             self.detecting = True
 
         if self.hold:
+            self.hold_time += dt
+
+        if self.strumming:
             self.strum_time += dt
 
         if self.strum_time > .2:
             self.strum_time = 0
-            self.display.on_button_up()
             self.strumming = False
             self.cur_notes = []
+
+        if self.hold_time > .2:
             self.hold = False
+            self.display.on_button_up()
+            self.hold_time = 0
+
             print('is this happening')
 
 
@@ -167,11 +176,13 @@ class Player(object):
         self.chords[name] = notes
 
     def detect_chord(self, notes):
+        print(self.chords)
+        print(notes)
         for chord in self.chords:
             chord_matched = True
-            for correct_note in self.chords[chord]:
+            for cur_note in notes:
                 match = False
-                for cur_note in notes:
+                for correct_note in self.chords[chord]:
                     if int(correct_note) % 12 == int(cur_note) % 12:
                         match = True
                         break

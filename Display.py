@@ -24,6 +24,9 @@ class BeatMatchDisplay(InstructionGroup):
             self.gems.append(gem)
             self.add(gem)
 
+
+
+
         # creates bars
         self.bars = []
         for bar_info in self.bar_data:
