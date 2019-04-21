@@ -7,6 +7,7 @@ from Audio import AudioController
 from Display import *
 from Player import Player
 from SongData import SongData
+from MIDIlistener import MIDIInput
 
 vel = 200
 nowbar_height = 100
@@ -27,6 +28,14 @@ class MainWidget(BaseWidget) :
         self.canvas.add(self.display)
 
         self.player = Player(self.data, self.display, self.controller)
+        self.player.add_chord(60,"Maj", False)
+        self.player.add_chord(62,"min", False)
+        self.player.add_chord(64,"min", False)
+        self.player.add_chord(65,"Maj", False)
+        self.player.add_chord(67,"Maj", False)
+
+        self.midi = MIDIInput(self.player.on_strum)
+
         self.time = 0
 
         self.label = topleft_label()
@@ -57,18 +66,19 @@ class MainWidget(BaseWidget) :
 
         print(keycode[1])
 
-
     def on_key_up(self, keycode):
+        pass
         # button up
-        button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
-        if button_idx is not None:
-            self.player.on_button_up()
+        # button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
+        # if button_idx is not None:
+        #     self.player.on_button_up()
 
     def on_update(self) :
         frame = self.controller.on_update()
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
+        self.midi.on_update()
 
         if not self.player.get_done():
             self.label.text = "Press \"P\" to "

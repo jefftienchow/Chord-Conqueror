@@ -31,11 +31,11 @@ class MIDIInput(object):
                 timer += deltatime
 
                 #separate message into Note and velocity
-                note_on = message[0] == 144
+                note_on = message[2] > 0
                 midiNote = message[1]
                 velocity = message[2]
 
-                print(message)
+                #print(message)
 
                 #means a note is actually being played, so we want to add to active notes
                 if note_on:

@@ -2,6 +2,7 @@ from kivy.graphics import Color, Rectangle
 
 
 color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
+chord_mapping = {"60Maj": 0, "62min": 1, "64min": 2, "65Maj": 3, "67Maj": 4}
 
 # Handles game logic and keeps score.
 # Controls the display and the audio
@@ -14,13 +15,21 @@ class Player(object):
         self.controller = audio_ctrl
 
         self.idx = 0
-        self.interval = .1
+        self.interval = .2
         self.score = 0
         self.streak = 0
         self.done = False
         self.max_streak = 0
         self.hits = 0
         self.chords = {}
+        self.cur_notes = []
+        self.detecting = False
+        self.time = 0
+        self.hold_time = 0
+
+        self.strumming = False
+        self.strum_time = 0
+        self.hold = False
 
     def get_score(self):
         return self.score
@@ -43,8 +52,27 @@ class Player(object):
     def get_accuracy(self):
         return self.hits * 100 /len(self.gem_data)
 
+    def on_strum(self, note):
+        if not self.strumming:
+            self.cur_notes.append(note)
+            self.strum_time = 0
+            self.strumming = True
+            print(note)
+        else:
+            self.cur_notes.append(note)
+            if len(self.cur_notes) >= 4:
+                chord = self.detect_chord(self.cur_notes)
+                if chord:
+                    self.on_button_down(chord)
+                    self.hold = True
+                    self.cur_notes = []
+                    self.hold_time = 0
+
+
     # called by MainWidget
     def on_button_down(self, chord):
+        print(chord)
+        chord = chord_mapping[chord]
         self.display.on_button_down(color_mapping[chord + 1], None)
         if self.idx < len(self.gem_data):
             if self.time >= self.gem_data[self.idx][0] - self.interval and self.time <= self.gem_data[self.idx][0] + self.interval:
@@ -73,6 +101,7 @@ class Player(object):
                 self.controller.set_mute(True)
                 self.deduct()
 
+
         # end of gems
         elif self.idx == len(self.gem_data):
             self.done = True
@@ -81,6 +110,7 @@ class Player(object):
         if self.score >= 50:
             self.score -= 50
         self.streak = 0
+        self.detecting = False
 
     # called by MainWidget
     def on_button_up(self):
@@ -88,6 +118,7 @@ class Player(object):
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
+        dt = time - self.time
         self.time = time
         # done
         if self.idx == len(self.gem_data):
@@ -100,7 +131,31 @@ class Player(object):
             self.controller.set_mute(True)
             self.deduct()
 
-    def generate_chord(self, root, quality, seventh):
+        if time > self.gem_data[self.idx][0] - self.interval:
+            self.detecting = True
+
+        if self.hold:
+            self.hold_time += dt
+
+        if self.strumming:
+            self.strum_time += dt
+
+        if self.strum_time > .2:
+            self.strum_time = 0
+            self.strumming = False
+            self.cur_notes = []
+
+        if self.hold_time > .2:
+            self.hold = False
+            self.display.on_button_up()
+            self.hold_time = 0
+
+            print('is this happening')
+
+
+
+
+    def add_chord(self, root, quality, seventh):
         notes = [root, root + 7]
         if quality == "Maj":
             notes.append(root + 4)
@@ -115,18 +170,20 @@ class Player(object):
             if seventh:
                 notes.append(root + 10)
 
-        name = quality + str(root)
+        name = str(root) + quality
         if seventh:
             name += "sev"
         self.chords[name] = notes
 
     def detect_chord(self, notes):
+        print(self.chords)
+        print(notes)
         for chord in self.chords:
             chord_matched = True
-            for correct_note in chord:
+            for cur_note in notes:
                 match = False
-                for cur_note in notes:
-                    if correct_note % 12 == cur_note % 12:
+                for correct_note in self.chords[chord]:
+                    if int(correct_note) % 12 == int(cur_note) % 12:
                         match = True
                         break
                 if not match:
@@ -134,6 +191,3 @@ class Player(object):
             if chord_matched:
                 return chord
         return None
-
-
-
