@@ -112,7 +112,7 @@ class GemDisplay(InstructionGroup):
 
         self.xpos = 100
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (600, 10))
+        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (400, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -155,7 +155,7 @@ class ButtonDisplay(InstructionGroup):
         self.color = color
         self.pos = pos
         self.add(color)
-        self.button = Rectangle(pos=pos, size=(600, 20))
+        self.button = Rectangle(pos=pos, size=(400, 20))
         self.add(self.button)
 
     # displays when button is down (and if it hit a gem)
