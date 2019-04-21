@@ -30,6 +30,10 @@ class MIDIInput(object):
                 message, deltatime = msg
                 timer += deltatime
 
+                #ignore exception message to avoid crash
+                if len(message) < 3:
+                    print("CRASH AVERTED")
+                    return
                 #separate message into Note and velocity
                 note_on = message[2] > 0
                 midiNote = message[1]
