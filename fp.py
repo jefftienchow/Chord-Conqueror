@@ -11,28 +11,34 @@ from MIDIlistener import MIDIInput
 
 vel = 200
 nowbar_height = 100
-color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
+colors = [(1,0,0), (1,1,0), (0,1,0), (0,1,1), (0,0,1)]
 
-class MainWidget(BaseWidget) :
+class MainWidget(BaseWidget):
     def __init__(self):
         super(MainWidget, self).__init__()
         self.playing = False
         self.started = False
 
-        self.data = SongData("annotations/annotation.txt", "annotations/barlines_beginning.txt")
+        self.data = SongData("annotations/BrownEyedGirlAnnotationFull.txt")
 
-        self.controller = AudioController("music/KillerQueen",self.data)
+        self.controller = AudioController("music/BrownEyedGirl", self.data)
 
-        self.display = BeatMatchDisplay(self.data)
 
+
+        self.color_mapping = {}
+        chords = self.data.get_chords()
+        for i in range(len(chords)):
+            self.color_mapping[chords[i]] = colors[i]
+
+
+        self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.canvas.add(self.display)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
 
-        self.player = Player(self.data, self.display, self.controller)
-        self.player.add_chord(60,"Maj", False)
-        self.player.add_chord(62,"min", False)
-        self.player.add_chord(64,"min", False)
-        self.player.add_chord(65,"Maj", False)
-        self.player.add_chord(67,"Maj", False)
+
+
+        for chord in chords:
+            self.player.add_chord(chord)
 
         self.midi = MIDIInput(self.player.on_strum)
 
@@ -59,19 +65,10 @@ class MainWidget(BaseWidget) :
         if keycode[1] == 'm':
             self.controller.set_mute(True)
 
-        # button down
-        button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
-        if button_idx is not None:
-            self.player.on_button_down(button_idx)
-
         print(keycode[1])
 
     def on_key_up(self, keycode):
         pass
-        # button up
-        # button_idx = lookup(keycode[1], '12345', (0,1,2,3,4))
-        # if button_idx is not None:
-        #     self.player.on_button_up()
 
     def on_update(self) :
         frame = self.controller.on_update()

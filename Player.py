@@ -1,13 +1,14 @@
 from kivy.graphics import Color, Rectangle
 
 
-color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
-chord_mapping = {"60Maj": 0, "62min": 1, "64min": 2, "65Maj": 3, "67Maj": 4}
+#chord_to_index = {"C": 0, "D": 1, "D7": 2, "e": 3, "G": 4}
+
+name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
 
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class Player(object):
-    def __init__(self, data, display, audio_ctrl):
+    def __init__(self, data, display, audio_ctrl, color_mapping):
         super(Player, self).__init__()
         self.gem_data = data.get_gems()
 
@@ -30,6 +31,11 @@ class Player(object):
         self.strumming = False
         self.strum_time = 0
         self.hold = False
+
+        self.color_mapping = color_mapping
+
+
+
 
     def get_score(self):
         return self.score
@@ -72,12 +78,11 @@ class Player(object):
     # called by MainWidget
     def on_button_down(self, chord):
         print(chord)
-        chord = chord_mapping[chord]
-        self.display.on_button_down(color_mapping[chord + 1], None)
+        self.display.on_button_down(self.color_mapping[chord], None)
         if self.idx < len(self.gem_data):
             if self.time >= self.gem_data[self.idx][0] - self.interval and self.time <= self.gem_data[self.idx][0] + self.interval:
                 # a correct note is hit
-                if chord + 1 == self.gem_data[self.idx][1]:
+                if chord == self.gem_data[self.idx][1]:
                     self.display.gem_hit(self.idx)
                     self.controller.set_mute(False)
                     self.idx += 1
@@ -155,7 +160,23 @@ class Player(object):
 
 
 
-    def add_chord(self, root, quality, seventh):
+    def add_chord(self, chord):
+        if chord[0].islower():
+            root = name_to_midi[chord[0]]
+            quality = "min"
+            if len(chord) == 3:
+                seventh = True
+            else:
+                seventh = False
+        else:
+            root = name_to_midi[chord[0].lower()]
+            quality = "Maj"
+            if len(chord) == 2:
+                seventh = True
+            else:
+                seventh = False
+
+
         notes = [root, root + 7]
         if quality == "Maj":
             notes.append(root + 4)
@@ -170,10 +191,7 @@ class Player(object):
             if seventh:
                 notes.append(root + 10)
 
-        name = str(root) + quality
-        if seventh:
-            name += "sev"
-        self.chords[name] = notes
+        self.chords[chord] = notes
 
     def detect_chord(self, notes):
         print(self.chords)

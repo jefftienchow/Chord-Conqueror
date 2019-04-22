@@ -18,17 +18,17 @@ import random
 import numpy as np
 import bisect
 
-class MainWidget(BaseWidget) :
-    def __init__(self):
-        super(MainWidget, self).__init__()
-
-
-        chords=['G','C','D', [-1,2,4,2,3,2]]
-        for index, chord in enumerate(chords):
-        	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
-
-    def on_update(self):
-    	pass
+# class MainWidget(BaseWidget) :
+#     def __init__(self):
+#         super(MainWidget, self).__init__()
+#
+#
+#         chords=['G','C','D', [-1,2,4,2,3,2]]
+#         for index, chord in enumerate(chords):
+#         	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
+#
+#     def on_update(self):
+#     	pass
 
 
 class Mute(InstructionGroup):
@@ -149,4 +149,4 @@ class ChordDiagram(InstructionGroup):
 		border.add(line)
 		self.add(border)
 
-run(MainWidget)
+# run(MainWidget)

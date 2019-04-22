@@ -2,30 +2,42 @@ from kivy.graphics import Color, Rectangle
 from kivy.graphics.instructions import InstructionGroup
 
 from Note import Note
+from ChordDiagram import ChordDiagram
 
 vel = 200
 nowbar_height = 100
-color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
 class BeatMatchDisplay(InstructionGroup):
-    def __init__(self, data):
+    def __init__(self, data, color_mapping):
         super(BeatMatchDisplay, self).__init__()
+
+        self.color_mapping = color_mapping
+
         self.gem_data = data.get_gems()
         self.bar_data = data.get_bars()
 
         self.time = 0
 
+
+        self.diagrams = []
         # creates gems
         self.gems = []
+        cur_chord = None
+        cur_display = None
         for gem_info in self.gem_data:
-            gem = GemDisplay(gem_info)
+            gem = GemDisplay(gem_info, self.color_mapping)
             self.gems.append(gem)
             self.add(gem)
-
-
-
+            
+            if cur_chord != gem_info[1]:
+                if cur_display:
+                    cur_display.set_next(gem_info[0])
+                cur_chord = gem_info[1]
+                cur_display = ChordDisplay(gem_info[1], gem_info[0])
+                self.diagrams.append(cur_display)
+                self.add(cur_display)
 
         # creates bars
         self.bars = []
@@ -74,6 +86,8 @@ class BeatMatchDisplay(InstructionGroup):
             gem.on_update(time)
         for bar in self.bars:
             bar.on_update(time)
+        for diagram in self.diagrams:
+            diagram.on_update(time)
 
 # display for a single gem at a position with a color (if desired)
 class BarDisplay(InstructionGroup):
@@ -101,9 +115,34 @@ class BarDisplay(InstructionGroup):
 
         self.bar.pos = (0, self.ypos)
 
+class ChordDisplay(InstructionGroup):
+    def __init__(self, chord, time_loc):
+        super(ChordDisplay, self).__init__()
+        self.chord = chord
+        self.time = 0
+        self.time_loc = time_loc
+        self.next_time = None
+
+        self.ypos = nowbar_height + (self.time_loc - self.time) * vel
+
+        self.box = ChordDiagram(80, (700, self.ypos), chord)
+        self.add(self.box)
+
+        self.vel = vel
+        
+    def set_next(self, next_time):
+        self.next_time = next_time
+
+    def on_update(self, time):
+        self.time = time
+
+        self.ypos = nowbar_height + (self.time_loc - time) * vel
+        
+        self.box.pos = (0, self.ypos)
+
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):
-    def __init__(self, data):
+    def __init__(self, data, color_mapping):
         super(GemDisplay, self).__init__()
         self.time = 0
         self.type = data[1]

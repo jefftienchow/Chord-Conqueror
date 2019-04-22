@@ -1,15 +1,24 @@
 # holds data for gems and barlines.
 class SongData(object):
-    def __init__(self, gem_annotation, bar_annotation):
+    def __init__(self, gem_annotation):
         super(SongData, self).__init__()
-        self.gems = self.read_gems(gem_annotation)
-        self.bars = self.read_bars(bar_annotation)
+        self.chords = []
+        self.bars = []
+        self.gems = []
+
+        self.read_gems(gem_annotation)
+        print(self.chords)
+        print(self.bars)
+        print(self.gems)
 
     def get_gems(self):
         return self.gems
 
     def get_bars(self):
         return self.bars
+
+    def get_chords(self):
+        return self.chords
 
     def lines_from_file(self,filepath):
         with open(filepath) as file:
@@ -23,17 +32,21 @@ class SongData(object):
     # read the gems and song data. You may want to add a secondary filepath
     # argument if your barline data is stored in a different txt file.
     def read_gems(self, filename):
-        gems = []
         lines = self.lines_from_file(filename)
-        for line in lines:
-            tokens = self.tokens_from_line(line)
-            gems.append((float(tokens[0]), int(tokens[1])))
-        return gems
 
-    def read_bars(self,filename):
-        bars = []
-        lines = self.lines_from_file(filename)
         for line in lines:
             tokens = self.tokens_from_line(line)
-            bars.append(float(tokens[0]))
-        return bars
+            if tokens[1] == "1":
+                self.bars.append(float(tokens[0]))
+            else:
+                self.gems.append((float(tokens[0]), tokens[1]))
+                if tokens[1] not in self.chords:
+                    self.chords.append(tokens[1])
+
+    # def read_bars(self,filename):
+    #     bars = []
+    #     lines = self.lines_from_file(filename)
+    #     for line in lines:
+    #         tokens = self.tokens_from_line(line)
+    #         bars.append(float(tokens[0]))
+    #     return bars

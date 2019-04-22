@@ -11,25 +11,20 @@ class AudioController(object):
         super(AudioController, self).__init__()
         self.audio = Audio(2)
         self.mixer = Mixer()
-        self.solo = WaveGenerator(WaveFile(song_name + "_solo.wav"), False)
-        self.bg = WaveGenerator(WaveFile(song_name + "_bg.wav"),False)
-        self.mixer.add(self.solo)
+        self.bg = WaveGenerator(WaveFile(song_name + ".wav"),False)
         self.mixer.add(self.bg)
-
         self.audio.set_generator(self.mixer)
 
     # start / stop the song
     def toggle(self):
-        self.solo.play_toggle()
         self.bg.play_toggle()
 
     def reset(self):
-        self.solo.reset()
         self.bg.reset()
 
     # mute / unmute the solo track
     def set_mute(self, mute):
-        self.solo.set_mute(mute)
+        pass
 
     # play a sound-fx (miss sound)
     def play_sfx(self):
@@ -41,4 +36,4 @@ class AudioController(object):
     # needed to update audio
     def on_update(self):
         self.audio.on_update()
-        return self.solo.get_frame()
+        return self.bg.get_frame()
