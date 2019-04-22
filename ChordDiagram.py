@@ -2,21 +2,11 @@
 import sys
 sys.path.append('..')
 from common.core import *
-from common.audio import *
-from common.mixer import *
-from common.wavegen import *
-from common.wavesrc import *
 from common.gfxutil import *
 
 from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
-from kivy.clock import Clock as kivyClock
-from kivy.uix.floatlayout import FloatLayout
-
-import random
-import numpy as np
-import bisect
 
 class MainWidget(BaseWidget) :
     def __init__(self):
