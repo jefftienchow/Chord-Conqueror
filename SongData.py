@@ -1,12 +1,13 @@
 # holds data for gems and barlines.
 class SongData(object):
-    def __init__(self, gem_annotation):
+    def __init__(self, gem_annotation, regions):
         super(SongData, self).__init__()
         self.chords = []
         self.bars = []
         self.gems = []
-
+        self.regions = []
         self.read_gems(gem_annotation)
+        self.regions_from_file(regions)
 
     def get_gems(self):
         return self.gems
@@ -16,6 +17,9 @@ class SongData(object):
 
     def get_chords(self):
         return self.chords
+
+    def get_regions(self):
+        return self.regions
 
     def lines_from_file(self,filepath):
         with open(filepath) as file:
@@ -39,6 +43,12 @@ class SongData(object):
                 self.gems.append((float(tokens[0]), tokens[1]))
                 if tokens[1] not in self.chords:
                     self.chords.append(tokens[1])
+
+    def regions_from_file(self, filename):
+        lines = self.lines_from_file(filename)
+        for line in lines:
+            tokens = self.tokens_from_line(line)
+            self.regions.append((float(tokens[0]), float(tokens[2])))
 
     # def read_bars(self,filename):
     #     bars = []
