@@ -118,6 +118,7 @@ class BarDisplay(InstructionGroup):
 class ChordDisplay(InstructionGroup):
     def __init__(self, chord, time_loc):
         super(ChordDisplay, self).__init__()
+        print(chord, time_loc)
         self.chord = chord
         self.time = 0
         self.time_loc = time_loc
@@ -138,7 +139,7 @@ class ChordDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - time) * vel
         
-        self.box.pos = (0, self.ypos)
+        self.box.set_pos((700, self.ypos))
 
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):

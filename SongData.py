@@ -7,9 +7,6 @@ class SongData(object):
         self.gems = []
 
         self.read_gems(gem_annotation)
-        print(self.chords)
-        print(self.bars)
-        print(self.gems)
 
     def get_gems(self):
         return self.gems

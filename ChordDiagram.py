@@ -57,10 +57,16 @@ class ChordDiagram(InstructionGroup):
 			'D7':[-1,-1,0,2,1,2],
 			'em':[0,2,2,0,0,0]}
 
-	def __init__(self, size=400, pos=(100,100), chord='G'):
+	def __init__(self, size=400, pos=(0,0), chord='G'):
 		super(ChordDiagram, self).__init__()
+
+
+		self.add(PushMatrix())
+		self.translate = Translate(*pos)
+		self.add(self.translate)
+
 		self.size = size
-		self.x, self.y = pos
+		self.x, self.y = (0,0)
 		
 		# fretboard
 		x = self.x + self.size * .1
@@ -148,5 +154,11 @@ class ChordDiagram(InstructionGroup):
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)
 		self.add(border)
+
+		self.add(PopMatrix())
+
+	def set_pos(self, pos):
+		self.translate.xy = pos
+
 
 # run(MainWidget)
