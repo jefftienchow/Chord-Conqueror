@@ -121,7 +121,6 @@ class BarDisplay(InstructionGroup):
 class ChordDisplay(InstructionGroup):
     def __init__(self, chord, time_loc):
         super(ChordDisplay, self).__init__()
-        print(chord, time_loc)
         self.chord = chord
         self.time = 0
         self.time_loc = time_loc

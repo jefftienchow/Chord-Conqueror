@@ -83,7 +83,6 @@ class ChordDiagram(InstructionGroup):
 		last_x = x
 		self.finger_placements = [x]
 		scale_length = self.size * 6
-		print(scale_length)
 		for i in range(4):
 			fret = InstructionGroup()
 			fret.add(Color(238/255, 238/255, 224/255))
