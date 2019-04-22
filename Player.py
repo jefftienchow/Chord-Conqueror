@@ -181,7 +181,7 @@ class Player(object):
         if quality == "Maj":
             notes.append(root + 4)
             if seventh:
-                notes.append(root + 11)
+                notes.append(root + 10)
         if quality == "min":
             notes.append(root + 3)
             if seventh:
