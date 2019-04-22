@@ -8,6 +8,7 @@ from Display import *
 from Player import Player
 from SongData import SongData
 from MIDIlistener import MIDIInput
+from common.kivyparticle.engine import ParticleSystem
 
 vel = 200
 nowbar_height = 100
@@ -19,6 +20,7 @@ class MainWidget(BaseWidget):
         self.playing = False
         self.started = False
         self.section2_started = False
+        self.streak = False
 
         self.data = SongData("annotations/BrownEyedGirlAnnotationFull.txt", "annotations/BrownEyedGirlRegions.txt")
 
@@ -53,13 +55,18 @@ class MainWidget(BaseWidget):
         self.label = topleft_label()
         self.add_widget(self.label)
 
+
+
+
     def on_key_down(self, keycode, modifiers):
         if not self.section2_started:
             if keycode[1] == "q":
                 self.controller.replay_region()
-                print('??')
             if keycode[1] == "w":
                 self.controller.next_region()
+            if keycode[1] == "1":
+                self.canvas.add(self.display)
+                self.section2_started = True
 
 
         if self.section2_started:
@@ -80,13 +87,36 @@ class MainWidget(BaseWidget):
             if keycode[1] == 'm':
                 self.controller.set_mute(True)
 
-            if keycode[1] == "1":
-                self.canvas.add(self.display)
-                self.section2_started = True
+
             print(keycode[1])
 
     def on_key_up(self, keycode):
         pass
+
+    def animate_streak(self):
+        if not self.streak:
+            self.ps1 = ParticleSystem('particle/particle.pex')
+            self.ps1.emitter_x = 50.0
+            self.ps1.emitter_y = 100.0
+            self.ps1.start()
+            self.add_widget(self.ps1)
+
+            self.ps2 = ParticleSystem('particle/particle.pex')
+            self.ps2.emitter_x = 550.0
+            self.ps2.emitter_y = 100.0
+            self.ps2.start()
+            self.add_widget(self.ps2)
+
+            self.streak = True
+
+
+    def stop_streak(self):
+        if self.streak:
+            self.remove_widget(self.ps1)
+            self.remove_widget(self.ps2)
+            self.streak = False
+            self.ps1.stop()
+            self.ps2.stop()
 
     def on_update(self) :
         frame = self.controller.on_update()
@@ -110,6 +140,10 @@ class MainWidget(BaseWidget):
                 self.label.text += "score: %d\n" % self.player.get_score()
                 if self.player.get_streak() >= 5:
                     self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
+                    if self.player.get_streak() == 5:
+                        self.animate_streak()
+                else:
+                    self.stop_streak()
             else:
                 self.label.text = "Final score is: %d\n" % self.player.get_score()
                 self.label.text += "Accuracy is: %d %%\n" % self.player.get_accuracy()

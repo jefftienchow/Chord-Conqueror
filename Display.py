@@ -174,7 +174,7 @@ class GemDisplay(InstructionGroup):
 
         # creates the hit effect where notes animations are added
         for i in range(6):
-            note = Note((self.xpos, nowbar_height), self.color_data, i * 60)
+            note = Note((300, nowbar_height), self.color_data, i * 60)
             self.add(note)
             self.notes.append(note)
 
