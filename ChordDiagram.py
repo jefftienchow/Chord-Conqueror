@@ -8,20 +8,20 @@ from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
 
-class MainWidget(BaseWidget) :
-    def __init__(self):
-        super(MainWidget, self).__init__()
-
-
-        # chords=['G','C','D', [-1,2,4,2,3,2]]
-        # for index, chord in enumerate(chords):
-        # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
-
-        x = ChordDiagram(size=200, pos=(200, 300))
-        self.canvas.add(x)
-
-    def on_update(self):
-    	pass
+# class MainWidget(BaseWidget) :
+#     def __init__(self):
+#         super(MainWidget, self).__init__()
+#
+#
+#         # chords=['G','C','D', [-1,2,4,2,3,2]]
+#         # for index, chord in enumerate(chords):
+#         # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
+#
+#         x = ChordDiagram(size=200, pos=(200, 300))
+#         self.canvas.add(x)
+#
+#     def on_update(self):
+#     	pass
 
 
 class Mute(InstructionGroup):
@@ -157,4 +157,4 @@ class ChordDiagram(InstructionGroup):
 		self.color.rgb = rgb
 
 
-run(MainWidget)
+# run(MainWidget)
