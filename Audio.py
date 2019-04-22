@@ -55,7 +55,13 @@ class AudioController(object):
     def next_region(self):
         self.cur_region.release()
         self.cur_region_idx += 1
-        self.cur_region = WaveGenerator(self.buffers[self.cur_region_idx])
+
+        #wrap around regions when they run out
+        try:
+            self.cur_region = WaveGenerator(self.buffers[self.cur_region_idx])
+        except:
+            self.cur_region_idx = 0
+            self.cur_region = WaveGenerator(self.buffers[self.cur_region_idx])
         self.mixer.add(self.cur_region)
 
     # needed to update audio
