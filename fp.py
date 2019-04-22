@@ -35,6 +35,7 @@ class MainWidget(BaseWidget):
 
 
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
+        #current player is chordPlayer
         self.player = Player(self.data, self.display, self.controller, self.color_mapping)
 
 
@@ -56,11 +57,18 @@ class MainWidget(BaseWidget):
     def on_key_down(self, keycode, modifiers):
         if not self.section2_started:
             if keycode[1] == "q":
+                #TODO change to self.player commands
                 self.controller.replay_region()
                 print('??')
+                #TODO change to self.player commands
             if keycode[1] == "w":
                 self.controller.next_region()
-
+            if keycode[1] == "1":
+                self.canvas.add(self.display)
+                self.section2_started = True
+                #change player to main game player
+                self.player = Player(self.data, self.display, self.controller, self.color_mapping)
+        print(keycode[1])
 
         if self.section2_started:
             # play / pause toggle
@@ -80,10 +88,7 @@ class MainWidget(BaseWidget):
             if keycode[1] == 'm':
                 self.controller.set_mute(True)
 
-            if keycode[1] == "1":
-                self.canvas.add(self.display)
-                self.section2_started = True
-            print(keycode[1])
+            
 
     def on_key_up(self, keycode):
         pass
