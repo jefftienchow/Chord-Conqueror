@@ -9,6 +9,9 @@ from Player import Player
 from SongData import SongData
 from MIDIlistener import MIDIInput
 from common.kivyparticle.engine import ParticleSystem
+from ChordMatchDisplay import *
+from ChordPlayer import *
+from kivy.clock import Clock as kivyClock
 
 vel = 200
 nowbar_height = 100
@@ -36,17 +39,24 @@ class MainWidget(BaseWidget):
             self.color_mapping[chords[i]] = colors[i]
 
 
+        #display, player for chord learning part
+        self.chordDisplay = ChordMatchDisplay()
+        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
+        self.canvas.add(self.chordDisplay)
+
+
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping)
-
-
-
+        
+        #added chords to both self.player and self.chordPlayer
         for chord in chords:
             self.player.add_chord(chord)
+            self.chordPlayer.add_chord(chord)
 
 
         try:
             self.midi = MIDIInput(self.player.on_strum)
+            self.midi2 = MIDIInput(self.chordPlayer.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -61,12 +71,17 @@ class MainWidget(BaseWidget):
     def on_key_down(self, keycode, modifiers):
         if not self.section2_started:
             if keycode[1] == "q":
-                self.controller.replay_region()
+                self.chordPlayer.replay_region()
             if keycode[1] == "w":
-                self.controller.next_region()
+                self.chordPlayer.next_region()
             if keycode[1] == "1":
-                self.canvas.add(self.display)
-                self.section2_started = True
+                #only do when section 2 hasnt begun yet
+                if not self.section2_started:
+                    self.canvas.add(self.display)
+                    self.chordDisplay.cleanup()
+                    self.canvas.remove(self.chordDisplay)
+                    self.time = 0
+                    self.section2_started = True
 
 
         if self.section2_started:
@@ -150,5 +165,16 @@ class MainWidget(BaseWidget):
 
                 self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
                 self.label.text += "Press \"R\" to restart"
+        else:
+            #section 1 of the game updates
+            self.label.text = 'CHORD LEARNING'
+            self.label.text += '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
+            if len(self.chordDisplay.chords) == 5:
+                self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'
+            self.time +=kivyClock.frametime
+            self.chordDisplay.on_update(self.time)
+            self.chordPlayer.on_update(self.time)
+            self.midi2.on_update()
+
 
 run(MainWidget)
