@@ -2,33 +2,26 @@
 import sys
 sys.path.append('..')
 from common.core import *
-from common.audio import *
-from common.mixer import *
-from common.wavegen import *
-from common.wavesrc import *
 from common.gfxutil import *
 
 from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
-from kivy.clock import Clock as kivyClock
-from kivy.uix.floatlayout import FloatLayout
 
-import random
-import numpy as np
-import bisect
+class MainWidget(BaseWidget) :
+    def __init__(self):
+        super(MainWidget, self).__init__()
 
-# class MainWidget(BaseWidget) :
-#     def __init__(self):
-#         super(MainWidget, self).__init__()
-#
-#
-#         chords=['G','C','D', [-1,2,4,2,3,2]]
-#         for index, chord in enumerate(chords):
-#         	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
-#
-#     def on_update(self):
-#     	pass
+
+        # chords=['G','C','D', [-1,2,4,2,3,2]]
+        # for index, chord in enumerate(chords):
+        # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
+
+        x = ChordDiagram(size=200, pos=(200, 300))
+        self.canvas.add(x)
+
+    def on_update(self):
+    	pass
 
 
 class Mute(InstructionGroup):
@@ -148,7 +141,8 @@ class ChordDiagram(InstructionGroup):
 
 		# border
 		border = InstructionGroup()
-		border.add(Color(1,1,1))
+		self.color = Color(1,1,1)
+		border.add(self.color)
 		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)
@@ -159,5 +153,8 @@ class ChordDiagram(InstructionGroup):
 	def set_pos(self, pos):
 		self.translate.xy = pos
 
+	def set_color(self, rgb):
+		self.color.rgb = rgb
 
-# run(MainWidget)
+
+run(MainWidget)
