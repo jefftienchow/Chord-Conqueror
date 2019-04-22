@@ -26,6 +26,7 @@ class BeatMatchDisplay(InstructionGroup):
         self.gems = []
         cur_chord = None
         cur_display = None
+        last_time = None
         for gem_info in self.gem_data:
             gem = GemDisplay(gem_info, self.color_mapping)
             self.gems.append(gem)
@@ -33,11 +34,13 @@ class BeatMatchDisplay(InstructionGroup):
             
             if cur_chord != gem_info[1]:
                 if cur_display:
-                    cur_display.set_next(gem_info[0])
+                    cur_display.set_next(last_time)
                 cur_chord = gem_info[1]
                 cur_display = ChordDisplay(gem_info[1], gem_info[0])
                 self.diagrams.append(cur_display)
                 self.add(cur_display)
+
+            last_time = gem_info[0]
 
         # creates bars
         self.bars = []
@@ -48,7 +51,7 @@ class BeatMatchDisplay(InstructionGroup):
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
-        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (800, 20))
+        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (600, 20))
         self.add(self.nowbar)
 
         # creates buttons
@@ -100,7 +103,7 @@ class BarDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.bar = Rectangle(pos=(0,self.ypos), size = (800, 2))
+        self.bar = Rectangle(pos=(0,self.ypos), size = (600, 2))
         self.add(self.bar)
 
         self.vel = vel
@@ -123,23 +126,28 @@ class ChordDisplay(InstructionGroup):
         self.time = 0
         self.time_loc = time_loc
         self.next_time = None
-
+        self.size = 125
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.box = ChordDiagram(80, (700, self.ypos), chord)
+        self.box = ChordDiagram(self.size, (650, self.ypos), chord)
         self.add(self.box)
 
         self.vel = vel
         
     def set_next(self, next_time):
-        self.next_time = next_time
+        self.next_time = next_time - self.size/vel/2
 
     def on_update(self, time):
         self.time = time
 
-        self.ypos = nowbar_height + (self.time_loc - time) * vel
+        if self.time < self.time_loc:
+            self.ypos = nowbar_height + (self.time_loc - time) * vel
+        elif self.time > self.time_loc and self.time < self.next_time:
+            self.ypos = nowbar_height
+        else:
+            self.ypos = nowbar_height + (self.next_time - time) * vel
         
-        self.box.set_pos((700, self.ypos))
+        self.box.set_pos((600, self.ypos))
 
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):

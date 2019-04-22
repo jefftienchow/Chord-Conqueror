@@ -194,8 +194,6 @@ class Player(object):
         self.chords[chord] = notes
 
     def detect_chord(self, notes):
-        print(self.chords)
-        print(notes)
         for chord in self.chords:
             chord_matched = True
             for cur_note in notes:
