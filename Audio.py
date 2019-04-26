@@ -17,7 +17,6 @@ class AudioController(object):
         self.regions_data = regions
         self.buffers = []
 
-        print(self.regions_data)
         for region in self.regions_data:
             start_frame = int(region[0] * Audio.sample_rate)
             num_frames = int(region[1] * Audio.sample_rate)
@@ -35,6 +34,12 @@ class AudioController(object):
 
     def reset(self):
         self.bg.reset()
+
+    def set_start(self, start):
+        self.bg.set_start(start * 44100)
+
+    def set_stop(self, stop):
+        self.bg.set_stop(stop * 44100)
 
     # mute / unmute the solo track
     def set_mute(self, mute):

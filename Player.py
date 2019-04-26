@@ -34,9 +34,6 @@ class Player(object):
 
         self.color_mapping = color_mapping
 
-
-
-
     def get_score(self):
         return self.score
 
@@ -105,7 +102,6 @@ class Player(object):
                 self.controller.play_sfx()
                 self.controller.set_mute(True)
                 self.deduct()
-
 
         # end of gems
         elif self.idx == len(self.gem_data):

@@ -35,6 +35,8 @@ class ChordMatchDisplay(InstructionGroup) :
         self.x = -390
         self.y =0
 
+
+
     
     def draw_chord(self, chord):
         self.x += 400

@@ -6,8 +6,13 @@ class SongData(object):
         self.bars = []
         self.gems = []
         self.regions = []
+        self.sections = []
+
         self.read_gems(gem_annotation)
         self.regions_from_file(regions)
+
+    def get_sections(self):
+        return self.sections
 
     def get_gems(self):
         return self.gems
@@ -35,6 +40,7 @@ class SongData(object):
     def read_gems(self, filename):
         lines = self.lines_from_file(filename)
 
+        last_chord = None
         for line in lines:
             tokens = self.tokens_from_line(line)
             if tokens[1] == "1":
@@ -43,6 +49,9 @@ class SongData(object):
                 self.gems.append((float(tokens[0]), tokens[1]))
                 if tokens[1] not in self.chords:
                     self.chords.append(tokens[1])
+                if tokens[1] != last_chord:
+                    self.sections.append((float(tokens[0]), tokens[1]))
+                    last_chord = tokens[1]
 
     def regions_from_file(self, filename):
         lines = self.lines_from_file(filename)
