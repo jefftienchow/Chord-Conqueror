@@ -35,6 +35,8 @@ class MIDIInput(object):
                     print("CRASH AVERTED")
                     return
                 #separate message into Note and velocity
+                # print(message)
+                string = message[0]
                 note_on = message[2] > 0
                 midiNote = message[1]
                 velocity = message[2]
@@ -45,6 +47,7 @@ class MIDIInput(object):
                 if note_on:
                     self.current_notes.add(midiNote)
                     self.last_note = midiNote
+                    self.last_string = string
                     self.callback(str(self.last_note))
                 #note not being played, so don't add/remove from active notes
                 else:
