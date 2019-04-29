@@ -1,3 +1,7 @@
+
+from common.clock import TempoMap
+
+
 # holds data for gems and barlines.
 class SongData(object):
     def __init__(self, gem_annotation, regions):
@@ -8,8 +12,8 @@ class SongData(object):
         self.regions = []
         self.sections = []
 
-        self.read_gems(gem_annotation)
-        self.regions_from_file(regions)
+        # self.read_gems(gem_annotation)
+        # self.regions_from_file(regions)
 
     def get_sections(self):
         return self.sections
@@ -26,7 +30,7 @@ class SongData(object):
     def get_regions(self):
         return self.regions
 
-    def lines_from_file(self,filepath):
+    def lines_from_file(self, filepath):
         with open(filepath) as file:
             return file.readlines()
 
@@ -61,7 +65,27 @@ class SongData(object):
 
     # updated method of reading data using tempo map, strumming patterns
     def read_gems_riptide(self, filename):
-        pass
+
+        strumming_patterns = [[1,3,6,7,8],[1,4,6,7,8],[1,4,6,7],[2,4,5,7,8]]
+
+        lines = self.lines_from_file(filename)
+        data = [(0,0)]
+        tick = 0
+        for line in lines:
+            tokens = self.tokens_from_line(line)
+            barline_time = float(tokens[0])
+            # case where there is a strumming pattern and a chord
+            try:
+                strum_pattern, chord = tokens[1].split(',')
+            # case where there chord, strumming pattern are None
+            except ValueError:
+                strum_pattern, chord = (None, None)
+            data.append((barline_time, tick))
+            tick += 1920
+        print(data)
+        tempo_map = TempoMap(data)
+
+        riptide_gems = []
 
 
     # def read_bars(self,filename):
@@ -71,3 +95,8 @@ class SongData(object):
     #         tokens = self.tokens_from_line(line)
     #         bars.append(float(tokens[0]))
     #     return bars
+
+
+filename = "C:/Users/Ian McNally/Documents/Chord-Conqueror/annotations/RiptideBarlinesFull.txt"
+x = SongData(filename, None)
+x.read_gems_riptide(filename)
