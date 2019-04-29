@@ -59,6 +59,11 @@ class SongData(object):
             tokens = self.tokens_from_line(line)
             self.regions.append((float(tokens[0]), float(tokens[2])))
 
+    # updated method of reading data using tempo map, strumming patterns
+    def read_gems_riptide(self, filename):
+        pass
+
+
     # def read_bars(self,filename):
     #     bars = []
     #     lines = self.lines_from_file(filename)
