@@ -22,6 +22,7 @@ class WaveGenerator(object):
         self._release = False
         self.gain = 1.0
         self.muted = False
+        self.stop = False
 
     def reset(self):
         self.paused = True
@@ -50,6 +51,13 @@ class WaveGenerator(object):
 
     def get_frame(self):
         return self.frame
+
+    def set_stop(self, stop):
+        self.stop = stop
+        self.stop = True
+
+    def set_start(self, start):
+        self.frame = start
 
     def generate(self, num_frames, num_channels) :
         if self.paused:
@@ -86,6 +94,11 @@ class WaveGenerator(object):
             # return
             if self.muted:
                 return (np.zeros(num_frames * num_channels), continue_flag)
+
+            if self.stop:
+                if self.frame >= self.stop:
+                    self.paused = True
+
             return (output * self.gain, continue_flag)
 
 
