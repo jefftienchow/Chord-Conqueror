@@ -46,6 +46,7 @@ class MainWidget(BaseWidget):
         self.controller.set_start(int(self.data.get_sections()[12][0]))
 
         self.canvas.add(self.progress_bar)
+        self.objects = []
 
 
         
@@ -62,8 +63,9 @@ class MainWidget(BaseWidget):
             self.chordPlayer.add_chord(chord)
 
         try:
+            pass
             
-            self.midiChord = MIDIInput(self.chordPlayer.on_strum)
+            # self.midiChord = MIDIInput(self.chordPlayer.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -78,7 +80,9 @@ class MainWidget(BaseWidget):
         text = label.texture
         if color:
             self.canvas.add(color)
-        self.canvas.add(Rectangle(size=text.size, pos=pos, texture=text))
+        item = Rectangle(size=text.size, pos=pos, texture=text)
+        self.canvas.add(item)
+        self.objects.append(item)
 
 
 
@@ -88,7 +92,7 @@ class MainWidget(BaseWidget):
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping)
-        self.midi = MIDIInput(self.player.on_strum)
+        # self.midi = MIDIInput(self.player.on_strum)
         for chord in self.chords:
             self.player.add_chord(chord)
 
@@ -110,14 +114,21 @@ class MainWidget(BaseWidget):
         if keycode[1] == "1":
             # only do when section 2 hasnt begun yet
             if not self.section2_started:
+                for obj in self.objects:
+                    self.canvas.remove(obj)
                 self.init_section_2()
-                self.midiChord.off()
+                # self.midiChord.off()
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
                 self.progress_bar.cleanup()
                 self.canvas.remove(self.chordDisplay)
                 self.canvas.remove(self.progress_bar)
+                self.controller.reset()
+                self.player.reset()
+                self.display.reset()
+                self.playing = False
+                self.started = False
                 self.time = 0
                 self.section2_started = True
 
@@ -182,7 +193,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        self.midi.on_update()
+        # self.midi.on_update()
 
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "
@@ -211,7 +222,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midiChord.on_update()
+        # self.midiChord.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
