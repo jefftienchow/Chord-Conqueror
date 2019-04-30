@@ -41,20 +41,25 @@ class SongData(object):
     # read the gems and song data. You may want to add a secondary filepath
     # argument if your barline data is stored in a different txt file.
     def read_gems(self, filename):
-        lines = self.lines_from_file(filename)
+        if filename == 'annotations/BrownEyedGirlAnnotationFull.txt':
 
-        last_chord = None
-        for line in lines:
-            tokens = self.tokens_from_line(line)
-            if tokens[1] == "1":
-                self.bars.append(float(tokens[0]))
-            else:
-                self.gems.append((float(tokens[0]), tokens[1]))
-                if tokens[1] not in self.chords:
-                    self.chords.append(tokens[1])
-                if tokens[1] != last_chord:
-                    self.sections.append((float(tokens[0]), tokens[1]))
-                    last_chord = tokens[1]
+            lines = self.lines_from_file(filename)
+
+            last_chord = None
+            for line in lines:
+                tokens = self.tokens_from_line(line)
+                if tokens[1] == "1":
+                    self.bars.append(float(tokens[0]))
+                else:
+                    self.gems.append((float(tokens[0]), tokens[1]))
+                    if tokens[1] not in self.chords:
+                        self.chords.append(tokens[1])
+                    if tokens[1] != last_chord:
+                        self.sections.append((float(tokens[0]), tokens[1]))
+                        last_chord = tokens[1]
+        else:
+            print('nope')
+            self.read_gems_riptide(filename)
 
     def regions_from_file(self, filename):
         lines = self.lines_from_file(filename)
@@ -79,6 +84,8 @@ class SongData(object):
             # case where there is a strumming pattern and a chord
             try:
                 strum_pattern, chord = tokens[1].split(',')
+                if chord not in self.chords:
+                    self.chords.append(chord)
                 if strum_pattern == 'single':
                     strum_pattern = 0
                 else:
@@ -91,7 +98,7 @@ class SongData(object):
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
-
+        print(self.chords)
         riptide_gems = []
         tempo_map = TempoMap(data)
         assert(len(patterns) == len(chords))
@@ -106,3 +113,4 @@ class SongData(object):
                     tick = barline_tick + (j - 1) * 240
                     time = tempo_map.tick_to_time(tick)
                     self.gems.append((time, chords[i]))
+
