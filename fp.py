@@ -44,7 +44,7 @@ class MainWidget(BaseWidget):
         self.chordDisplay = ChordMatchDisplay()
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
         self.canvas.add(self.chordDisplay)
-        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping)
+        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
         self.canvas.add(self.progress_bar)
 
 
@@ -186,7 +186,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi2.on_update()
+        #self.midi2.on_update()
 
         self.label.text = 'CHORD LEARNING'
         self.label.text += '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
@@ -199,4 +199,4 @@ class MainWidget(BaseWidget):
         # if self.midi2 is not None:
         #     self.midi2.on_update()
 
-run(MainWidget(sys.argv[1]))
+run(MainWidget,sys.argv[1])

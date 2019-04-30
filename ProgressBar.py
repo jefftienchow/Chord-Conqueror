@@ -36,6 +36,7 @@ class ProgressBar(InstructionGroup):
     def set_cursor(self, time):
         xpos = (time - self.start_time) * 700 / self.duration + 50
         self.cursor.pos = (xpos, 500)
+
     def cleanup(self):
         for obj in self.objects:
             self.remove(obj)
