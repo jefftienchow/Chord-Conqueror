@@ -1,3 +1,6 @@
+
+from common.clock import TempoMap
+
 # holds data for gems and barlines.
 class SongData(object):
     def __init__(self, gem_annotation, regions):
@@ -8,8 +11,8 @@ class SongData(object):
         self.regions = []
         self.sections = []
 
-        self.read_gems(gem_annotation)
-        self.regions_from_file(regions)
+        # self.read_gems(gem_annotation)
+        # self.regions_from_file(regions)
 
     def get_sections(self):
         return self.sections
@@ -26,7 +29,7 @@ class SongData(object):
     def get_regions(self):
         return self.regions
 
-    def lines_from_file(self,filepath):
+    def lines_from_file(self, filepath):
         with open(filepath) as file:
             return file.readlines()
 
@@ -61,7 +64,48 @@ class SongData(object):
 
     # updated method of reading data using tempo map, strumming patterns
     def read_gems_riptide(self, filename):
-        pass
+        # all strumming patterns used in Riptide (in eighth notes)
+        strumming_patterns = [[1], [1,3,6,7,8],[1,4,6,7,8],[1,4,6,7],[2,4,5,6,7,8]]
+        lines = self.lines_from_file(filename)
+        data = [(0,0)]
+        patterns = []
+        chords = []
+        tick = 0
+        for index, line in enumerate(lines):
+
+            tokens = self.tokens_from_line(line)
+            barline_time = float(tokens[0])
+
+            # case where there is a strumming pattern and a chord
+            try:
+                strum_pattern, chord = tokens[1].split(',')
+                if strum_pattern == 'single':
+                    strum_pattern = 0
+                else:
+                    strum_pattern = int(strum_pattern)
+            # case where there chord, strumming pattern are None
+            except ValueError:
+                strum_pattern, chord = (None, None)
+            
+            data.append((barline_time, tick))
+            patterns.append(strum_pattern)
+            chords.append(chord)
+            tick += 1920
+
+        riptide_gems = []
+        tempo_map = TempoMap(data)
+        assert(len(patterns) == len(chords))
+        assert(len(patterns) == len(data) - 1)
+        for i in range(len(patterns)):
+            barline_time, barline_tick = data[i + 1]
+            self.bars.append(barline_time)
+            for j in range(1, 4):
+                self.bars.append(tempo_map.tick_to_time(barline_tick + 480 * j))
+            if patterns[i] is not None:
+                for j in strumming_patterns[patterns[i]]:
+                    tick = barline_tick + (j - 1) * 240
+                    time = tempo_map.tick_to_time(tick)
+                    self.gems.append((time, chords[i]))
 
 
     # def read_bars(self,filename):
