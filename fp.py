@@ -13,24 +13,24 @@ from ChordMatchDisplay import *
 from ChordPlayer import *
 from kivy.clock import Clock as kivyClock
 from ProgressBar import ProgressBar
+import sys
 
 vel = 200
 nowbar_height = 100
 colors = [(1,0,0), (1,1,0), (0,1,0), (0,1,1), (0,0,1)]
 
 class MainWidget(BaseWidget):
-    def __init__(self):
+    def __init__(self, song):
         super(MainWidget, self).__init__()
         self.playing = False
         self.started = False
         self.section2_started = False
         self.streak = False
 
-        self.data = SongData("annotations/BrownEyedGirlAnnotationFull.txt", "annotations/BrownEyedGirlRegions.txt")
-
+        self.data = SongData("annotations/" + song + "AnnotationFull.txt", "annotations/" + song + "Regions.txt")
 
         self.regions = self.data.get_regions()
-        self.controller = AudioController("music/BrownEyedGirl", self.regions)
+        self.controller = AudioController("music/"+ song, self.regions)
 
 
 
@@ -180,8 +180,6 @@ class MainWidget(BaseWidget):
             self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
             self.label.text += "Press \"R\" to restart"
 
-
-
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
@@ -197,4 +195,4 @@ class MainWidget(BaseWidget):
         # if self.midi2 is not None:
         #     self.midi2.on_update()
 
-run(MainWidget)
+run(MainWidget(sys.argv[1]))

@@ -5,7 +5,7 @@ from Audio import AudioController
 from Display import *
 
 class ProgressBar(InstructionGroup):
-    def __init__(self, sections, start, end, color_mapping):
+    def __init__(self, sections, start, end, color_mapping, controller):
         super().__init__()
         self.start_time = sections[start][0]
         self.end_time = sections[end][0]
