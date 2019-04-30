@@ -35,9 +35,9 @@ class MainWidget(BaseWidget):
 
 
         self.color_mapping = {}
-        chords = self.data.get_chords()
-        for i in range(len(chords)):
-            self.color_mapping[chords[i]] = colors[i]
+        self.chords = self.data.get_chords()
+        for i in range(len(self.chords)):
+            self.color_mapping[self.chords[i]] = colors[i]
 
 
         #display, player for chord learning part
@@ -48,17 +48,17 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.progress_bar)
 
 
-        self.display = BeatMatchDisplay(self.data, self.color_mapping)
-        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
+        
+        
         
         #added chords to both self.player and self.chordPlayer
-        for chord in chords:
-            self.player.add_chord(chord)
+        for chord in self.chords:
+            # self.player.add_chord(chord)
             self.chordPlayer.add_chord(chord)
 
         try:
-            self.midi = MIDIInput(self.player.on_strum)
-            self.midi2 = MIDIInput(self.chordPlayer.on_strum)
+            
+            self.midiChord = MIDIInput(self.chordPlayer.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -66,6 +66,13 @@ class MainWidget(BaseWidget):
 
         self.label = topleft_label()
         self.add_widget(self.label)
+
+    def init_section_2(self):
+        self.display = BeatMatchDisplay(self.data, self.color_mapping)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
+        self.midi = MIDIInput(self.player.on_strum)
+        for chord in self.chords:
+            self.player.add_chord(chord)
 
     def on_touch_down(self, touch):
         if not self.section2_started:
@@ -87,6 +94,8 @@ class MainWidget(BaseWidget):
         if keycode[1] == "1":
             # only do when section 2 hasnt begun yet
             if not self.section2_started:
+                self.init_section_2()
+                self.midiChord.off()
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
@@ -186,7 +195,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midi2.on_update()
+        self.midiChord.on_update()
 
         self.label.text = 'CHORD LEARNING'
         self.label.text += '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
@@ -196,7 +205,10 @@ class MainWidget(BaseWidget):
         self.chordDisplay.on_update(self.time)
         self.chordPlayer.on_update(self.time)
         self.progress_bar.set_cursor(frame/44100)
-        # if self.midi2 is not None:
-        #     self.midi2.on_update()
-
-run(MainWidget,sys.argv[1])
+        # if self.midiChord is not None:
+        #     self.midiChord.on_update()
+print (sys.argv)
+try:
+    run(MainWidget,sys.argv[1])
+except:
+    run(MainWidget, "BrownEyedGirl")

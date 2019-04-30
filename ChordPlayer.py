@@ -16,7 +16,8 @@ class ChordPlayer(object):
         self.interval = .2
         self.done = False
         self.chords = {}
-        self.cur_notes = []
+        self.cur_notes = set()
+        self.cur_strings = []
         self.detecting = False
         self.time = 0
         self.hold_time = 0
@@ -28,28 +29,56 @@ class ChordPlayer(object):
         self.detected = set()
         self.all_chords = ['G', 'C', 'D', 'em','D7' ]
         self.current_chord = 0
+        self.chord_played = False
 
         self.replay_region()
 
+    def new_chord(self, string, note):
+        self.strumming = True
+        self.strum_time = 0
+        self.cur_notes.clear()
+        self.cur_strings.clear()
+        self.cur_notes.add(note)
+        self.cur_strings.append(string)
+
+    def wrong(self):
+        self.display.wrong()
+        self.controller.play_sfx()
+
     
     def on_strum(self, note):
-        if not self.strumming:
-            self.cur_notes.append(note)
-            self.strum_time = 0
-            self.strumming = True
+        string = note[0]
+        note = note[1]
+        chord = False
+        # print(string, self.cur_strings)
+        #assuming self.hold means that we are playing a chord
+        if not self.strumming or (self.hold and string in self.cur_strings):
+            self.new_chord(string, note)
         else:
-            self.cur_notes.append(note)
+            self.cur_notes.add(note)  
             if len(self.cur_notes) >= 4:
                 chord = self.detect_chord(self.cur_notes)
-                if chord:
-                    self.on_button_down(chord)
-                    self.hold = True
-                    self.cur_notes = []
-                    self.hold_time = 0
-                else:
-                    self.display.wrong()
-                    self.controller.play_sfx()
+                self.chord_played = True
+            if self.chord_played:
 
+                #redundant self.hold for testing purposes
+
+                if chord != None and chord != False:
+                    if string in self.cur_strings:
+                        self.new_chord(string, note)
+                    else:
+                        self.chord_played = True
+                        self.cur_strings.append(string)          
+                        print("i have detected " + str(chord) + " chord being played")
+                        self.on_button_down(chord)
+                        self.hold = True
+                        self.cur_notes = set()
+                        self.hold_time = 0
+                elif chord == None:
+                    self.wrong()
+
+
+        
 
     # called by MainWidget
     def on_button_down(self, chord):
@@ -80,7 +109,8 @@ class ChordPlayer(object):
         if self.strum_time > .2:
             self.strum_time = 0
             self.strumming = False
-            self.cur_notes = []
+            self.cur_notes.clear()
+            self.cur_strings.clear()
 
         if self.hold_time > .2:
             self.hold = False
@@ -117,7 +147,7 @@ class ChordPlayer(object):
         if quality == "Maj":
             notes.append(root + 4)
             if seventh:
-                notes.append(root + 11)
+                notes.append(root + 10)
         if quality == "min":
             notes.append(root + 3)
             if seventh:
