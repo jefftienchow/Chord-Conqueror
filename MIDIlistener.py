@@ -13,50 +13,56 @@ class MIDIInput(object):
         self.callback = callback
         self.last_note = 0
         self.current_notes = set()
+        self.on = True
         try:
             self.midiin, port_name = open_midiinput(0)
         except:
             sys.exit()
-
+    def off(self):
+        self.on = False
     def on_update(self):
         #verify if the port is receiving any input
-        try:
-            timer = time.time()
-            #get the MIDI input
-            msg = self.midiin.get_message()
+        if self.on:
+            try:
+                timer = time.time()
+                #get the MIDI input
+                msg = self.midiin.get_message()
 
-            #if input received
-            if msg:
-                message, deltatime = msg
-                timer += deltatime
 
-                #ignore exception message to avoid crash
-                if len(message) < 3:
-                    print("CRASH AVERTED")
-                    return
-                #separate message into Note and velocity
-                # print(message)
-                string = message[0]
-                note_on = message[2] > 0
-                midiNote = message[1]
-                velocity = message[2]
+                #if input received
+                while msg != None:
+                    message, deltatime = msg
+                    timer += deltatime
 
-                #print(message)
+                    #ignore exception message to avoid crash
+                    if len(message) < 3:
+                        print("CRASH AVERTED")
+                        return
+                    #separate message into Note and velocity
+                    # print(message)
+                    string = message[0]
+                    note_on = message[2] > 0
+                    midiNote = message[1]
+                    velocity = message[2]
 
-                #means a note is actually being played, so we want to add to active notes
-                if note_on:
-                    self.current_notes.add(midiNote)
-                    self.last_note = midiNote
-                    self.last_string = string
-                    self.callback((str(self.last_string),str(self.last_note)))
-                #note not being played, so don't add/remove from active notes
-                else:
-                    if midiNote in self.current_notes:
-                        self.current_notes.remove(midiNote)
+                    #print(message)
 
-            # time.sleep(0.01)
-        except KeyboardInterrupt:
-            print('')
+                    #means a note is actually being played, so we want to add to active notes
+                    if note_on:
+                        self.current_notes.add(midiNote)
+                        self.last_note = midiNote
+                        self.last_string = string
+                        self.callback((str(self.last_string),str(self.last_note)))
+                    #note not being played, so don't add/remove from active notes
+                    else:
+                        if midiNote in self.current_notes:
+                            self.current_notes.remove(midiNote)
+                    msg = self.midiin.get_message()
+                    
+
+        # time.sleep(0.01)
+            except KeyboardInterrupt:
+                print('')
         
 
 
