@@ -23,14 +23,17 @@ class Player(object):
         self.max_streak = 0
         self.hits = 0
         self.chords = {}
-        self.cur_notes = []
+        self.cur_notes = set()
+        self.cur_strings = []
         self.detecting = False
         self.time = 0
         self.hold_time = 0
 
+
         self.strumming = False
         self.strum_time = 0
         self.hold = False
+        self.chord_played = False
 
         self.color_mapping = color_mapping
 
@@ -54,22 +57,51 @@ class Player(object):
 
     def get_accuracy(self):
         return self.hits * 100 /len(self.gem_data)
+    #new chord was detected
+    def new_chord(self, string, note):
+        self.strumming = True
+        self.strum_time = 0
+        self.cur_notes.clear()
+        self.cur_strings.clear()
+        self.cur_notes.add(note)
+        self.cur_strings.append(string)
+
 
     def on_strum(self, note):
-        if not self.strumming:
-            self.cur_notes.append(note)
-            self.strum_time = 0
-            self.strumming = True
-            print(note)
+        string = note[0]
+        note = note[1]
+        # print(string, self.cur_strings)
+        #assuming self.hold means that we are playing a chord
+        if not self.strumming or (self.hold and string in self.cur_strings):
+            self.new_chord(string, note)
+            # self.cur_notes.clear()
+            # self.cur_strings.clear()
+            # self.cur_notes.add(note)
+            # self.cur_strings.append(string)
+            # self.strum_time = 0
+            # self.strumming = True
+            #added reset for hold & hold time 
+            # self.hold = False
+            # self.hold_time = 0
+            # self.display.on_button_up()
+            # print(note)
         else:
-            self.cur_notes.append(note)
+            self.cur_notes.add(note)  
             if len(self.cur_notes) >= 4:
                 chord = self.detect_chord(self.cur_notes)
-                if chord:
+                #redundant self.hold for testing purposes
+                if string in self.cur_strings and self.hold:
+                    self.new_chord()
+                elif chord:
+                    self.chord_played = True
+                    self.cur_strings.append(string)          
+                    print("i have detected " + str(chord) + " chord being played")
                     self.on_button_down(chord)
                     self.hold = True
-                    self.cur_notes = []
+                    self.cur_notes = set()
                     self.hold_time = 0
+
+
 
 
     # called by MainWidget
@@ -119,6 +151,7 @@ class Player(object):
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
+        # print(self.cur_strings)
         dt = time - self.time
         self.time = time
         # done
@@ -136,7 +169,9 @@ class Player(object):
             self.detecting = True
 
         if self.hold:
+            # print("HERE")
             self.hold_time += dt
+        
 
         if self.strumming:
             self.strum_time += dt
@@ -144,14 +179,20 @@ class Player(object):
         if self.strum_time > .2:
             self.strum_time = 0
             self.strumming = False
-            self.cur_notes = []
+            # self.cur_notes = []
+            self.cur_strings.clear()
+            self.cur_notes.clear()
 
         if self.hold_time > .2:
+            # print("WOW")
+            # self.cur_notes.clear()
+            # self.cur_strings.clear()
             self.hold = False
-            self.display.on_button_up()
+            self.on_button_up()
             self.hold_time = 0
+            # self.strumming = False
 
-            print('is this happening')
+            # print('is this happening')
 
 
 
