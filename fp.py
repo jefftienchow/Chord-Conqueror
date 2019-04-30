@@ -88,8 +88,11 @@ class MainWidget(BaseWidget):
             # only do when section 2 hasnt begun yet
             if not self.section2_started:
                 self.canvas.add(self.display)
+                #cleanup graphics
                 self.chordDisplay.cleanup()
+                self.progress_bar.cleanup()
                 self.canvas.remove(self.chordDisplay)
+                self.canvas.remove(self.progress_bar)
                 self.time = 0
                 self.section2_started = True
 
@@ -185,6 +188,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
+        self.midi2.on_update()
 
         self.label.text = 'CHORD LEARNING'
         self.label.text += '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)

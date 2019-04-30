@@ -48,7 +48,7 @@ class MIDIInput(object):
                     self.current_notes.add(midiNote)
                     self.last_note = midiNote
                     self.last_string = string
-                    self.callback(str(self.last_note))
+                    self.callback((str(self.last_string),str(self.last_note)))
                 #note not being played, so don't add/remove from active notes
                 else:
                     if midiNote in self.current_notes:
