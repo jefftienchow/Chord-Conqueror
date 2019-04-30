@@ -48,17 +48,14 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.progress_bar)
 
 
-<<<<<<< HEAD
         
         
         
-=======
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping)
 
         self.create_label("Chord Learning", (50, 560), Color(1, 0, 0))
 
->>>>>>> 97143783b627bd2b46acf5f07bf9404e78957334
         #added chords to both self.player and self.chordPlayer
         for chord in self.chords:
             # self.player.add_chord(chord)
@@ -187,29 +184,29 @@ class MainWidget(BaseWidget):
         self.player.on_update(self.time)
         self.midi.on_update()
 
-        if not self.player.get_done():
-            self.label.text = "Press \"P\" to "
-            if self.playing:
-                self.label.text += "pause.\n"
-            elif self.started:
-                self.label.text += "unpause\n"
-                self.label.text += "Press \"R\" to restart\n"
+        # if not self.player.get_done():
+        #     self.label.text = "Press \"P\" to "
+        #     if self.playing:
+        #         self.label.text += "pause.\n"
+        #     elif self.started:
+        #         self.label.text += "unpause\n"
+        #         self.label.text += "Press \"R\" to restart\n"
 
-            else:
-                self.label.text += "begin.\n"
-            self.label.text += "score: %d\n" % self.player.get_score()
-            if self.player.get_streak() >= 5:
-                self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
-                if self.player.get_streak() == 5:
-                    self.animate_streak()
-            else:
-                self.stop_streak()
-        else:
-            self.label.text = "Final score is: %d\n" % self.player.get_score()
-            self.label.text += "Accuracy is: %d %%\n" % self.player.get_accuracy()
+        #     else:
+        #         self.label.text += "begin.\n"
+        #     self.label.text += "score: %d\n" % self.player.get_score()
+        #     if self.player.get_streak() >= 5:
+        #         self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
+        #         if self.player.get_streak() == 5:
+        #             self.animate_streak()
+        #     else:
+        #         self.stop_streak()
+        # else:
+        #     self.label.text = "Final score is: %d\n" % self.player.get_score()
+        #     self.label.text += "Accuracy is: %d %%\n" % self.player.get_accuracy()
 
-            self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
-            self.label.text += "Press \"R\" to restart"
+        #     self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
+        #     self.label.text += "Press \"R\" to restart"
 
     def update_section1(self):
         # section 1 of the game updates
@@ -222,19 +219,13 @@ class MainWidget(BaseWidget):
         self.time += kivyClock.frametime
         self.chordDisplay.on_update(self.time)
         self.chordPlayer.on_update(self.time)
-<<<<<<< HEAD
-        self.progress_bar.set_cursor(frame/44100)
-        # if self.midiChord is not None:
-        #     self.midiChord.on_update()
+        self.progress_bar.on_update(frame / 44100)
 print (sys.argv)
 try:
     run(MainWidget,sys.argv[1])
 except:
     run(MainWidget, "BrownEyedGirl")
-=======
-        self.progress_bar.on_update(frame / 44100)
+    
         # if self.midi2 is not None:
         #     self.midi2.on_update()
 
-run(MainWidget,sys.argv[1])
->>>>>>> 97143783b627bd2b46acf5f07bf9404e78957334
