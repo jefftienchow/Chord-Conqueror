@@ -14,6 +14,7 @@ from ChordPlayer import *
 from kivy.clock import Clock as kivyClock
 from ProgressBar import ProgressBar
 import sys
+from kivy.uix.label import CoreLabel
 
 vel = 200
 nowbar_height = 100
@@ -32,25 +33,32 @@ class MainWidget(BaseWidget):
         self.regions = self.data.get_regions()
         self.controller = AudioController("music/"+ song, self.regions)
 
-
-
         self.color_mapping = {}
         self.chords = self.data.get_chords()
         for i in range(len(self.chords)):
             self.color_mapping[self.chords[i]] = colors[i]
-
 
         #display, player for chord learning part
         self.chordDisplay = ChordMatchDisplay()
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
         self.canvas.add(self.chordDisplay)
         self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
+        self.controller.set_start(int(self.data.get_sections()[12][0]))
+
         self.canvas.add(self.progress_bar)
 
 
+<<<<<<< HEAD
         
         
         
+=======
+        self.display = BeatMatchDisplay(self.data, self.color_mapping)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
+
+        self.create_label("Chord Learning", (50, 560), Color(1, 0, 0))
+
+>>>>>>> 97143783b627bd2b46acf5f07bf9404e78957334
         #added chords to both self.player and self.chordPlayer
         for chord in self.chords:
             # self.player.add_chord(chord)
@@ -64,8 +72,21 @@ class MainWidget(BaseWidget):
 
         self.time = 0
 
-        self.label = topleft_label()
-        self.add_widget(self.label)
+
+
+
+    def create_label(self, text, pos, color = None):
+        label = CoreLabel(text=text, font_size=20)
+        label.refresh()
+        text = label.texture
+        if color:
+            self.canvas.add(color)
+        self.canvas.add(Rectangle(size=text.size, pos=pos, texture=text))
+
+
+
+
+
 
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
@@ -77,8 +98,7 @@ class MainWidget(BaseWidget):
     def on_touch_down(self, touch):
         if not self.section2_started:
             if touch:
-                pass #self.chordPlayer.on_click(touch)
-
+                self.progress_bar.set_cursor(touch.pos)
 
     def on_key_down(self, keycode, modifiers):
         if self.section2_started:
@@ -87,10 +107,9 @@ class MainWidget(BaseWidget):
             self.handle_down_section1(keycode, modifiers)
 
     def handle_down_section1(self, keycode, modifiers):
-        if keycode[1] == "q":
-            self.chordPlayer.replay_region()
-        if keycode[1] == "w":
-            self.chordPlayer.next_region()
+        if keycode[1] == "p":
+            self.controller.toggle()
+
         if keycode[1] == "1":
             # only do when section 2 hasnt begun yet
             if not self.section2_started:
@@ -197,13 +216,13 @@ class MainWidget(BaseWidget):
         frame = self.controller.on_update()
         self.midiChord.on_update()
 
-        self.label.text = 'CHORD LEARNING'
-        self.label.text += '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
-        if len(self.chordDisplay.chords) == 5:
-            self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'
+        # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
+        # if len(self.chordDisplay.chords) == 5:
+        #     self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'
         self.time += kivyClock.frametime
         self.chordDisplay.on_update(self.time)
         self.chordPlayer.on_update(self.time)
+<<<<<<< HEAD
         self.progress_bar.set_cursor(frame/44100)
         # if self.midiChord is not None:
         #     self.midiChord.on_update()
@@ -212,3 +231,10 @@ try:
     run(MainWidget,sys.argv[1])
 except:
     run(MainWidget, "BrownEyedGirl")
+=======
+        self.progress_bar.on_update(frame / 44100)
+        # if self.midi2 is not None:
+        #     self.midi2.on_update()
+
+run(MainWidget,sys.argv[1])
+>>>>>>> 97143783b627bd2b46acf5f07bf9404e78957334

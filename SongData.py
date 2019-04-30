@@ -93,12 +93,13 @@ class SongData(object):
             # case where there chord, strumming pattern are None
             except ValueError:
                 strum_pattern, chord = (None, None)
+
             
             data.append((barline_time, tick))
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
-        print(self.chords)
+        self.sections = chords
         riptide_gems = []
         tempo_map = TempoMap(data)
         assert(len(patterns) == len(chords))
@@ -113,15 +114,4 @@ class SongData(object):
                     tick = barline_tick + (j - 1) * 240
                     time = tempo_map.tick_to_time(tick)
                     self.gems.append((time, chords[i]))
-
-
-    # def read_bars(self,filename):
-    #     bars = []
-    #     lines = self.lines_from_file(filename)
-    #     for line in lines:
-    #         tokens = self.tokens_from_line(line)
-    #         bars.append(float(tokens[0]))
-    #     return bars
-
-x = SongData("./annotations/RiptideAnnotationFull.txt", "./annotations/RiptideRegions.txt")
 

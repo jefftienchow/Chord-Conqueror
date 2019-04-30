@@ -29,6 +29,7 @@ class ChordPlayer(object):
         self.detected = set()
         self.all_chords = ['G', 'C', 'D', 'em','D7' ]
         self.current_chord = 0
+<<<<<<< HEAD
         self.chord_played = False
 
         self.replay_region()
@@ -45,6 +46,8 @@ class ChordPlayer(object):
         self.display.wrong()
         self.controller.play_sfx()
 
+=======
+>>>>>>> 97143783b627bd2b46acf5f07bf9404e78957334
     
     def on_strum(self, note):
         string = note[0]
