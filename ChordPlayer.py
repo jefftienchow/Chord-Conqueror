@@ -28,9 +28,6 @@ class ChordPlayer(object):
         self.detected = set()
         self.all_chords = ['G', 'C', 'D', 'em','D7' ]
         self.current_chord = 0
-
-        self.replay_region()
-
     
     def on_strum(self, note):
         if not self.strumming:

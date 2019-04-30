@@ -106,12 +106,3 @@ class SongData(object):
                     tick = barline_tick + (j - 1) * 240
                     time = tempo_map.tick_to_time(tick)
                     self.gems.append((time, chords[i]))
-
-
-    # def read_bars(self,filename):
-    #     bars = []
-    #     lines = self.lines_from_file(filename)
-    #     for line in lines:
-    #         tokens = self.tokens_from_line(line)
-    #         bars.append(float(tokens[0]))
-    #     return bars

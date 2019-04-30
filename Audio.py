@@ -36,10 +36,10 @@ class AudioController(object):
         self.bg.reset()
 
     def set_start(self, start):
-        self.bg.set_start(start * 44100)
+        self.bg.set_start(int(start * 44100))
 
     def set_stop(self, stop):
-        self.bg.set_stop(stop * 44100)
+        self.bg.set_stop(int(stop * 44100))
 
     # mute / unmute the solo track
     def set_mute(self, mute):
