@@ -54,7 +54,7 @@ class MIDIInput(object):
                     if midiNote in self.current_notes:
                         self.current_notes.remove(midiNote)
 
-            time.sleep(0.01)
+            # time.sleep(0.01)
         except KeyboardInterrupt:
             print('')
         
