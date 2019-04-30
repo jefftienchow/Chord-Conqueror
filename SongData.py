@@ -93,12 +93,13 @@ class SongData(object):
             # case where there chord, strumming pattern are None
             except ValueError:
                 strum_pattern, chord = (None, None)
+
             
             data.append((barline_time, tick))
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
-        print(self.chords)
+        self.sections = chords
         riptide_gems = []
         tempo_map = TempoMap(data)
         assert(len(patterns) == len(chords))
