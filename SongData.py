@@ -11,8 +11,8 @@ class SongData(object):
         self.regions = []
         self.sections = []
 
-        # self.read_gems(gem_annotation)
-        # self.regions_from_file(regions)
+        self.read_gems(gem_annotation)
+        self.regions_from_file(regions)
 
     def get_sections(self):
         return self.sections
