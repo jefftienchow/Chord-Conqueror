@@ -38,19 +38,20 @@ class MainWidget(BaseWidget):
         self.chords = self.data.get_chords()
         for i in range(len(self.chords)):
             self.color_mapping[self.chords[i]] = colors[i]
-
+        print(self.color_mapping)
         self.detector = ChordDetector()
 
         #display, player for chord learning part
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping)
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector)
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
-        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
-        self.controller.set_start(int(self.data.get_sections()[12][0]))
+        # self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
+        self.controller.set_start(int(self.data.get_sections()[92][0]))
+        self.controller.set_stop(int(self.data.get_sections()[108][0]))
 
-        self.canvas.add(self.progress_bar)
+        # self.canvas.add(self.progress_bar)
         self.objects = []
 
 
@@ -103,7 +104,7 @@ class MainWidget(BaseWidget):
     def on_touch_down(self, touch):
         if not self.section2_started:
             if touch:
-                self.progress_bar.set_cursor(touch.pos)
+                self.chordDisplay.on_touch_down(touch)
 
     def on_key_down(self, keycode, modifiers):
         if self.section2_started:
@@ -124,9 +125,9 @@ class MainWidget(BaseWidget):
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
-                self.progress_bar.cleanup()
+                # self.progress_bar.cleanup()
                 self.canvas.remove(self.chordDisplay)
-                self.canvas.remove(self.progress_bar)
+                # self.canvas.remove(self.progress_bar)
                 self.controller.reset()
                 self.player.reset()
                 self.display.reset()
@@ -135,7 +136,7 @@ class MainWidget(BaseWidget):
                 self.time = 0
                 self.section2_started = True
                 self.controller.set_start(0)
-                self.controller.set_stop(None)
+                self.controller.set_stop(999999)
 
     def handle_down_section2(self, keycode, modifiers):
         # play / pause toggle
@@ -233,9 +234,9 @@ class MainWidget(BaseWidget):
         # if len(self.chordDisplay.chords) == 5:
         #     self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'
         self.time += kivyClock.frametime
-        self.chordDisplay.on_update(self.time)
+        self.chordDisplay.on_update(frame)
         self.chordPlayer.on_update(self.time)
-        self.progress_bar.on_update(frame / 44100)
+        # self.progress_bar.on_update(frame / 44100)
 print (sys.argv)
 try:
     run(MainWidget,sys.argv[1])
