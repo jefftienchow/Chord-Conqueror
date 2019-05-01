@@ -78,7 +78,10 @@ class Player(object):
                     if self.streak >= 5:
                         self.score += 100
                         # new streak handling
-                        self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
+                        #self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
+                        self.main.animate_streak()
+                    else:
+                        self.main.stop_streak()
 
                 # a lane miss
                 else:

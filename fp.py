@@ -58,7 +58,7 @@ class MainWidget(BaseWidget):
         
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
 
-        self.create_label("Chord Learning", (50, 560), Color(1, 0, 0))
+        self.title = self.create_label("Chord Learning", (50, Window.height - 40), Color(1, 0, 0))
 
 
 
@@ -76,8 +76,6 @@ class MainWidget(BaseWidget):
 
         self.time = 0
 
-        label = self.create_label("hi", (100,100))
-        self.modify_text(label,"bye")
 
 
 
@@ -136,6 +134,7 @@ class MainWidget(BaseWidget):
                 self.section2_started = True
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
+                self.canvas.remove(self.title)
         if keycode[1] == "q":
             self.chordPlayer.new_section()
         if keycode[1] == "r":
