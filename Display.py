@@ -85,12 +85,15 @@ class BeatMatchDisplay(InstructionGroup):
 
     # call every frame to make gems and barlines flow down the screen
     def on_update(self, time):
+        dt = time-self.time
+        self.time = time
         for gem in self.gems:
             gem.on_update(time)
         for bar in self.bars:
             bar.on_update(time)
         for diagram in self.diagrams:
             diagram.on_update(time)
+        self.button.on_update(dt)
 
 # display for a single gem at a position with a color (if desired)
 class BarDisplay(InstructionGroup):
@@ -207,11 +210,17 @@ class ButtonDisplay(InstructionGroup):
         self.add(color)
         self.button = Rectangle(pos=pos, size=(400, 20))
         self.add(self.button)
+        self.time = 0
 
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
         self.color.rgb = color
+        self.time = 0
 
     # back to normal state
     def on_up(self):
         self.color.rgb = (1,1,1)
+
+    def on_update(self, dt):
+        if self.time > .2:
+            self.color.rgb = (1,1,1)

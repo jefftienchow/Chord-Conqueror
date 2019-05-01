@@ -1,5 +1,5 @@
 from kivy.graphics import Color, Rectangle
-
+from ChordDetector import ChordDetector
 
 #chord_to_index = {"C": 0, "D": 1, "D7": 2, "e": 3, "G": 4}
 
@@ -8,7 +8,7 @@ name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class Player(object):
-    def __init__(self, data, display, audio_ctrl, color_mapping):
+    def __init__(self, data, display, audio_ctrl, color_mapping, detector):
         super(Player, self).__init__()
         self.gem_data = data.get_gems()
 
@@ -25,17 +25,13 @@ class Player(object):
         self.chords = {}
         self.cur_notes = set()
         self.cur_strings = []
-        self.detecting = False
         self.time = 0
-        self.hold_time = 0
 
-
-        self.strumming = False
-        self.strum_time = 0
-        self.hold = False
         self.chord_played = False
 
         self.color_mapping = color_mapping
+        self.detector = detector
+        self.detector.set_callback(self.on_button_down)
 
     def get_score(self):
         return self.score
@@ -57,57 +53,12 @@ class Player(object):
 
     def get_accuracy(self):
         return self.hits * 100 /len(self.gem_data)
-    #new chord was detected
-    def new_chord(self, string, note):
-        self.strumming = True
-        self.strum_time = 0
-        self.cur_notes.clear()
-        self.cur_strings.clear()
-        self.cur_notes.add(note)
-        self.cur_strings.append(string)
+
 
     def wrong(self):
-        self.on_button_up()
-        self.display.gem_pass(self.idx)
         self.controller.play_sfx()
         self.controller.set_mute(True)
         self.deduct()
-
-
-
-    def on_strum(self, note):
-        string = note[0]
-        note = note[1]
-        chord = False
-        print(string, self.cur_strings)
-        #assuming self.hold means that we are playing a chord
-        if not self.strumming or (self.hold and string in self.cur_strings):
-            self.new_chord(string, note)
-        else:
-            self.cur_notes.add(note)  
-            if len(self.cur_notes) >= 4:
-                chord = self.detect_chord(self.cur_notes)
-                self.chord_played = True
-            if self.chord_played:
-
-                #redundant self.hold for testing purposes
-
-                if chord != None and chord != False:
-                    if string in self.cur_strings:
-                        self.new_chord(string, note)
-                    else:
-                        self.chord_played = True
-                        self.cur_strings.append(string)          
-                        print("i have detected " + str(chord) + " chord being played")
-                        self.on_button_down(chord)
-                        self.hold = True
-                        self.cur_notes = set()
-                        self.hold_time = 0
-                elif chord == None:
-                    self.wrong()
-
-
-
 
     # called by MainWidget
     def on_button_down(self, chord):
@@ -129,16 +80,12 @@ class Player(object):
 
                 # a lane miss
                 else:
+                    self.wrong()
                     self.display.gem_pass(self.idx)
-                    self.controller.play_sfx()
-                    self.controller.set_mute(True)
-                    self.deduct()
 
             # a temporal miss
             elif self.idx > 0:
-                self.controller.play_sfx()
-                self.controller.set_mute(True)
-                self.deduct()
+                self.wrong()
 
         # end of gems
         elif self.idx == len(self.gem_data):
@@ -148,11 +95,6 @@ class Player(object):
         if self.score >= 50:
             self.score -= 50
         self.streak = 0
-        self.detecting = False
-
-    # called by MainWidget
-    def on_button_up(self):
-        self.display.on_button_up()
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
@@ -170,82 +112,4 @@ class Player(object):
             self.controller.set_mute(True)
             self.deduct()
 
-        if time > self.gem_data[self.idx][0] - self.interval:
-            self.detecting = True
-
-        if self.hold:
-            # print("HERE")
-            self.hold_time += dt
-        
-
-        if self.strumming:
-            self.strum_time += dt
-
-        if self.strum_time > .2:
-            self.strum_time = 0
-            self.strumming = False
-            # self.cur_notes = []
-            self.cur_strings.clear()
-            self.cur_notes.clear()
-
-        if self.hold_time > .2:
-            # print("WOW")
-            # self.cur_notes.clear()
-            # self.cur_strings.clear()
-            self.hold = False
-            self.on_button_up()
-            self.hold_time = 0
-            # self.strumming = False
-
-            # print('is this happening')
-
-
-
-
-    def add_chord(self, chord):
-        if chord[0].islower():
-            root = name_to_midi[chord[0]]
-            quality = "min"
-            if len(chord) == 3:
-                seventh = True
-            else:
-                seventh = False
-        else:
-            root = name_to_midi[chord[0].lower()]
-            quality = "Maj"
-            if len(chord) == 2:
-                seventh = True
-            else:
-                seventh = False
-
-
-        notes = [root, root + 7]
-        if quality == "Maj":
-            notes.append(root + 4)
-            if seventh:
-                notes.append(root + 10)
-        if quality == "min":
-            notes.append(root + 3)
-            if seventh:
-                notes.append(root + 10)
-        if quality == "Dom":
-            notes.append(root + 4)
-            if seventh:
-                notes.append(root + 10)
-
-        self.chords[chord] = notes
-
-    def detect_chord(self, notes):
-        for chord in self.chords:
-            chord_matched = True
-            for cur_note in notes:
-                match = False
-                for correct_note in self.chords[chord]:
-                    if int(correct_note) % 12 == int(cur_note) % 12:
-                        match = True
-                        break
-                if not match:
-                    chord_matched = False
-            if chord_matched:
-                return chord
-        return None
+        self.detector.on_update(dt)

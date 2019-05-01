@@ -15,6 +15,7 @@ from kivy.clock import Clock as kivyClock
 from ProgressBar import ProgressBar
 import sys
 from kivy.uix.label import CoreLabel
+from ChordDetector import ChordDetector
 
 vel = 200
 nowbar_height = 100
@@ -38,9 +39,11 @@ class MainWidget(BaseWidget):
         for i in range(len(self.chords)):
             self.color_mapping[self.chords[i]] = colors[i]
 
+        self.detector = ChordDetector()
+
         #display, player for chord learning part
         self.chordDisplay = ChordMatchDisplay(self.color_mapping)
-        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
+        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector)
         self.canvas.add(self.chordDisplay)
         self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
         self.controller.set_start(int(self.data.get_sections()[92][0]))
@@ -49,23 +52,25 @@ class MainWidget(BaseWidget):
         self.objects = []
 
 
+
         
         
         
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
-        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
 
         self.create_label("Chord Learning", (50, 560), Color(1, 0, 0))
+
+
+
 
         #added chords to both self.player and self.chordPlayer
         for chord in self.chords:
             # self.player.add_chord(chord)
-            self.chordPlayer.add_chord(chord)
-
+            self.detector.add_chord(chord)
         try:
             pass
             
-            self.midiChord = MIDIInput(self.chordPlayer.on_strum)
+            self.midiChord = MIDIInput(self.detector.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -91,10 +96,7 @@ class MainWidget(BaseWidget):
 
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
-        self.player = Player(self.data, self.display, self.controller, self.color_mapping)
-        self.midi = MIDIInput(self.player.on_strum)
-        for chord in self.chords:
-            self.player.add_chord(chord)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector)
 
     def on_touch_down(self, touch):
         if not self.section2_started:
@@ -117,7 +119,7 @@ class MainWidget(BaseWidget):
                 for obj in self.objects:
                     self.canvas.remove(obj)
                 self.init_section_2()
-                self.midiChord.off()
+                #self.midiChord.off()
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
@@ -224,7 +226,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midiChord.on_update()
+        #self.midiChord.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
