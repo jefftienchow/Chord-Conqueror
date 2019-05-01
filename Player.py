@@ -80,8 +80,7 @@ class Player(object):
                         # new streak handling
                         #self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
                         self.main.animate_streak()
-                    else:
-                        self.main.stop_streak()
+                   
 
                 # a lane miss
                 else:
@@ -107,6 +106,7 @@ class Player(object):
         if self.score >= 50:
             self.score -= 50
         self.streak = 0
+        self.main.stop_streak()
 
     # needed to check if for pass gems (ie, went past the slop window)
     def on_update(self, time):
