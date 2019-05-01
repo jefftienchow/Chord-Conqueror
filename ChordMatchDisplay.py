@@ -47,10 +47,10 @@ class ChordMatchDisplay(InstructionGroup) :
 
 
     def show_options(self, chord):
-
+        pass
 
     def remove_options(self):
-
+        pass
     
     def draw_chord(self, chord):
         if self.x  >= Window.width:
