@@ -41,7 +41,7 @@ class MainWidget(BaseWidget):
         self.detector = ChordDetector()
 
         #display, player for chord learning part
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller)
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector)
 
         self.canvas.add(self.chordDisplay)
@@ -75,6 +75,8 @@ class MainWidget(BaseWidget):
 
         self.time = 0
 
+        label = self.create_label("hi", (100,100))
+        self.modify_text(label,"bye")
 
 
 
@@ -86,9 +88,12 @@ class MainWidget(BaseWidget):
             self.canvas.add(color)
         item = Rectangle(size=text.size, pos=pos, texture=text)
         self.canvas.add(item)
-        self.objects.append(item)
+        return item
 
-
+    def modify_text(self, label, new_text):
+        label = CoreLabel(text=new_text)
+        label.refresh()
+        label.texture = label.texture
 
 
 
@@ -197,6 +202,14 @@ class MainWidget(BaseWidget):
         self.player.on_update(self.time)
         #self.midi.on_update()
 
+        if self.player.get_streak() >= 5:
+
+            self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
+            if self.player.get_streak() == 5:
+                self.animate_streak()
+        else:
+            self.stop_streak()
+
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "
         #     if self.playing:
@@ -208,12 +221,7 @@ class MainWidget(BaseWidget):
         #     else:
         #         self.label.text += "begin.\n"
         #     self.label.text += "score: %d\n" % self.player.get_score()
-        #     if self.player.get_streak() >= 5:
-        #         self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
-        #         if self.player.get_streak() == 5:
-        #             self.animate_streak()
-        #     else:
-        #         self.stop_streak()
+        #
         # else:
         #     self.label.text = "Final score is: %d\n" % self.player.get_score()
         #     self.label.text += "Accuracy is: %d %%\n" % self.player.get_accuracy()

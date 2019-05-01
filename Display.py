@@ -4,6 +4,7 @@ from kivy.graphics.instructions import InstructionGroup
 from Note import Note
 from ChordDiagram import ChordDiagram
 from common.gfxutil import *
+from kivy.core.image import Image
 
 vel = 200
 nowbar_height = 100
@@ -35,7 +36,7 @@ class BeatMatchDisplay(InstructionGroup):
 
             if cur_chord != gem_info[1]:
                 if cur_display:
-                    cur_display.set_next(last_time)
+                    cur_display.set_next(gem_info[0])
                 cur_chord = gem_info[1]
                 cur_display = ChordDisplay(gem_info[1], gem_info[0], self.color_mapping[cur_chord])
                 self.diagrams.append(cur_display)
@@ -54,11 +55,9 @@ class BeatMatchDisplay(InstructionGroup):
         self.add(self.nowbar)
 
         # creates buttons
-        color = Color(1,1,1)
-        color.a = .5
         pos = (100, nowbar_height)
 
-        self.button = ButtonDisplay(pos,color)
+        self.button = ButtonDisplay(pos)
 
         self.add(self.button)
 
@@ -150,7 +149,7 @@ class ChordDisplay(InstructionGroup):
         return self.ypos >= 0 and self.ypos <= 600
         
     def set_next(self, next_time):
-        self.next_time = next_time - self.size/vel/2
+        self.next_time = next_time - self.size/vel
 
     def on_update(self, time):
         self.time = time
@@ -176,9 +175,9 @@ class GemDisplay(InstructionGroup):
         self.color.a = .7
         self.add(self.color)
 
-        self.xpos = 100
+        self.xpos = 105
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (400, 10))
+        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (390, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -221,25 +220,31 @@ class GemDisplay(InstructionGroup):
 
 # Displays one button on the nowbar
 class ButtonDisplay(InstructionGroup):
-    def __init__(self, pos, color):
+    def __init__(self, pos):
         super(ButtonDisplay, self).__init__()
-        self.color = color
+        self.border_color = Color(1,1,1)
         self.pos = pos
-        self.add(color)
-        self.button = Rectangle(pos=pos, size=(400, 20))
-        self.add(self.button)
+        self.add(self.border_color)
+        self.border = Rectangle(pos=pos, size=(400, 20))
+        self.add(self.border)
         self.time = 0
+
+        self.inside_color = Color(0,0,0,.5)
+        self.add(self.inside_color)
+        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (390, 10))
+        self.add(self.inside)
 
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
-        self.color.rgb = color
+        self.border_color.rgb = color
+        self.inside_color.a = .2
         self.time = 0
 
     # back to normal state
     def on_up(self):
-        self.color.rgb = (1,1,1)
+        self.border_color.rgb = (1, 1, 1)
 
     def on_update(self, dt):
         self.time += dt
         if self.time > .2:
-            self.color.rgb = (1,1,1)
+            self.border_color.rgb = (1, 1, 1)
