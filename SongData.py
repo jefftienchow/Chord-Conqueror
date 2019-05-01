@@ -99,7 +99,7 @@ class SongData(object):
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
-        self.sections = chords
+        self.sections = [(data[i+1][0],chords[i]) for i in range(len(chords))]
         riptide_gems = []
         tempo_map = TempoMap(data)
         assert(len(patterns) == len(chords))

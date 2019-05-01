@@ -17,8 +17,11 @@ class ProgressBar(InstructionGroup):
         x_loc = 50
         for i in range(start, end):
             print(sections[i][1])
-            color = self.color_mapping[sections[i][1]]
-            color = Color(*color)
+            if sections[i][1]:
+                color = self.color_mapping[sections[i][1]]
+                color = Color(*color)
+            else:
+                color = Color(0,0,0)
             self.add(color)
             self.objects.append(color)
             length = (sections[i+1][0] - sections[i][0]) * 700 / self.duration
@@ -49,5 +52,3 @@ class ProgressBar(InstructionGroup):
     def cleanup(self):
         for obj in self.objects:
             self.remove(obj)
-
-

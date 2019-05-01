@@ -42,8 +42,8 @@ class MainWidget(BaseWidget):
         self.chordDisplay = ChordMatchDisplay()
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
         self.canvas.add(self.chordDisplay)
-        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
-        self.controller.set_start(int(self.data.get_sections()[12][0]))
+        self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
+        self.controller.set_start(int(self.data.get_sections()[92][0]))
 
         self.canvas.add(self.progress_bar)
 
@@ -108,6 +108,8 @@ class MainWidget(BaseWidget):
                 self.canvas.remove(self.progress_bar)
                 self.time = 0
                 self.section2_started = True
+                self.controller.set_start(0)
+                self.controller.set_stop(None)
 
     def handle_down_section2(self, keycode, modifiers):
         # play / pause toggle
