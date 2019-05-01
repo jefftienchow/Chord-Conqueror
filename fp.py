@@ -98,7 +98,7 @@ class MainWidget(BaseWidget):
 
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
-        self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
 
     def on_touch_down(self, touch):
         if not self.section2_started:
@@ -204,13 +204,13 @@ class MainWidget(BaseWidget):
         self.player.on_update(self.time)
         #self.midi.on_update()
 
-        if self.player.get_streak() >= 5:
-
-            self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
-            if self.player.get_streak() == 5:
-                self.animate_streak()
-        else:
-            self.stop_streak()
+        # if self.player.get_streak() >= 5:
+        #
+        #     self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
+        #     if self.player.get_streak() == 5:
+        #         self.animate_streak()
+        # else:
+        #     self.stop_streak()
 
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "
