@@ -42,6 +42,8 @@ class MainWidget(BaseWidget):
         self.chordDisplay = ChordMatchDisplay(self.color_mapping)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
         self.canvas.add(self.chordDisplay)
+        #BrownEyedGirl 12 and 23
+        #Riptide 92 108
         self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
         self.controller.set_start(int(self.data.get_sections()[92][0]))
 
