@@ -9,8 +9,9 @@ name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class Player(object):
-    def __init__(self, data, display, audio_ctrl, color_mapping, detector):
+    def __init__(self, data, display, audio_ctrl, color_mapping, detector, main):
         super(Player, self).__init__()
+        self.main = main
         self.gem_data = data.get_gems()
 
         self.display = display
@@ -77,7 +78,10 @@ class Player(object):
                     if self.streak >= 5:
                         self.score += 100
                         # new streak handling
-                        self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
+                        #self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
+                        self.main.animate_streak()
+                    else:
+                        self.main.stop_streak()
 
                 # a lane miss
                 else:

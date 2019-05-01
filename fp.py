@@ -58,7 +58,7 @@ class MainWidget(BaseWidget):
         
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
 
-        self.create_label("Chord Learning", (50, 560), Color(1, 0, 0))
+        self.title = self.create_label("Chord Learning", (50, Window.height - 40), Color(1, 0, 0))
 
 
 
@@ -76,8 +76,6 @@ class MainWidget(BaseWidget):
 
         self.time = 0
 
-        label = self.create_label("hi", (100,100))
-        self.modify_text(label,"bye")
 
 
 
@@ -98,7 +96,7 @@ class MainWidget(BaseWidget):
 
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
-        self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector)
+        self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
 
     def on_touch_down(self, touch):
         if not self.section2_started:
@@ -136,6 +134,7 @@ class MainWidget(BaseWidget):
                 self.section2_started = True
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
+                self.canvas.remove(self.title)
         if keycode[1] == "q":
             self.chordPlayer.new_section()
         if keycode[1] == "r":
@@ -204,13 +203,13 @@ class MainWidget(BaseWidget):
         self.player.on_update(self.time)
         #self.midi.on_update()
 
-        if self.player.get_streak() >= 5:
-
-            self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
-            if self.player.get_streak() == 5:
-                self.animate_streak()
-        else:
-            self.stop_streak()
+        # if self.player.get_streak() >= 5:
+        #
+        #     self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
+        #     if self.player.get_streak() == 5:
+        #         self.animate_streak()
+        # else:
+        #     self.stop_streak()
 
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "

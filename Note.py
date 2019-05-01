@@ -27,13 +27,13 @@ class Note(InstructionGroup):
         self.translate2 = Translate(0, 40)
         self.add(self.translate2)
 
-        self.note = Rectangle(texture=Image("particle/texture.png").texture, pos = (-10,-10), size = (20,20))
+        self.note = Rectangle(texture=Image("particle/texture.png").texture, pos = (-15,-15), size = (30,30))
 
         self.add(self.note)
 
         self.add(PopMatrix())
 
-        self.vel = np.array((0,40), dtype= np.float)
+        self.vel = np.array((0,60), dtype= np.float)
 
         self.color.a = 1
 
