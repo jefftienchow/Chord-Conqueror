@@ -3,10 +3,10 @@ from kivy.graphics.instructions import InstructionGroup
 
 from Note import Note
 from ChordDiagram import ChordDiagram
+from common.gfxutil import *
 
 vel = 200
 nowbar_height = 100
-
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
 class BeatMatchDisplay(InstructionGroup):
@@ -20,6 +20,8 @@ class BeatMatchDisplay(InstructionGroup):
 
         self.time = 0
 
+        self.anim_group = AnimGroup()
+        self.add(self.anim_group)
 
         self.diagrams = []
         # creates gems
@@ -30,15 +32,13 @@ class BeatMatchDisplay(InstructionGroup):
         for gem_info in self.gem_data:
             gem = GemDisplay(gem_info, self.color_mapping)
             self.gems.append(gem)
-            self.add(gem)
-            
+
             if cur_chord != gem_info[1]:
                 if cur_display:
                     cur_display.set_next(last_time)
                 cur_chord = gem_info[1]
                 cur_display = ChordDisplay(gem_info[1], gem_info[0], self.color_mapping[cur_chord])
                 self.diagrams.append(cur_display)
-                self.add(cur_display)
 
             last_time = gem_info[0]
 
@@ -47,7 +47,6 @@ class BeatMatchDisplay(InstructionGroup):
         for bar_info in self.bar_data:
             bar = BarDisplay(bar_info)
             self.bars.append(bar)
-            self.add(bar)
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
@@ -67,6 +66,11 @@ class BeatMatchDisplay(InstructionGroup):
         for gem in self.gems:
             gem.reset()
 
+        for gem in self.gems:
+            gem.added = False
+        for bar in self.bars:
+            bar.added = False
+
     # called by Player. Causes the right thing to happen
     def gem_hit(self, gem_idx):
         self.gems[gem_idx].on_hit()
@@ -85,12 +89,21 @@ class BeatMatchDisplay(InstructionGroup):
 
     # call every frame to make gems and barlines flow down the screen
     def on_update(self, time):
-        dt = time-self.time
+        dt = time - self.time
         self.time = time
         for gem in self.gems:
             gem.on_update(time)
+            if gem.on_screen:
+                self.add(gem)
+            elif gem.added:
+                self.remove(gem)
+
         for bar in self.bars:
             bar.on_update(time)
+            if bar.on_screen:
+                self.add(bar)
+            elif bar.added:
+                self.remove(gem)
         for diagram in self.diagrams:
             diagram.on_update(time)
         self.button.on_update(dt)
@@ -111,6 +124,11 @@ class BarDisplay(InstructionGroup):
 
         self.vel = vel
         self.notes = []
+        self.added = False
+
+    @property
+    def on_screen(self):
+        return self.ypos >= 0 and self.ypos <= 600
 
     # useful if gem is to animate
     def on_update(self, time):
@@ -170,6 +188,11 @@ class GemDisplay(InstructionGroup):
 
         self.vel = vel
         self.notes = []
+        self.added = False
+
+    @property
+    def on_screen(self):
+        return self.ypos >= 0 and self.ypos <= 600
 
     # change to display this gem being hit
     def on_hit(self):
