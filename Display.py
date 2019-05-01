@@ -5,7 +5,7 @@ from Note import Note
 from ChordDiagram import ChordDiagram
 from common.gfxutil import *
 
-vel = 200
+vel = Window.height/4
 nowbar_height = 100
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
@@ -50,7 +50,7 @@ class BeatMatchDisplay(InstructionGroup):
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
-        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (600, 20))
+        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (Window.width*1.25/2, 20))
         self.add(self.nowbar)
 
         # creates buttons
@@ -119,7 +119,7 @@ class BarDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.bar = Rectangle(pos=(0,self.ypos), size = (600, 2))
+        self.bar = Rectangle(pos=(0,self.ypos), size = (Window.height, 2))
         self.add(self.bar)
 
         self.vel = vel
@@ -128,7 +128,7 @@ class BarDisplay(InstructionGroup):
 
     @property
     def on_screen(self):
-        return self.ypos >= 0 and self.ypos <= 600
+        return self.ypos >= 0 and self.ypos <= Window.height
 
     # useful if gem is to animate
     def on_update(self, time):
@@ -167,7 +167,7 @@ class ChordDisplay(InstructionGroup):
         else:
             self.ypos = nowbar_height + (self.next_time - time) * vel
         
-        self.box.set_pos((600, self.ypos))
+        self.box.set_pos((Window.height, self.ypos))
 
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):
@@ -183,7 +183,7 @@ class GemDisplay(InstructionGroup):
 
         self.xpos = 100
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (400, 10))
+        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (1/2*Window.width, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -192,7 +192,7 @@ class GemDisplay(InstructionGroup):
 
     @property
     def on_screen(self):
-        return self.ypos >= 0 and self.ypos <= 600
+        return self.ypos >= 0 and self.ypos <= Window.height
 
     # change to display this gem being hit
     def on_hit(self):

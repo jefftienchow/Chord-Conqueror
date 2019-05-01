@@ -12,6 +12,7 @@ from Display import *
 from Player import Player
 from SongData import SongData
 from ChordDiagram import ChordDiagram
+from ProgressBar import ProgressBar
 
 vel = 200
 nowbar_height = 100
@@ -20,9 +21,11 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 #Expects inpput chords in the following format [(ROOT, quality, seventhBOOL, chordName]
 class ChordMatchDisplay(InstructionGroup) :
-    def __init__(self,color_mapping):
+    def __init__(self,color_mapping,data,controller):
         super(ChordMatchDisplay, self).__init__()
         self.color_mapping = color_mapping
+        self.data = data
+        self.controller = controller
 
         self.color = Color(1,1,1)
         self.add(self.color)
@@ -35,6 +38,10 @@ class ChordMatchDisplay(InstructionGroup) :
         self.diagramHeight = self.diagramWidth/1.6
         self.x = 0
         self.y =0
+
+        self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
+        self.add(self.progress_bar)
+        self.chord_order = self.progress_bar.chord_order
 
 
 
@@ -66,14 +73,22 @@ class ChordMatchDisplay(InstructionGroup) :
         self.color.s = 1
         self.color.rgb = color
 
-    def on_update(self, time):
+    def on_update(self, frame):
         self.color.s -= .01 
+        self.progress_bar.on_update(frame / 44100)
     #erases everything from its canvas
     def cleanup(self):
         self.remove(self.background)
         self.remove(self.color)
+        self.progress_bar.cleanup()
+        self.remove(self.progress_bar)
         for diag in self.diagrams:
             self.remove(diag)
+
+
+
+    def on_touch_down(self, touch):
+        self.progress_bar.set_cursor(touch.pos)
 
 
 
