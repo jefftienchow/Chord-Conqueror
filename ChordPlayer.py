@@ -78,9 +78,6 @@ class ChordPlayer(object):
             self.current_chord%=len(self.chord_order)
             self.new_section()
         else:
-            print("HERE")
-            print(chord)
-            print(self.chord_order[self.current_chord])
             self.display.correct(chord, False)
 
     # called by MainWidget

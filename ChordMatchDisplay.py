@@ -43,11 +43,16 @@ class ChordMatchDisplay(InstructionGroup) :
         self.add(self.progress_bar)
         self.chord_order = self.progress_bar.chord_order
 
+        self.options = []
 
 
+    def show_options(self, chord):
+        pass
+
+    def remove_options(self):
+        pass
     
     def draw_chord(self, chord):
-        
         if self.x  >= Window.width:
             self.y += self.diagramHeight + 20
             self.x = 0
