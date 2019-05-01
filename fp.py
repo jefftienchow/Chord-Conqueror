@@ -92,12 +92,9 @@ class MainWidget(BaseWidget):
         return item
 
     def modify_text(self, label, new_text):
-        label = CoreLabel(text=new_text)
-        label.refresh()
-        label.texture = label.texture
-
-
-
+        text_label = CoreLabel(text=new_text, font_size = 20)
+        text_label.refresh()
+        label.texture = text_label.texture
 
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
@@ -205,7 +202,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        self.midi.on_update()
+        #self.midi.on_update()
 
         if self.player.get_streak() >= 5:
 
@@ -237,7 +234,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
