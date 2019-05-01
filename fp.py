@@ -44,6 +44,7 @@ class MainWidget(BaseWidget):
         #display, player for chord learning part
         self.chordDisplay = ChordMatchDisplay(self.color_mapping)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector)
+
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
@@ -198,7 +199,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "
@@ -227,7 +228,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
