@@ -17,7 +17,7 @@ import sys
 from kivy.uix.label import CoreLabel
 from ChordDetector import ChordDetector
 
-vel = 200
+vel = Window.height/2
 nowbar_height = 100
 colors = [(1,0,0), (1,1,0), (0,1,0), (0,1,1), (0,0,1)]
 
@@ -41,8 +41,9 @@ class MainWidget(BaseWidget):
         self.detector = ChordDetector()
 
         #display, player for chord learning part
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping)
-        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector)
+
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller)
+        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data)
 
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23
@@ -138,6 +139,10 @@ class MainWidget(BaseWidget):
                 self.section2_started = True
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
+        if keycode[1] == "q":
+            self.chordPlayer.new_section()
+        if keycode[1] == "r":
+            self.chordPlayer.replay_section()
 
     def handle_down_section2(self, keycode, modifiers):
         # play / pause toggle
@@ -200,7 +205,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        #self.midi.on_update()
+        self.midi.on_update()
 
         if self.player.get_streak() >= 5:
 
@@ -232,7 +237,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midi.on_update()
+        self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:

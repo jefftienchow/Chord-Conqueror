@@ -87,6 +87,12 @@ class SongData(object):
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
+
+        cur_chord = None
+        # for i in range(len(chords)):
+        #     if cur_chord != data[i][1]:
+        #         self.sections.append((float(data[i][0]),data[i][1]))
+        #         cur_chord = data[i][1]
         self.sections = [(data[i+1][0],chords[i]) for i in range(len(chords))]
         riptide_gems = []
         tempo_map = TempoMap(data)
