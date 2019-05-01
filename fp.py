@@ -17,7 +17,7 @@ import sys
 from kivy.uix.label import CoreLabel
 from ChordDetector import ChordDetector
 
-vel = Window.height/2
+vel = Window.height
 nowbar_height = 100
 colors = [(1,0,0), (1,1,0), (0,1,0), (0,1,1), (0,0,1)]
 
