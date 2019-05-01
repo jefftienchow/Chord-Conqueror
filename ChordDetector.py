@@ -26,7 +26,7 @@ class ChordDetector(object):
         string = note[0]
         note = note[1]
         chord = False
-        print(string, self.cur_strings)
+        # print(string, self.cur_strings)
         #assuming self.hold means that we are playing a chord
         if not self.strumming:
             self.new_chord(string, note)
