@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db87c2ef-104c-401c-b0f1-ea5d729ef2b3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ChordMatchDisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChordMatchDisplay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChordPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChordPlayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Display.py" beforeDir="false" afterPath="$PROJECT_DIR$/Display.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProgressBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProgressBar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SongData.py" beforeDir="false" afterPath="$PROJECT_DIR$/SongData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fp.py" beforeDir="false" afterPath="$PROJECT_DIR$/fp.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="355">
+              <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
               <folding>
                 <element signature="e#8#33#0" expanded="true" />
               </folding>
@@ -110,11 +105,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Display.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="180" column="85" selection-start-line="180" selection-start-column="85" selection-end-line="180" selection-end-column="85" />
+            <state relative-caret-position="498">
+              <caret line="191" column="42" lean-forward="true" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -147,7 +142,6 @@
       <find>self.midichord</find>
       <find>midiInput</find>
       <find>midichord</find>
-      <find>midi</find>
       <find>self.time</find>
       <find>animgroup</find>
       <find>self.midi</find>
@@ -163,6 +157,7 @@
       <find>velocity</find>
       <find>speed</find>
       <find>&gt;&gt;&gt;&gt;</find>
+      <find>midi</find>
     </findStrings>
     <replaceStrings>
       <replace>print ('</replace>
@@ -190,8 +185,8 @@
         <option value="$PROJECT_DIR$/Player.py" />
         <option value="$PROJECT_DIR$/SongData.py" />
         <option value="$PROJECT_DIR$/Audio.py" />
-        <option value="$PROJECT_DIR$/fp.py" />
         <option value="$PROJECT_DIR$/Display.py" />
+        <option value="$PROJECT_DIR$/fp.py" />
       </list>
     </option>
   </component>
@@ -505,22 +500,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fp.py">
+    <entry file="file://$PROJECT_DIR$/Display.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+        <state relative-caret-position="498">
+          <caret line="191" column="42" lean-forward="true" selection-start-line="191" selection-start-column="42" selection-end-line="191" selection-end-column="42" />
           <folding>
-            <element signature="e#8#33#0" expanded="true" />
+            <element signature="e#0#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Display.py">
+    <entry file="file://$PROJECT_DIR$/fp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="180" column="85" selection-start-line="180" selection-start-column="85" selection-end-line="180" selection-end-column="85" />
+        <state relative-caret-position="355">
+          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#8#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
