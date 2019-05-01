@@ -39,7 +39,7 @@ class MainWidget(BaseWidget):
             self.color_mapping[self.chords[i]] = colors[i]
 
         #display, player for chord learning part
-        self.chordDisplay = ChordMatchDisplay()
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller)
         self.canvas.add(self.chordDisplay)
         self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
@@ -65,7 +65,7 @@ class MainWidget(BaseWidget):
         try:
             pass
             
-            # self.midiChord = MIDIInput(self.chordPlayer.on_strum)
+            self.midiChord = MIDIInput(self.chordPlayer.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -92,7 +92,7 @@ class MainWidget(BaseWidget):
     def init_section_2(self):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping)
-        # self.midi = MIDIInput(self.player.on_strum)
+        self.midi = MIDIInput(self.player.on_strum)
         for chord in self.chords:
             self.player.add_chord(chord)
 
@@ -117,7 +117,7 @@ class MainWidget(BaseWidget):
                 for obj in self.objects:
                     self.canvas.remove(obj)
                 self.init_section_2()
-                # self.midiChord.off()
+                self.midiChord.off()
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
@@ -193,7 +193,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        # self.midi.on_update()
+        self.midi.on_update()
 
         # if not self.player.get_done():
         #     self.label.text = "Press \"P\" to "
@@ -222,7 +222,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        # self.midiChord.on_update()
+        self.midiChord.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:

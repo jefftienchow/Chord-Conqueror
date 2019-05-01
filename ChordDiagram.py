@@ -130,10 +130,10 @@ class ChordDiagram(InstructionGroup):
 		for index, fret in enumerate(indices):
 			
 			finger = InstructionGroup()
-			finger.add(Color(50/255,1,0))
+			finger.add(Color(*color))
 			# TO DO: handle muted strings
 			if fret == -1:
-				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]))
+				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]),color= Color(*color))
 				finger.add(x)
 			else:
 				dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
