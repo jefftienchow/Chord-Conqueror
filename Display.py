@@ -66,10 +66,8 @@ class BeatMatchDisplay(InstructionGroup):
         for gem in self.gems:
             gem.reset()
 
-        for gem in self.gems:
-            gem.added = False
-        for bar in self.bars:
-            bar.added = False
+        for object in self.gems + self.bars + self.diagrams:
+            object.added = False
 
     # called by Player. Causes the right thing to happen
     def gem_hit(self, gem_idx):
@@ -91,21 +89,13 @@ class BeatMatchDisplay(InstructionGroup):
     def on_update(self, time):
         dt = time - self.time
         self.time = time
-        for gem in self.gems:
-            gem.on_update(time)
-            if gem.on_screen:
-                self.add(gem)
-            elif gem.added:
-                self.remove(gem)
 
-        for bar in self.bars:
-            bar.on_update(time)
-            if bar.on_screen:
-                self.add(bar)
-            elif bar.added:
-                self.remove(gem)
-        for diagram in self.diagrams:
-            diagram.on_update(time)
+        for object in self.gems + self.bars + self.diagrams:
+            object.on_update(time)
+            if object.on_screen:
+                self.add(object)
+            elif object.added:
+                self.remove(object)
         self.button.on_update(dt)
 
 # display for a single gem at a position with a color (if desired)
@@ -153,6 +143,11 @@ class ChordDisplay(InstructionGroup):
         self.add(self.box)
 
         self.vel = vel
+        self.added = False
+
+    @property
+    def on_screen(self):
+        return self.ypos >= 0 and self.ypos <= 600
         
     def set_next(self, next_time):
         self.next_time = next_time - self.size/vel/2

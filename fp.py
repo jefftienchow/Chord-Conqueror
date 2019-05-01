@@ -29,10 +29,9 @@ class MainWidget(BaseWidget):
         self.section2_started = False
         self.streak = False
 
-        self.data = SongData("annotations/" + song + "AnnotationFull.txt", "annotations/" + song + "Regions.txt")
+        self.data = SongData("annotations/" + song + "AnnotationFull.txt")
 
-        self.regions = self.data.get_regions()
-        self.controller = AudioController("music/"+ song, self.regions)
+        self.controller = AudioController("music/"+ song)
 
         self.color_mapping = {}
         self.chords = self.data.get_chords()
@@ -54,10 +53,6 @@ class MainWidget(BaseWidget):
 
         # self.canvas.add(self.progress_bar)
         self.objects = []
-
-
-
-        
         
         
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
