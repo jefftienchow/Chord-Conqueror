@@ -5,20 +5,20 @@ from common.gfxutil import *
 from kivy.uix.label import CoreLabel
 
 
-class MainWidget(BaseWidget):
+# class MainWidget(BaseWidget):
 
-	def __init__(self, whatever=None):
-	    super(MainWidget, self).__init__()
+# 	def __init__(self, whatever=None):
+# 	    super(MainWidget, self).__init__()
 	    
-	    self.txt = TextLabel(text="Time for bed.", pos=(400, 300))
-	    self.anim = AnimGroup()
-	    self.anim.add(self.txt)
-	    self.canvas.add(self.anim)
+# 	    self.txt = TextLabel(text="Time for bed.", pos=(400, 300))
+# 	    self.anim = AnimGroup()
+# 	    self.anim.add(self.txt)
+# 	    self.canvas.add(self.anim)
 	    
 	    
 
-	def on_update(self):
-		self.anim.on_update()
+# 	def on_update(self):
+# 		self.anim.on_update()
 
 class TextLabel(InstructionGroup):
 
@@ -46,4 +46,4 @@ class TextLabel(InstructionGroup):
 		return True
 		return self.size_func.is_active(self.t)
 
-run(MainWidget, None)
+# run(MainWidget, None)
