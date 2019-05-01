@@ -3,7 +3,7 @@
 
 
 ##### NEW UDIO CONTROLLER, NEW PLAYER, AND NEW DISPLAY
-
+import random
 from common.core import *
 from common.gfxutil import *
 
@@ -44,12 +44,31 @@ class ChordMatchDisplay(InstructionGroup) :
         self.chord_order = self.progress_bar.chord_order
 
         self.options = []
+        self.allchords = ['G',
+            'A',
+            'am',
+            'bm',
+            'C',
+            'D',
+            'D7',
+            'em',
+            'Fmaj7',
+            'em7',]
 
 
     def show_options(self, chord):
-        pass
+        self.options.append(chord)
+        for i in range(2):
+            choice = random.choice(self.allchords)
+            while choice not in self.options() and choice != chord:
+                choice = random.choice(self.allchords)
+            self.options.append(choice)
+
+
+
 
     def remove_options(self):
+        self.options = []
         pass
     
     def draw_chord(self, chord):

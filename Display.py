@@ -6,7 +6,7 @@ from ChordDiagram import ChordDiagram
 from common.gfxutil import *
 from kivy.core.image import Image
 
-vel = Window.height/4
+vel = Window.height/3
 nowbar_height = 100
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
@@ -33,6 +33,7 @@ class BeatMatchDisplay(InstructionGroup):
         for gem_info in self.gem_data:
             gem = GemDisplay(gem_info, self.color_mapping)
             self.gems.append(gem)
+            #self.add(gem)
 
             if cur_chord != gem_info[1]:
                 if cur_display:
@@ -40,6 +41,7 @@ class BeatMatchDisplay(InstructionGroup):
                 cur_chord = gem_info[1]
                 cur_display = ChordDisplay(gem_info[1], gem_info[0], self.color_mapping[cur_chord])
                 self.diagrams.append(cur_display)
+                #self.add(cur_display)
 
             last_time = gem_info[0]
 
@@ -48,6 +50,7 @@ class BeatMatchDisplay(InstructionGroup):
         for bar_info in self.bar_data:
             bar = BarDisplay(bar_info)
             self.bars.append(bar)
+            #self.add(bar)
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
@@ -67,6 +70,7 @@ class BeatMatchDisplay(InstructionGroup):
 
         for object in self.gems + self.bars + self.diagrams:
             object.added = False
+            object.removed = False
 
     # called by Player. Causes the right thing to happen
     def gem_hit(self, gem_idx):
@@ -90,11 +94,15 @@ class BeatMatchDisplay(InstructionGroup):
         self.time = time
 
         for object in self.gems + self.bars + self.diagrams:
-            object.on_update(time)
-            if object.on_screen:
+            #object.on_update(time)
+            if not object.removed:
+                object.on_update(time)
+            if object.on_screen and not object.added:
                 self.add(object)
-            elif object.added:
+                object.added = True
+            elif object.added and not object.removed and not object.on_screen:
                 self.remove(object)
+                object.removed = True
         self.button.on_update(dt)
 
 # display for a single gem at a position with a color (if desired)
@@ -114,6 +122,7 @@ class BarDisplay(InstructionGroup):
         self.vel = vel
         self.notes = []
         self.added = False
+        self.removed = False
 
     @property
     def on_screen(self):
@@ -143,10 +152,11 @@ class ChordDisplay(InstructionGroup):
 
         self.vel = vel
         self.added = False
+        self.removed = False
 
     @property
     def on_screen(self):
-        return self.ypos >= 0 and self.ypos <= 600
+        return self.ypos >= -300 and self.ypos <= 600
         
     def set_next(self, next_time):
         self.next_time = next_time - self.size/vel
@@ -184,6 +194,7 @@ class GemDisplay(InstructionGroup):
         self.vel = vel
         self.notes = []
         self.added = False
+        self.removed = False
 
     @property
     def on_screen(self):
@@ -194,8 +205,8 @@ class GemDisplay(InstructionGroup):
         self.color.a = 0
 
         # creates the hit effect where notes animations are added
-        for i in range(6):
-            note = Note((300, nowbar_height), self.color_data, i * 60)
+        for i in range(9):
+            note = Note((300, nowbar_height), self.color_data, i * 40)
             self.add(note)
             self.notes.append(note)
 
@@ -226,13 +237,13 @@ class ButtonDisplay(InstructionGroup):
         self.border_color = Color(1,1,1)
         self.pos = pos
         self.add(self.border_color)
-        self.border = Rectangle(pos=pos, size=(400, 20))
+        self.border = Rectangle(pos=pos, size=(Window.width/2, 20))
         self.add(self.border)
         self.time = 0
 
         self.inside_color = Color(0,0,0,.5)
         self.add(self.inside_color)
-        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (390, 10))
+        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (Window.width/2-10, 10))
         self.add(self.inside)
 
     # displays when button is down (and if it hit a gem)
