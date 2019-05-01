@@ -1,5 +1,6 @@
 from kivy.graphics import Color, Rectangle
 from ChordDetector import ChordDetector
+from TextLabel import *
 
 #chord_to_index = {"C": 0, "D": 1, "D7": 2, "e": 3, "G": 4}
 
@@ -76,6 +77,8 @@ class Player(object):
                     self.max_streak = max(self.streak, self.max_streak)
                     if self.streak >= 5:
                         self.score += 100
+                        # new streak handling
+                        self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))
 
                 # a lane miss
                 else:
