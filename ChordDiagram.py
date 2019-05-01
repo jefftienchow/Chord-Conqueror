@@ -51,7 +51,7 @@ class ChordDiagram(InstructionGroup):
 			'em':[0,2,2,0,0,0],
 			'Fmaj7':[-1,-1,3,2,1,0]}
 
-	def __init__(self, size=400, pos=(0,0), chord='G'):
+	def __init__(self, size=400, pos=(0,0), chord='G', color=Color(1,1,1)):
 		super(ChordDiagram, self).__init__()
 
 
@@ -142,8 +142,8 @@ class ChordDiagram(InstructionGroup):
 
 		# border
 		border = InstructionGroup()
-		self.color = Color(1,1,1)
-		border.add(self.color)
+		self.color = color
+		border.add(Color(*self.color))
 		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)
