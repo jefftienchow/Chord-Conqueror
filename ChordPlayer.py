@@ -52,6 +52,7 @@ class ChordPlayer(object):
         self.controller.set_stop(int(self.data.get_sections()[self.end_section][0]))
 
     def new_section(self):
+        self.display.remove_options()
         self.current_chord +=1
         self.current_chord %= len(self.chord_order)
         current_section = self.chords[self.chord_order[self.current_chord]]
@@ -60,7 +61,7 @@ class ChordPlayer(object):
             self.end_section = self.chords[self.chord_order[self.current_chord+1]] + 2
         else:
             self.end_section = self.start_section + 4
-
+        self.display.show_options(self.chord_order[self.current_chord])
 
         self.replay_section()
         
