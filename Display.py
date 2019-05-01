@@ -4,8 +4,9 @@ from kivy.graphics.instructions import InstructionGroup
 from Note import Note
 from ChordDiagram import ChordDiagram
 from common.gfxutil import *
+from kivy.core.image import Image
 
-vel = 200
+vel = Window.height/4
 nowbar_height = 100
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
@@ -35,7 +36,7 @@ class BeatMatchDisplay(InstructionGroup):
 
             if cur_chord != gem_info[1]:
                 if cur_display:
-                    cur_display.set_next(last_time)
+                    cur_display.set_next(gem_info[0])
                 cur_chord = gem_info[1]
                 cur_display = ChordDisplay(gem_info[1], gem_info[0], self.color_mapping[cur_chord])
                 self.diagrams.append(cur_display)
@@ -50,15 +51,13 @@ class BeatMatchDisplay(InstructionGroup):
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
-        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (600, 20))
+        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (Window.width*1.25/2, 20))
         self.add(self.nowbar)
 
         # creates buttons
-        color = Color(1,1,1)
-        color.a = .5
         pos = (100, nowbar_height)
 
-        self.button = ButtonDisplay(pos,color)
+        self.button = ButtonDisplay(pos)
 
         self.add(self.button)
 
@@ -66,10 +65,8 @@ class BeatMatchDisplay(InstructionGroup):
         for gem in self.gems:
             gem.reset()
 
-        for gem in self.gems:
-            gem.added = False
-        for bar in self.bars:
-            bar.added = False
+        for object in self.gems + self.bars + self.diagrams:
+            object.added = False
 
     # called by Player. Causes the right thing to happen
     def gem_hit(self, gem_idx):
@@ -91,21 +88,13 @@ class BeatMatchDisplay(InstructionGroup):
     def on_update(self, time):
         dt = time - self.time
         self.time = time
-        for gem in self.gems:
-            gem.on_update(time)
-            if gem.on_screen:
-                self.add(gem)
-            elif gem.added:
-                self.remove(gem)
 
-        for bar in self.bars:
-            bar.on_update(time)
-            if bar.on_screen:
-                self.add(bar)
-            elif bar.added:
-                self.remove(gem)
-        for diagram in self.diagrams:
-            diagram.on_update(time)
+        for object in self.gems + self.bars + self.diagrams:
+            object.on_update(time)
+            if object.on_screen:
+                self.add(object)
+            elif object.added:
+                self.remove(object)
         self.button.on_update(dt)
 
 # display for a single gem at a position with a color (if desired)
@@ -119,7 +108,7 @@ class BarDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.bar = Rectangle(pos=(0,self.ypos), size = (600, 2))
+        self.bar = Rectangle(pos=(0,self.ypos), size = (Window.height, 2))
         self.add(self.bar)
 
         self.vel = vel
@@ -128,7 +117,7 @@ class BarDisplay(InstructionGroup):
 
     @property
     def on_screen(self):
-        return self.ypos >= 0 and self.ypos <= 600
+        return self.ypos >= 0 and self.ypos <= Window.height
 
     # useful if gem is to animate
     def on_update(self, time):
@@ -153,9 +142,14 @@ class ChordDisplay(InstructionGroup):
         self.add(self.box)
 
         self.vel = vel
+        self.added = False
+
+    @property
+    def on_screen(self):
+        return self.ypos >= 0 and self.ypos <= 600
         
     def set_next(self, next_time):
-        self.next_time = next_time - self.size/vel/2
+        self.next_time = next_time - self.size/vel
 
     def on_update(self, time):
         self.time = time
@@ -167,7 +161,7 @@ class ChordDisplay(InstructionGroup):
         else:
             self.ypos = nowbar_height + (self.next_time - time) * vel
         
-        self.box.set_pos((600, self.ypos))
+        self.box.set_pos((Window.height, self.ypos))
 
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):
@@ -181,9 +175,10 @@ class GemDisplay(InstructionGroup):
         self.color.a = .7
         self.add(self.color)
 
-        self.xpos = 100
+        self.xpos = 105
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (400, 10))
+
+        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (1/2*Window.width - 10, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -192,7 +187,7 @@ class GemDisplay(InstructionGroup):
 
     @property
     def on_screen(self):
-        return self.ypos >= 0 and self.ypos <= 600
+        return self.ypos >= 0 and self.ypos <= Window.height
 
     # change to display this gem being hit
     def on_hit(self):
@@ -226,25 +221,31 @@ class GemDisplay(InstructionGroup):
 
 # Displays one button on the nowbar
 class ButtonDisplay(InstructionGroup):
-    def __init__(self, pos, color):
+    def __init__(self, pos):
         super(ButtonDisplay, self).__init__()
-        self.color = color
+        self.border_color = Color(1,1,1)
         self.pos = pos
-        self.add(color)
-        self.button = Rectangle(pos=pos, size=(400, 20))
-        self.add(self.button)
+        self.add(self.border_color)
+        self.border = Rectangle(pos=pos, size=(400, 20))
+        self.add(self.border)
         self.time = 0
+
+        self.inside_color = Color(0,0,0,.5)
+        self.add(self.inside_color)
+        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (390, 10))
+        self.add(self.inside)
 
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
-        self.color.rgb = color
+        self.border_color.rgb = color
+        self.inside_color.a = .2
         self.time = 0
 
     # back to normal state
     def on_up(self):
-        self.color.rgb = (1,1,1)
+        self.border_color.rgb = (1, 1, 1)
 
     def on_update(self, dt):
         self.time += dt
         if self.time > .2:
-            self.color.rgb = (1,1,1)
+            self.border_color.rgb = (1, 1, 1)

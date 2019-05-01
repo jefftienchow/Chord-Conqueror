@@ -8,15 +8,15 @@ name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class ChordPlayer(object):
-    def __init__(self, display, audio_ctrl, detector):
+    def __init__(self, display, audio_ctrl, detector,data):
         super(ChordPlayer, self).__init__()
         self.detector = detector
-
+        self.data = data
         self.display = display
         self.controller = audio_ctrl
+        self.progress_bar = self.display.progress_bar
         self.interval = .2
         self.done = False
-        self.chords = {}
         self.cur_notes = set()
         self.cur_strings = []
         self.detecting = False
@@ -28,31 +28,55 @@ class ChordPlayer(object):
         self.hold = False
 
         self.detected = set()
-        self.all_chords = ['G', 'C', 'D', 'em','D7' ]
-        self.current_chord = 0
+        self.chords = self.display.chord_order
+        self.chord_order = []
+        for chord in self.chords:
+            self.chord_order.append(chord)
+        self.current_chord = -1
         self.chord_played = False
+        self.start_section = 0
+        self.end_section = None
+        # self.current_section = 92
 
+
+        print(self.chords)
+        print(self.chord_order)
+        print(self.current_chord)
+        print("REE")
         self.detector.set_callback(self.on_button_down)
 
-    def new_chord(self, string, note):
-        self.strumming = True
-        self.strum_time = 0
-        self.cur_notes.clear()
-        self.cur_strings.clear()
-        self.cur_notes.add(note)
-        self.cur_strings.append(string)
 
+
+    def replay_section(self):
+        self.controller.set_start(int(self.data.get_sections()[self.start_section][0]))
+        self.controller.set_stop(int(self.data.get_sections()[self.end_section][0]))
+
+    def new_section(self):
+        self.current_chord +=1
+        self.current_chord %= len(self.chord_order)
+        current_section = self.chords[self.chord_order[self.current_chord]]
+        self.start_section = current_section - 1
+        if self.current_chord != len(self.chord_order) - 1:
+            self.end_section = self.chords[self.chord_order[self.current_chord+1]] + 2
+        else:
+            self.end_section = self.start_section + 4
+
+
+        self.replay_section()
+        
+        
+        
     def wrong(self):
         self.display.wrong()
         self.controller.play_sfx()
 
     # called by MainWidget
     def on_button_down(self, chord):
-        if chord == self.all_chords[self.current_chord]:
-            self.current_chord+=1
+        if chord == self.chord_order[self.current_chord]:
             self.display.correct(chord,True)
             self.detected.add(chord)
-            self.current_chord%=len(self.all_chords)
+            self.current_chord%=len(self.chord_order)
+            self.new_section()
         else:
             self.display.correct(chord, False)
 

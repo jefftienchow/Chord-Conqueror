@@ -3,16 +3,14 @@ from common.clock import TempoMap
 
 # holds data for gems and barlines.
 class SongData(object):
-    def __init__(self, gem_annotation, regions):
+    def __init__(self, gem_annotation):
         super(SongData, self).__init__()
         self.chords = []
         self.bars = []
         self.gems = []
-        self.regions = []
         self.sections = []
 
         self.read_gems(gem_annotation)
-        self.regions_from_file(regions)
 
     def get_sections(self):
         return self.sections
@@ -25,9 +23,6 @@ class SongData(object):
 
     def get_chords(self):
         return self.chords
-
-    def get_regions(self):
-        return self.regions
 
     def lines_from_file(self, filepath):
         with open(filepath) as file:
@@ -59,12 +54,6 @@ class SongData(object):
                         last_chord = tokens[1]
         else:
             self.read_gems_riptide(filename)
-
-    def regions_from_file(self, filename):
-        lines = self.lines_from_file(filename)
-        for line in lines:
-            tokens = self.tokens_from_line(line)
-            self.regions.append((float(tokens[0]), float(tokens[2])))
 
     # updated method of reading data using tempo map, strumming patterns
     def read_gems_riptide(self, filename):
@@ -98,6 +87,12 @@ class SongData(object):
             patterns.append(strum_pattern)
             chords.append(chord)
             tick += 1920
+
+        cur_chord = None
+        # for i in range(len(chords)):
+        #     if cur_chord != data[i][1]:
+        #         self.sections.append((float(data[i][0]),data[i][1]))
+        #         cur_chord = data[i][1]
         self.sections = [(data[i+1][0],chords[i]) for i in range(len(chords))]
         riptide_gems = []
         tempo_map = TempoMap(data)
