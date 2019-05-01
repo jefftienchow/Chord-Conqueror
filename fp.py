@@ -49,8 +49,8 @@ class MainWidget(BaseWidget):
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
         # self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
-        self.controller.set_start(int(self.data.get_sections()[92][0]))
-        self.controller.set_stop(int(self.data.get_sections()[108][0]))
+        self.controller.set_start(int(self.data.get_sections()[12][0]))
+        self.controller.set_stop(int(self.data.get_sections()[23][0]))
 
         # self.canvas.add(self.progress_bar)
         self.objects = []
@@ -201,7 +201,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        #self.midi.on_update()
+        self.midi.on_update()
 
         # if self.player.get_streak() >= 5:
         #
@@ -233,7 +233,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midi.on_update()
+        self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
