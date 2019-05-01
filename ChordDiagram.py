@@ -49,7 +49,8 @@ class ChordDiagram(InstructionGroup):
 			'D':[-1,-1,0,2,3,2],
 			'D7':[-1,-1,0,2,1,2],
 			'em':[0,2,2,0,0,0],
-			'Fmaj7':[-1,-1,3,2,1,0]}
+			'Fmaj7':[-1,-1,3,2,1,0],
+			'em7':[0,2,0,0,0,0]}
 
 	def __init__(self, size=400, pos=(0,0), chord='G', color=Color(1,1,1)):
 		super(ChordDiagram, self).__init__()
