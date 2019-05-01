@@ -205,8 +205,8 @@ class GemDisplay(InstructionGroup):
         self.color.a = 0
 
         # creates the hit effect where notes animations are added
-        for i in range(6):
-            note = Note((300, nowbar_height), self.color_data, i * 60)
+        for i in range(9):
+            note = Note((300, nowbar_height), self.color_data, i * 40)
             self.add(note)
             self.notes.append(note)
 
@@ -237,13 +237,13 @@ class ButtonDisplay(InstructionGroup):
         self.border_color = Color(1,1,1)
         self.pos = pos
         self.add(self.border_color)
-        self.border = Rectangle(pos=pos, size=(400, 20))
+        self.border = Rectangle(pos=pos, size=(Window.width/2, 20))
         self.add(self.border)
         self.time = 0
 
         self.inside_color = Color(0,0,0,.5)
         self.add(self.inside_color)
-        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (390, 10))
+        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (Window.width/2-10, 10))
         self.add(self.inside)
 
     # displays when button is down (and if it hit a gem)
