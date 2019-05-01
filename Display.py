@@ -222,5 +222,6 @@ class ButtonDisplay(InstructionGroup):
         self.color.rgb = (1,1,1)
 
     def on_update(self, dt):
+        self.time += dt
         if self.time > .2:
             self.color.rgb = (1,1,1)

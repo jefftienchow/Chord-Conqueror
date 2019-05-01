@@ -62,8 +62,6 @@ class Player(object):
 
     # called by MainWidget
     def on_button_down(self, chord):
-        print(chord)
-        self.display.on_button_down(self.color_mapping[chord], None)
         if self.idx < len(self.gem_data):
             if self.time >= self.gem_data[self.idx][0] - self.interval and self.time <= self.gem_data[self.idx][0] + self.interval:
                 # a correct note is hit
@@ -80,6 +78,9 @@ class Player(object):
 
                 # a lane miss
                 else:
+                    if chord is None:
+                        self.wrong()
+                        return
                     self.wrong()
                     self.display.gem_pass(self.idx)
 
@@ -90,6 +91,10 @@ class Player(object):
         # end of gems
         elif self.idx == len(self.gem_data):
             self.done = True
+
+        if chord is not None:
+            self.display.on_button_down(self.color_mapping[chord], None)
+
 
     def deduct(self):
         if self.score >= 50:

@@ -54,7 +54,6 @@ class WaveGenerator(object):
 
     def set_stop(self, stop):
         self.stop = stop
-        self.stop = True
 
     def set_start(self, start):
         self.frame = start

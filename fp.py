@@ -47,8 +47,8 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
-        self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
-        self.controller.set_start(int(self.data.get_sections()[92][0]))
+        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
+        self.controller.set_start(int(self.data.get_sections()[12][0]))
 
         self.canvas.add(self.progress_bar)
         self.objects = []
@@ -72,7 +72,7 @@ class MainWidget(BaseWidget):
         try:
             pass
             
-            self.midiChord = MIDIInput(self.detector.on_strum)
+            self.midi = MIDIInput(self.detector.on_strum)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -121,7 +121,6 @@ class MainWidget(BaseWidget):
                 for obj in self.objects:
                     self.canvas.remove(obj)
                 self.init_section_2()
-                #self.midiChord.off()
                 self.canvas.add(self.display)
                 #cleanup graphics
                 self.chordDisplay.cleanup()
@@ -228,7 +227,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midiChord.on_update()
+        self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
