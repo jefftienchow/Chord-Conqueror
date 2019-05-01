@@ -51,7 +51,7 @@ class ChordDiagram(InstructionGroup):
 			'em':[0,2,2,0,0,0],
 			'Fmaj7':[-1,-1,3,2,1,0]}
 
-	def __init__(self, size=400, pos=(0,0), chord='G'):
+	def __init__(self, size=400, pos=(0,0), chord='G', color=Color(1,1,1)):
 		super(ChordDiagram, self).__init__()
 
 
@@ -130,10 +130,10 @@ class ChordDiagram(InstructionGroup):
 		for index, fret in enumerate(indices):
 			
 			finger = InstructionGroup()
-			finger.add(Color(50/255,1,0))
+			finger.add(Color(*color))
 			# TO DO: handle muted strings
 			if fret == -1:
-				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]))
+				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]),color= Color(*color))
 				finger.add(x)
 			else:
 				dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
@@ -142,8 +142,8 @@ class ChordDiagram(InstructionGroup):
 
 		# border
 		border = InstructionGroup()
-		self.color = Color(1,1,1)
-		border.add(self.color)
+		self.color = color
+		border.add(Color(*self.color))
 		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)

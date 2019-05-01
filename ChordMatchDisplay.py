@@ -20,9 +20,9 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 #Expects inpput chords in the following format [(ROOT, quality, seventhBOOL, chordName]
 class ChordMatchDisplay(InstructionGroup) :
-    def __init__(self):
+    def __init__(self,color_mapping):
         super(ChordMatchDisplay, self).__init__()
-
+        self.color_mapping = color_mapping
 
         self.color = Color(1,1,1)
         self.add(self.color)
@@ -31,21 +31,23 @@ class ChordMatchDisplay(InstructionGroup) :
 
         self.chords = []
         self.diagrams = []
-        
-        self.x = -390
+        self.diagramWidth = Window.width/(len(self.color_mapping)+1)
+        self.diagramHeight = self.diagramWidth/1.6
+        self.x = 0
         self.y =0
 
 
 
     
     def draw_chord(self, chord):
-        self.x += 400
-        if self.x >= Window.width:
-            self.y += 250
-            self.x = 10
-        diag = ChordDiagram(200, (self.x,self.y), chord)
+        
+        if self.x  >= Window.width:
+            self.y += self.diagramHeight + 20
+            self.x = 0
+        diag = ChordDiagram(self.diagramHeight, (self.x,self.y), chord = chord, color = self.color_mapping[chord] )
         self.add(diag)
         self.diagrams.append(diag)
+        self.x += self.diagramWidth + self.diagramWidth/(len(self.color_mapping)-1)
 
 
     #what happens when a note is correct, called by ChordPlayer

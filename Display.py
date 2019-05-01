@@ -36,7 +36,7 @@ class BeatMatchDisplay(InstructionGroup):
                 if cur_display:
                     cur_display.set_next(last_time)
                 cur_chord = gem_info[1]
-                cur_display = ChordDisplay(gem_info[1], gem_info[0])
+                cur_display = ChordDisplay(gem_info[1], gem_info[0], self.color_mapping[cur_chord])
                 self.diagrams.append(cur_display)
                 self.add(cur_display)
 
@@ -119,7 +119,7 @@ class BarDisplay(InstructionGroup):
         self.bar.pos = (0, self.ypos)
 
 class ChordDisplay(InstructionGroup):
-    def __init__(self, chord, time_loc):
+    def __init__(self, chord, time_loc, color=Color(1,1,1)):
         super(ChordDisplay, self).__init__()
         self.chord = chord
         self.time = 0
@@ -128,7 +128,7 @@ class ChordDisplay(InstructionGroup):
         self.size = 125
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.box = ChordDiagram(self.size, (650, self.ypos), chord)
+        self.box = ChordDiagram(self.size, (650, self.ypos), chord, color)
         self.add(self.box)
 
         self.vel = vel
