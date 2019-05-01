@@ -39,11 +39,12 @@ class ChordMatchDisplay(InstructionGroup) :
         self.x = 0
         self.y =0
 
-        self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
+        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
         self.add(self.progress_bar)
         self.chord_order = self.progress_bar.chord_order
 
-        self.options = []
+        self.options = set()
+        self.optiondiags = []
         self.allchords = ['G',
             'A',
             'am',
@@ -53,23 +54,48 @@ class ChordMatchDisplay(InstructionGroup) :
             'D7',
             'em',
             'Fmaj7',
-            'em7',]
+            'em7']
 
 
     def show_options(self, chord):
-        self.options.append(chord)
-        for i in range(2):
-            choice = random.choice(self.allchords)
-            while choice not in self.options() and choice != chord:
-                choice = random.choice(self.allchords)
-            self.options.append(choice)
+        self.options.add(chord)
+        print(self.allchords)
+        print("ALL CHORDS")
 
+        while len(self.options)< 3:
+            self.options.add(random.choice(self.allchords))
+
+
+
+
+        # for i in range(2):
+        #     choice = random.choice(self.allchords)
+        #     print(choice)
+        #     while choice not in self.options and choice != chord:
+        #         choice = random.choice(self.allchords)
+        #         print(choice)
+        #     print("DIFFERENT FROM: " + chord )
+        #     print(choice)
+        #     self.options.append(choice)
+        # random.shuffle(self.options)
+        # print(self.options)
+
+        #drawign section
+        x = 0
+        y = Window.height/2
+        for option in self.options:
+            diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =(1,1,1) )
+            x +=self.diagramWidth + self.diagramWidth/2
+            self.add(diag)
+            self.optiondiags.append(diag)
 
 
 
     def remove_options(self):
-        self.options = []
-        pass
+        self.options = set()
+        for option in self.optiondiags:
+            self.remove(option)
+        self.optiondiags.clear()
     
     def draw_chord(self, chord):
         if self.x  >= Window.width:
