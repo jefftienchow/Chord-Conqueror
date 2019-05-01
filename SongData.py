@@ -41,7 +41,7 @@ class SongData(object):
     # read the gems and song data. You may want to add a secondary filepath
     # argument if your barline data is stored in a different txt file.
     def read_gems(self, filename):
-        if filename == 'annotations/BrownEyedGirlAnnotationFull.txt':
+        if filename != 'annotations/RiptideAnnotationFull.txt':
 
             lines = self.lines_from_file(filename)
 
@@ -58,7 +58,6 @@ class SongData(object):
                         self.sections.append((float(tokens[0]), tokens[1]))
                         last_chord = tokens[1]
         else:
-            print('nope')
             self.read_gems_riptide(filename)
 
     def regions_from_file(self, filename):
