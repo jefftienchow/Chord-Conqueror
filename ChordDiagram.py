@@ -8,20 +8,20 @@ from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
 
-class MainWidget(BaseWidget) :
-    def __init__(self, hi):
-        super(MainWidget, self).__init__()
-
-
-        # chords=['G','C','D', [-1,2,4,2,3,2]]
-        # for index, chord in enumerate(chords):
-        # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
-
-        x = ChordDiagram(size=200, pos=(200, 300))
-        self.canvas.add(x)
-
-    def on_update(self):
-    	pass
+# class MainWidget(BaseWidget) :
+#     def __init__(self, hi):
+#         super(MainWidget, self).__init__()
+#
+#
+#         # chords=['G','C','D', [-1,2,4,2,3,2]]
+#         # for index, chord in enumerate(chords):
+#         # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
+#
+#         x = ChordDiagram(size=200, pos=(200, 300))
+#         self.canvas.add(x)
+#
+#     def on_update(self):
+#     	pass
 
 
 class Mute(InstructionGroup):
@@ -78,7 +78,7 @@ class ChordDiagram(InstructionGroup):
 		last_x = x
 		self.finger_placements = [x]
 		scale_length = self.size * 6
-		for i in range(4):
+		for i in range(5):
 			fret = InstructionGroup()
 			fret.add(Color(238/255, 238/255, 224/255))
 			x = last_x + scale_length/17.817
@@ -112,7 +112,7 @@ class ChordDiagram(InstructionGroup):
 			line = Line(points=[self.x + self.size * .1, y, self.x + self.size * 1.5, y], width=width, cap='round')
 			string.add(line)
 			self.add(string)
-
+		print(self.string_heights)
 		# nut
 		x = self.x + self.size * .1
 		nut = InstructionGroup()
@@ -153,7 +153,7 @@ class ChordDiagram(InstructionGroup):
 		finger_colors = Color(*self.color)
 		finger_colors.a = .3
 		self.add(finger_colors)
-		for i in range(5):
+		for i in range(6):
 			dot = CEllipse(cpos = (self.finger_placements[0], self.string_heights[i]), csize=(self.size*.1, self.size*.1))
 			self.fingers.append(dot)
 			self.add(dot)
@@ -166,8 +166,9 @@ class ChordDiagram(InstructionGroup):
 		self.color.rgb = rgb
 
 	def on_update(self, string, fret): #info: string, fret
-		self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[])
+		if fret < 5:
+			self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[5-string])
 
 
 
-run(MainWidget, "BrownEyedGirl")
+# run(MainWidget, "BrownEyedGirl")

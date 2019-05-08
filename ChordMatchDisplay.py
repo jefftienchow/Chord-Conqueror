@@ -23,6 +23,8 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 class ChordMatchDisplay(InstructionGroup) :
     def __init__(self,color_mapping,data,controller):
         super(ChordMatchDisplay, self).__init__()
+        self.diags = []
+
         self.color_mapping = color_mapping
         self.data = data
         self.controller = controller
@@ -83,12 +85,19 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 0
         y = Window.height/2
+        self.diags = []
         for option in self.options:
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =(1,1,1) )
             x +=self.diagramWidth + self.diagramWidth/2
             self.add(diag)
             self.optiondiags.append(diag)
+            self.diags.append(diag)
 
+    def on_update_diagram(self, string, fret):
+        print(string)
+        print(fret)
+        for diag in self.diags:
+            diag.on_update(string,fret)
 
 
     def remove_options(self):
