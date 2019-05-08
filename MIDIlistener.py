@@ -35,7 +35,6 @@ class MIDIInput(object):
 
                 #if input received
                 while msg != None:
-
                     message, deltatime = msg
                     timer += deltatime
 
@@ -76,6 +75,8 @@ class MIDIInput(object):
                         if (len(message) == 8 and message[4] == 1):
                             string = message[5]
                             midiNote = message[6]
+                            print(string-1)
+                            print(midiNote - STRING_TO_MIDINOTE[string])
                             self.callback2(string-1, midiNote - STRING_TO_MIDINOTE[string])
                             # self.callback2(str(string) + " has finger on fret #:" + str(int(midiNote)-STRING_TO_MIDINOTE[string]))
                     msg = self.midiin.get_message()

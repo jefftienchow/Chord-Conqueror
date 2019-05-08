@@ -24,6 +24,8 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 class ChordMatchDisplay(InstructionGroup) :
     def __init__(self,color_mapping,data,controller):
         super(ChordMatchDisplay, self).__init__()
+        self.diags = []
+
         self.color_mapping = color_mapping
         self.data = data
         self.controller = controller
@@ -91,14 +93,24 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 50
         y = Window.height/2
+<<<<<<< HEAD
         self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
         self.add(self.label)
+=======
+        self.diags = []
+>>>>>>> 959c3234600ac3ec12a19aec70feeaf7a19c39bf
         for option in self.options:
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =color)
             x +=self.diagramWidth + self.diagramWidth/2
             self.add(diag)
             self.optiondiags.append(diag)
+            self.diags.append(diag)
 
+    def on_update_diagram(self, string, fret):
+        print(string)
+        print(fret)
+        for diag in self.diags:
+            diag.on_update(string,fret)
 
 
     def remove_options(self):

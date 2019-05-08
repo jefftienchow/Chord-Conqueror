@@ -68,9 +68,8 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-            pass
             
-            self.midi = MIDIInput(self.detector.on_strum)
+            self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
