@@ -13,6 +13,7 @@ from Player import Player
 from SongData import SongData
 from ChordDiagram import ChordDiagram
 from ProgressBar import ProgressBar
+from TextLabel import TextLabel
 
 vel = 200
 nowbar_height = 100
@@ -29,8 +30,8 @@ class ChordMatchDisplay(InstructionGroup) :
 
         self.color = Color(1,1,1)
         self.add(self.color)
-        self.background = Rectangle(pos = (Window.width - 300,Window.height - 300), size = (250, 250))
-        self.add(self.background)
+        # self.background = Rectangle(pos = (Window.width - 300,Window.height - 300), size = (250, 250))
+        # self.add(self.background)
 
         self.chords = []
         self.diagrams = []
@@ -42,6 +43,15 @@ class ChordMatchDisplay(InstructionGroup) :
         self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
         self.add(self.progress_bar)
         self.chord_order = self.progress_bar.chord_order
+
+        # Text Labels
+        self.instrucions1 = TextLabel("Each colored section in the bar above corresponds to a different chord in the song.  Press P to play/pause!", pos=(50, 475), font=15, color=Color(1,0,0))
+        self.add(self.instrucions1)
+        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor.", pos=(50, 450), font=15, color=Color(1,0,0))
+        self.add(self.instrucions1)
+
+        self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,0,0))
+        self.add(self.move_on)
 
         self.options = set()
         self.optiondiags = []
@@ -57,7 +67,7 @@ class ChordMatchDisplay(InstructionGroup) :
             'em7']
 
 
-    def show_options(self, chord):
+    def show_options(self, chord, color=Color(1,1,1), color_name='WHITE'):
         self.options.add(chord)
         print(self.allchords)
         print("ALL CHORDS")
@@ -81,10 +91,12 @@ class ChordMatchDisplay(InstructionGroup) :
         # print(self.options)
 
         #drawign section
-        x = 0
+        x = 50
         y = Window.height/2
+        self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
+        self.add(self.label)
         for option in self.options:
-            diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =(1,1,1) )
+            diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =color)
             x +=self.diagramWidth + self.diagramWidth/2
             self.add(diag)
             self.optiondiags.append(diag)
@@ -128,7 +140,6 @@ class ChordMatchDisplay(InstructionGroup) :
         self.progress_bar.on_update(frame / 44100)
     #erases everything from its canvas
     def cleanup(self):
-        self.remove(self.background)
         self.remove(self.color)
         self.progress_bar.cleanup()
         self.remove(self.progress_bar)

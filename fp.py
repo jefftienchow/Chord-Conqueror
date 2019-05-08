@@ -19,7 +19,7 @@ from ChordDetector import ChordDetector
 
 vel = Window.height
 nowbar_height = 100
-colors = [(1,0,0), (1,1,0), (0,1,0), (0,1,1), (0,0,1)]
+colors = [(0,1,0), (1,0,0), (1,1,0), (0,0.5,1), (1,165/255,0)]
 
 class MainWidget(BaseWidget):
     def __init__(self, song):
@@ -135,7 +135,7 @@ class MainWidget(BaseWidget):
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
                 self.canvas.remove(self.title)
-        if keycode[1] == "q":
+        if keycode[1] == "spacebar":
             self.chordPlayer.new_section()
         if keycode[1] == "r":
             self.chordPlayer.replay_section()
