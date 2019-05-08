@@ -5,19 +5,23 @@ from __future__ import print_function
 import logging
 import sys
 import time
-
+import rtmidi
 from rtmidi.midiutil import open_midiinput
 
+
+STRING_TO_MIDINOTE = {6:40, 5:45, 4:50, 3:55, 2:59, 1:64}
 class MIDIInput(object):
-    def __init__(self,  callback = print):
+    def __init__(self,  callback = print, callback2= print):
         self.callback = callback
+        self.callback2 = callback2
         self.last_note = 0
         self.current_notes = set()
         self.on = True
         try:
-            self.midiin, port_name = open_midiinput(0)
+            self.midiin, port_name = open_midiinput(0, api=0)
         except:
             sys.exit()
+        self.midiin.ignore_types(sysex=False)
     def off(self):
         self.on = False
     def on_update(self):
@@ -31,6 +35,7 @@ class MIDIInput(object):
 
                 #if input received
                 while msg != None:
+
                     message, deltatime = msg
                     timer += deltatime
 
@@ -38,25 +43,41 @@ class MIDIInput(object):
                     if len(message) < 3:
                         print("CRASH AVERTED")
                         return
-                    #separate message into Note and velocity
-                    # print(message)
-                    string = message[0]
-                    note_on = message[2] > 0
-                    midiNote = message[1]
-                    velocity = message[2]
 
-                    #print(message)
 
-                    #means a note is actually being played, so we want to add to active notes
-                    if note_on:
-                        self.current_notes.add(midiNote)
-                        self.last_note = midiNote
-                        self.last_string = string
-                        self.callback((str(self.last_string),str(self.last_note)))
-                    #note not being played, so don't add/remove from active notes
+                    sysex_message = message[0] == 240
+                    if not sysex_message:
+                        #separate message into Note and velocity
+                        # print(message)
+                        string = message[0]
+                        note_on = message[2] > 80
+                        midiNote = message[1]
+                        velocity = message[2]
+
+                        #print(message)
+
+                        #means a note is actually being played, so we want to add to active notes
+                        if note_on:
+                            self.current_notes.add(midiNote)
+                            self.last_note = midiNote
+                            self.last_string = string
+                            self.callback((str(self.last_string),str(self.last_note)))
+                        #note not being played, so don't add/remove from active notes
+                        else:
+                            if midiNote in self.current_notes:
+                                self.current_notes.remove(midiNote)
+
                     else:
-                        if midiNote in self.current_notes:
-                            self.current_notes.remove(midiNote)
+                        # print(message)
+                        # self.callback2("REE")
+
+                        
+
+                        if (len(message) == 8 and message[4] == 1):
+                            string = message[5]
+                            midiNote = message[6]
+                            self.callback2(string-1, midiNote - STRING_TO_MIDINOTE[string])
+                            # self.callback2(str(string) + " has finger on fret #:" + str(int(midiNote)-STRING_TO_MIDINOTE[string]))
                     msg = self.midiin.get_message()
                     
 
