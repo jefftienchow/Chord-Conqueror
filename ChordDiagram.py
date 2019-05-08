@@ -8,20 +8,20 @@ from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
 
-# class MainWidget(BaseWidget) :
-#     def __init__(self):
-#         super(MainWidget, self).__init__()
-#
-#
-#         # chords=['G','C','D', [-1,2,4,2,3,2]]
-#         # for index, chord in enumerate(chords):
-#         # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
-#
-#         x = ChordDiagram(size=200, pos=(200, 300))
-#         self.canvas.add(x)
-#
-#     def on_update(self):
-#     	pass
+class MainWidget(BaseWidget) :
+    def __init__(self, hi):
+        super(MainWidget, self).__init__()
+
+
+        # chords=['G','C','D', [-1,2,4,2,3,2]]
+        # for index, chord in enumerate(chords):
+        # 	self.canvas.add(ChordDiagram(size=100, pos=(60+170*index, 300), chord=chord))
+
+        x = ChordDiagram(size=200, pos=(200, 300))
+        self.canvas.add(x)
+
+    def on_update(self):
+    	pass
 
 
 class Mute(InstructionGroup):
@@ -52,7 +52,7 @@ class ChordDiagram(InstructionGroup):
 			'Fmaj7':[-1,-1,3,2,1,0],
 			'em7':[0,2,0,0,0,0]}
 
-	def __init__(self, size=400, pos=(0,0), chord='G', color=Color(1,1,1)):
+	def __init__(self, size=400, pos=(0,0), chord='G', color=(1,1,1)):
 		super(ChordDiagram, self).__init__()
 
 
@@ -124,15 +124,13 @@ class ChordDiagram(InstructionGroup):
 		# chord fingering
 		# if chord is hard-coded, get the frets from the dict.  else, use the passed-in list of frets
 		try:
-			indices = self.Chords[chord]
+			self.indices = self.Chords[chord]
 		except:
-			indices = chord
-
-		for index, fret in enumerate(indices):
+			self.indices = chord
+		for index, fret in enumerate(self.indices):
 			
 			finger = InstructionGroup()
-			finger.add(Color(*color))
-			# TO DO: handle muted strings
+			finger.add(Color(*color))# TO DO: handle muted strings
 			if fret == -1:
 				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]),color= Color(*color))
 				finger.add(x)
@@ -150,6 +148,15 @@ class ChordDiagram(InstructionGroup):
 		border.add(line)
 		self.add(border)
 
+		self.fingers = []
+
+		finger_colors = Color(*self.color)
+		finger_colors.a = .3
+		self.add(finger_colors)
+		for i in range(5):
+			dot = CEllipse(cpos = (self.finger_placements[0], self.string_heights[i]), csize=(self.size*.1, self.size*.1))
+			self.fingers.append(dot)
+			self.add(dot)
 		self.add(PopMatrix())
 
 	def set_pos(self, pos):
@@ -158,5 +165,9 @@ class ChordDiagram(InstructionGroup):
 	def set_color(self, rgb):
 		self.color.rgb = rgb
 
+	def on_update(self, string, fret): #info: string, fret
+		self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[])
 
-# run(MainWidget)
+
+
+run(MainWidget, "BrownEyedGirl")
