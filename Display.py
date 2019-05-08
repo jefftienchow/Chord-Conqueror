@@ -54,7 +54,7 @@ class BeatMatchDisplay(InstructionGroup):
 
         # creates the nowbar
         self.add(Color(1,1,1,.5))
-        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (Window.width*1.25/2, 20))
+        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (Window.width/2 + 200, 20))
         self.add(self.nowbar)
 
         # creates buttons
@@ -116,7 +116,7 @@ class BarDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.bar = Rectangle(pos=(0,self.ypos), size = (Window.height, 2))
+        self.bar = Rectangle(pos=(0,self.ypos), size = (Window.width/2 + 200, 2))
         self.add(self.bar)
 
         self.vel = vel

@@ -30,8 +30,6 @@ class ChordMatchDisplay(InstructionGroup) :
 
         self.color = Color(1,1,1)
         self.add(self.color)
-        # self.background = Rectangle(pos = (Window.width - 300,Window.height - 300), size = (250, 250))
-        # self.add(self.background)
 
         self.chords = []
         self.diagrams = []
