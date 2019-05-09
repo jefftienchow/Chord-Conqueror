@@ -4,6 +4,8 @@ from kivy.graphics import Color, Rectangle
 #chord_to_index = {"C": 0, "D": 1, "D7": 2, "e": 3, "G": 4}
 
 name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
+colors = [(0,1,0), (1,0,0), (1,1,0), (0,0.5,1), (1,165/255,0)]
+color_names = ["GREEN", "RED", "YELLOW", "BLUE", "ORANGE"]
 
 # Handles game logic and keeps score.
 # Controls the display and the audio
@@ -61,7 +63,7 @@ class ChordPlayer(object):
             self.end_section = self.chords[self.chord_order[self.current_chord+1]] + 2
         else:
             self.end_section = self.start_section + 4
-        self.display.show_options(self.chord_order[self.current_chord])
+        self.display.show_options(self.chord_order[self.current_chord], color=colors[self.current_chord], color_name=color_names[self.current_chord])
 
         self.replay_section()
         
