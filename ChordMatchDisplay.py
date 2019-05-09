@@ -93,12 +93,9 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 50
         y = Window.height/2
-<<<<<<< HEAD
         self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
         self.add(self.label)
-=======
         self.diags = []
->>>>>>> 959c3234600ac3ec12a19aec70feeaf7a19c39bf
         for option in self.options:
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =color)
             x +=self.diagramWidth + self.diagramWidth/2
