@@ -14,6 +14,7 @@ from SongData import SongData
 from ChordDiagram import ChordDiagram
 from ProgressBar import ProgressBar
 from TextLabel import TextLabel
+from common.gfxutil import *
 
 vel = 200
 nowbar_height = 100
@@ -25,6 +26,7 @@ class ChordMatchDisplay(InstructionGroup) :
     def __init__(self,color_mapping,data,controller):
         super(ChordMatchDisplay, self).__init__()
         self.diags = []
+        self.label = None
 
         self.color_mapping = color_mapping
         self.data = data
@@ -53,6 +55,9 @@ class ChordMatchDisplay(InstructionGroup) :
         self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,0,0))
         self.add(self.move_on)
 
+        self.anim = AnimGroup()
+        self.add(self.anim)
+
         self.options = set()
         self.optiondiags = []
         self.allchords = ['G',
@@ -67,7 +72,7 @@ class ChordMatchDisplay(InstructionGroup) :
             'em7']
 
 
-    def show_options(self, chord, color=Color(1,1,1), color_name='WHITE'):
+    def show_options(self, chord, color=(1,1,1), color_name='WHITE'):
         self.options.add(chord)
         print(self.allchords)
         print("ALL CHORDS")
@@ -93,8 +98,12 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 50
         y = Window.height/2
-        self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
-        self.add(self.label)
+        if self.label is None:
+            self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
+            self.add(self.label)
+        else:
+            print(color)
+            self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, color)
         self.diags = []
         for option in self.options:
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =color)
@@ -129,12 +138,15 @@ class ChordMatchDisplay(InstructionGroup) :
     #what happens when a note is correct, called by ChordPlayer
     def correct(self,chord,right):
         self.change_bg((0,1,0))
+        self.anim.add(TextLabel("Correct!", pos=(400, 200), font=100, align='center', color=Color(0,1,0), anim=KFAnim((0, 40), (1, 60), (1.2, 0))))
+        
         if chord not in self.chords and right:
             self.draw_chord(chord)
             self.chords.append(chord)
     #What happens when a chord is incorrect, called by Chord Player
     def wrong(self):
         self.change_bg((1,0,0))
+        self.anim.add(TextLabel("Incorrect, try again!", pos=(400, 200), font=100, align='center', color=Color(1,0,0), anim=KFAnim((0, 40), (1.5, 60), (1.7, 0))))
 
 
     #changes background to current color
@@ -145,6 +157,7 @@ class ChordMatchDisplay(InstructionGroup) :
     def on_update(self, frame):
         self.color.s -= .01 
         self.progress_bar.on_update(frame / 44100)
+        self.anim.on_update()
     #erases everything from its canvas
     def cleanup(self):
         self.remove(self.color)

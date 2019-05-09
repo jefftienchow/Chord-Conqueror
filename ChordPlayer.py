@@ -64,7 +64,7 @@ class ChordPlayer(object):
         else:
             self.end_section = self.start_section + 4
         self.display.show_options(self.chord_order[self.current_chord], color=colors[self.current_chord], color_name=color_names[self.current_chord])
-
+        self.display.wrong()
         self.replay_section()
         
         

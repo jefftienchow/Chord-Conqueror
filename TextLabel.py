@@ -28,24 +28,26 @@ class TextLabel(InstructionGroup):
 		super(TextLabel, self).__init__()
 		self.t = 0
 		self.size_func = anim
-		label = CoreLabel(text=text, font_size=font)
+		self.font = font
+		label = CoreLabel(text=text, font_size=self.font)
 		label.refresh()
-		text = label.texture
+		self.text = label.texture
 		self.color = color
 		self.add(self.color)
+		self.ratio = self.text.size[0]/self.text.size[1]
 		if align == 'left':
 			self.pos = pos
 		else:
-			self.pos = (pos[0] - text.size[0]/2, pos[1] - text.size[1]/2)
+			self.pos = (pos[0] - self.text.size[0]/2, pos[1] - self.text.size[1]/2)
 			
-		self.item = Rectangle(size=text.size, pos=self.pos, texture=text)
+		self.item = Rectangle(size=self.text.size, pos=self.pos, texture=self.text)
 		self.add(self.item)
 
 	def on_update(self, dt):
 		if self.size_func:
 			size = self.size_func.eval(self.t)
 			x, y = self.item.size
-			self.item.size = (size*5, size)
+			self.item.size = (size*self.ratio, size)
 			size_diff = (self.item.size[0] - x, self.item.size[1] - y)
 			print(self.item.size)
 			pos = self.item.pos
@@ -53,5 +55,16 @@ class TextLabel(InstructionGroup):
 			self.t += dt
 			return self.size_func.is_active(self.t)
 		return True
+
+	def update_text(self, text, color):
+		label = CoreLabel(text=text, font_size=self.font)
+		label.refresh()
+		self.text = label.texture
+		self.item.texture = self.text
+		print(self.text)
+		self.ratio = self.text.size[0]/self.text.size[1]
+		self.color = Color(*color)
+		self.add(self.color)
+
 
 # run(MainWidget, None)
