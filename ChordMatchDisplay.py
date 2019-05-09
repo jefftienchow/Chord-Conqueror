@@ -144,7 +144,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.color.rgb = color
 
     def on_update(self, frame):
-        self.color.s -= .01 
+        #self.color.s -= .01
         self.progress_bar.on_update(frame / 44100)
     #erases everything from its canvas
     def cleanup(self):

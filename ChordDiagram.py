@@ -23,7 +23,7 @@ from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
 #     def on_update(self):
 #     	pass
 
-
+to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0)}
 class Mute(InstructionGroup):
 	def __init__(self, size=20, pos=(100,100), color=Color(50/255,1,0)):
 		super(Mute, self).__init__()
@@ -130,9 +130,9 @@ class ChordDiagram(InstructionGroup):
 		for index, fret in enumerate(self.indices):
 			
 			finger = InstructionGroup()
-			finger.add(Color(*color))# TO DO: handle muted strings
+			finger.add(Color(*to_rgb[color]))# TO DO: handle muted strings
 			if fret == -1:
-				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]),color= Color(*color))
+				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]), color= Color(*to_rgb[color]))
 				finger.add(x)
 			else:
 				dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
@@ -141,7 +141,7 @@ class ChordDiagram(InstructionGroup):
 
 		# border
 		border = InstructionGroup()
-		self.color = color
+		self.color = to_rgb[color]
 		border.add(Color(*self.color))
 		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
 							 width=self.size/100, joint='miter', close=True)

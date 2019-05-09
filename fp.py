@@ -19,7 +19,7 @@ from ChordDetector import ChordDetector
 
 vel = Window.height
 nowbar_height = 100
-colors = [(0,1,0), (1,0,0), (1,1,0), (0,0.5,1), (1,165/255,0)]
+colors = ["red", "green", "blue", "yellow", "purple", "light_blue"]
 
 class MainWidget(BaseWidget):
     def __init__(self, song):
@@ -58,9 +58,6 @@ class MainWidget(BaseWidget):
 
         # self.canvas.add(self.progress_bar)
         self.objects = []
-        
-        
-        self.display = BeatMatchDisplay(self.data, self.color_mapping)
 
         self.title = self.create_label("Chord Learning", (50, Window.height - 40), Color(1, 0, 0))
 

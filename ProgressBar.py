@@ -23,20 +23,17 @@ class ProgressBar(InstructionGroup):
 
         x_loc = 50
         for i in range(start, end):
-            print(sections[i][1])
+            length = (sections[i + 1][0] - sections[i][0]) * 700 / self.duration
+
             if sections[i][1]:
                 if sections[i][1] not in self.chord_order:
                     self.chord_order[sections[i][1]] = i
                 color = self.color_mapping[sections[i][1]]
-                color = Color(*color)
-            else:
-                color = Color(0,0,0)
-            self.add(color)
-            #self.objects.append(color)
-            length = (sections[i+1][0] - sections[i][0]) * 700 / self.duration
-            rectangle = Rectangle(pos=(x_loc, 500), size = (length, 50))
-            self.add(rectangle)
-            self.objects.append(rectangle)
+                rectangle = Rectangle(texture=Image("pictures/" + color + ".png").texture, pos=(x_loc, 500),
+                                      size=(length, 50))
+
+                self.add(rectangle)
+                self.objects.append(rectangle)
             x_loc += length
 
         
