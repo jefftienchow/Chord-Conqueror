@@ -108,3 +108,4 @@ class ChordPlayer(object):
             self.hold_time = 0
 
         self.detector.on_update(dt)
+

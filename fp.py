@@ -19,7 +19,7 @@ from ChordDetector import ChordDetector
 
 vel = Window.height
 nowbar_height = 100
-colors = [(0,1,0), (1,0,0), (1,1,0), (0,0.5,1), (1,165/255,0)]
+colors = ["red", "green", "blue", "yellow", "purple", "light_blue"]
 
 class MainWidget(BaseWidget):
     def __init__(self, song):
@@ -28,6 +28,7 @@ class MainWidget(BaseWidget):
         self.started = False
         self.section2_started = False
         self.streak = False
+
 
         self.data = SongData("annotations/" + song + "AnnotationFull.txt")
 
@@ -42,21 +43,21 @@ class MainWidget(BaseWidget):
 
         #display, player for chord learning part
 
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller)
+
+        self.start_section = 12
+        self.end_section = 23
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data)
 
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
         # self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
-        self.controller.set_start(int(self.data.get_sections()[12][0]))
-        self.controller.set_stop(int(self.data.get_sections()[23][0]))
+        self.controller.set_start(int(self.data.get_sections()[self.start_section][0]))
+        self.controller.set_stop(int(self.data.get_sections()[self.end_section][0]))
 
         # self.canvas.add(self.progress_bar)
         self.objects = []
-        
-        
-        self.display = BeatMatchDisplay(self.data, self.color_mapping)
 
         self.title = self.create_label("Chord Learning", (50, Window.height - 40), Color(1, 0, 0))
 
@@ -68,7 +69,7 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-            
+            pass
             self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
@@ -200,7 +201,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # if self.player.get_streak() >= 5:
         #
@@ -232,7 +233,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:

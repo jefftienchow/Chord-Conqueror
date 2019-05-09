@@ -8,6 +8,7 @@ from kivy.core.image import Image
 
 vel = Window.height/3
 nowbar_height = 100
+to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0)}
 
 # Displays and controls all game elements: Nowbar, Buttons, BarLines, Gems.
 class BeatMatchDisplay(InstructionGroup):
@@ -52,10 +53,7 @@ class BeatMatchDisplay(InstructionGroup):
             self.bars.append(bar)
             #self.add(bar)
 
-        # creates the nowbar
-        self.add(Color(1,1,1,.5))
-        self.nowbar = Rectangle(pos = (0,nowbar_height), size = (Window.width/2 + 200, 20))
-        self.add(self.nowbar)
+
 
         # creates buttons
         pos = (100, nowbar_height)
@@ -181,14 +179,14 @@ class GemDisplay(InstructionGroup):
         self.type = data[1]
         self.time_loc = data[0]
         self.color_data = color_mapping[self.type]
-        self.color = Color(*color_mapping[self.type])
-        self.color.a = .7
+        self.color = Color(1,1,1)
+        self.color.a = 1
         self.add(self.color)
 
-        self.xpos = 105
+        self.xpos = 110
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
-
-        self.gem = Rectangle(pos=(self.xpos,self.ypos), size = (1/2*Window.width - 10, 10))
+        color = color_mapping[self.type]
+        self.gem = Rectangle(texture=Image("pictures/" + color + "_gem.png").texture, pos=(self.xpos,self.ypos), size = (1/2*Window.width - 20, 10))
         self.add(self.gem)
 
         self.vel = vel
@@ -215,7 +213,7 @@ class GemDisplay(InstructionGroup):
         self.color.a = .3
 
     def reset(self):
-        self.color.a = .7
+        self.color.a = 1
         self.notes = []
 
     # useful if gem is to animate
@@ -237,7 +235,7 @@ class ButtonDisplay(InstructionGroup):
         self.border_color = Color(1,1,1)
         self.pos = pos
         self.add(self.border_color)
-        self.border = Rectangle(pos=pos, size=(Window.width/2, 20))
+        self.border = Rectangle(texture=Image("pictures/bar.png").texture,pos=pos, size=(Window.width/2, 20))
         self.add(self.border)
         self.time = 0
 
@@ -248,7 +246,7 @@ class ButtonDisplay(InstructionGroup):
 
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
-        self.border_color.rgb = color
+        self.border_color.rgb = to_rgb[color]
         self.inside_color.a = .2
         self.time = 0
 

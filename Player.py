@@ -62,14 +62,20 @@ class Player(object):
         self.controller.set_mute(True)
         self.deduct()
 
+    def correct(self):
+        self.controller.set_mute(False)
+
     # called by MainWidget
     def on_button_down(self, chord):
         if self.idx < len(self.gem_data):
+
+
             if self.time >= self.gem_data[self.idx][0] - self.interval and self.time <= self.gem_data[self.idx][0] + self.interval:
                 # a correct note is hit
                 if chord == self.gem_data[self.idx][1]:
                     self.display.gem_hit(self.idx)
                     self.controller.set_mute(False)
+                    self.cur_chord = self.gem_data[self.idx][1]
                     self.idx += 1
                     self.score += 100
                     self.streak += 1
@@ -89,6 +95,9 @@ class Player(object):
                         return
                     self.wrong()
                     self.display.gem_pass(self.idx)
+
+            elif chord == self.cur_chord:
+                self.correct()
 
             # a temporal miss
             elif self.idx > 0:
@@ -121,6 +130,7 @@ class Player(object):
         while time > self.gem_data[self.idx][0] + self.interval:
             self.display.gem_pass(self.idx)
             self.idx += 1
+            self.cur_chord = self.gem_data[self.idx][1]
             self.controller.set_mute(True)
             self.deduct()
 

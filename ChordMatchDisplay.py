@@ -23,7 +23,7 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 #Expects inpput chords in the following format [(ROOT, quality, seventhBOOL, chordName]
 class ChordMatchDisplay(InstructionGroup) :
-    def __init__(self,color_mapping,data,controller):
+    def __init__(self,color_mapping,data,controller, start, end):
         super(ChordMatchDisplay, self).__init__()
         self.diags = []
         self.label = None
@@ -35,6 +35,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.color = Color(1,1,1)
         self.add(self.color)
 
+
         self.chords = []
         self.diagrams = []
         self.diagramWidth = Window.width/(len(self.color_mapping)+1)
@@ -42,7 +43,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.x = 0
         self.y =0
 
-        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
+        self.progress_bar = ProgressBar(self.data.get_sections(), start, end, self.color_mapping, self.controller)
         self.add(self.progress_bar)
         self.chord_order = self.progress_bar.chord_order
 
@@ -155,7 +156,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.color.rgb = color
 
     def on_update(self, frame):
-        self.color.s -= .01 
+        #self.color.s -= .01
         self.progress_bar.on_update(frame / 44100)
         self.anim.on_update()
     #erases everything from its canvas
