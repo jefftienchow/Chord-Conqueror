@@ -68,7 +68,7 @@ class ChordMatchDisplay(InstructionGroup) :
             'em7']
 
 
-    def show_options(self, chord, color=Color(1,1,1), color_name='WHITE'):
+    def show_options(self, chord, color):
         self.options.add(chord)
         print(self.allchords)
         print("ALL CHORDS")
@@ -94,11 +94,11 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 50
         y = Window.height/2
-        self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
+        self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
         self.add(self.label)
         self.diags = []
         for option in self.options:
-            diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color =color)
+            diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color = self.color_mapping[chord])
             x +=self.diagramWidth + self.diagramWidth/2
             self.add(diag)
             self.optiondiags.append(diag)

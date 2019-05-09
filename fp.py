@@ -47,7 +47,7 @@ class MainWidget(BaseWidget):
         self.start_section = 12
         self.end_section = 23
         self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
-        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data)
+        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
 
         self.canvas.add(self.chordDisplay)
         #BrownEyedGirl 12 and 23

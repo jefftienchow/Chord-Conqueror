@@ -235,7 +235,7 @@ class ButtonDisplay(InstructionGroup):
         self.border_color = Color(1,1,1)
         self.pos = pos
         self.add(self.border_color)
-        self.border = Rectangle(texture=Image("pictures/bar.png").texture,pos=pos, size=(Window.width/2, 20))
+        self.border = Rectangle(texture=Image("pictures/black.png").texture,pos=pos, size=(Window.width/2, 20))
         self.add(self.border)
         self.time = 0
 

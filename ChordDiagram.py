@@ -23,7 +23,7 @@ from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
 #     def on_update(self):
 #     	pass
 
-to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0)}
+to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0), "black": (0,0,0)}
 class Mute(InstructionGroup):
 	def __init__(self, size=20, pos=(100,100), color=Color(50/255,1,0)):
 		super(Mute, self).__init__()
@@ -52,7 +52,7 @@ class ChordDiagram(InstructionGroup):
 			'Fmaj7':[-1,-1,3,2,1,0],
 			'em7':[0,2,0,0,0,0]}
 
-	def __init__(self, size=400, pos=(0,0), chord='G', color=(1,1,1)):
+	def __init__(self, size=400, pos=(0,0), chord='G', color="black"):
 		super(ChordDiagram, self).__init__()
 
 
