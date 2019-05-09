@@ -32,7 +32,7 @@ class ProgressBar(InstructionGroup):
             else:
                 color = Color(0,0,0)
             self.add(color)
-            self.objects.append(color)
+            #self.objects.append(color)
             length = (sections[i+1][0] - sections[i][0]) * 700 / self.duration
             rectangle = Rectangle(pos=(x_loc, 500), size = (length, 50))
             self.add(rectangle)
@@ -42,19 +42,29 @@ class ProgressBar(InstructionGroup):
         
         newcolor = Color(1,1,1)
         self.add(newcolor)
-        self.objects.append(newcolor)
+        #self.objects.append(newcolor)
         self.cursor = Rectangle(pos = (50, 500), size = (2, 50))
 
         self.add(self.cursor)
-        self.objects.append(self.cursor)
+        #self.objects.append(self.cursor)
         # print(self.chord_order)
 
     def set_cursor(self, loc):
-        if loc[1] <= 550 and loc[1] >= 500 and loc[0] >= 50 and loc[0] <= 750:
-            self.cursor.pos = (loc[0], 500)
-            time = ((loc[0] - 50) / 700) * self.duration + self.start_time
-            self.controller.set_start(time)
-            #xpos = (time - self.start_time) * 700 / self.duration + 50
+        for object in self.objects:
+            if loc[1] <= 550 and loc[1] >= 500 and loc[0] >= object.pos[0] and loc[0] <= object.pos[0] + object.size[0]:
+                self.cursor.pos = (object.pos[0], 500)
+                time = ((object.pos[0] - 50) / 700) * self.duration + self.start_time
+                self.controller.set_start(time)
+                self.controller.set_stop(self.end_time)
+
+
+
+
+        # if loc[1] <= 550 and loc[1] >= 500 and loc[0] >= 50 and loc[0] <= 750:
+        #     self.cursor.pos = (loc[0], 500)
+        #     time = ((loc[0] - 50) / 700) * self.duration + self.start_time
+        #     self.controller.set_start(time)
+        #     #xpos = (time - self.start_time) * 700 / self.duration + 50
 
     def on_update(self, time):
         xpos = (time - self.start_time) * 700 /self.duration + 50

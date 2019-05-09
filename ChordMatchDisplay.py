@@ -21,7 +21,7 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 #Expects inpput chords in the following format [(ROOT, quality, seventhBOOL, chordName]
 class ChordMatchDisplay(InstructionGroup) :
-    def __init__(self,color_mapping,data,controller):
+    def __init__(self,color_mapping,data,controller, start, end):
         super(ChordMatchDisplay, self).__init__()
         self.diags = []
 
@@ -31,7 +31,8 @@ class ChordMatchDisplay(InstructionGroup) :
 
         self.color = Color(1,1,1)
         self.add(self.color)
-        self.background = Rectangle(pos = (Window.width - 150,Window.height - 300), size = (100, 100))
+
+        self.background = Rectangle(texture = Image("pictures/blue.jpg").texture, pos = (Window.width - 150,Window.height - 300), size = (100, 100))
         self.add(self.background)
 
         self.chords = []
@@ -41,7 +42,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.x = 0
         self.y =0
 
-        self.progress_bar = ProgressBar(self.data.get_sections(), 12, 23, self.color_mapping, self.controller)
+        self.progress_bar = ProgressBar(self.data.get_sections(), start, end, self.color_mapping, self.controller)
         self.add(self.progress_bar)
         self.chord_order = self.progress_bar.chord_order
 
