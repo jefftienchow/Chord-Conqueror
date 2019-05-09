@@ -5,14 +5,15 @@ from common.gfxutil import *
 from kivy.uix.label import CoreLabel
 
 
-anim = KFAnim((0, 30), (1, 60), (2, 30), (3, 60))
+# anim = KFAnim((0, 30), (1, 60), (2, 30), (3, 60))
 
 # class MainWidget(BaseWidget):
 
 # 	def __init__(self, whatever=None):
 # 	    super(MainWidget, self).__init__()
 	    
-# 	    self.txt = TextLabel(text="Time for bed.", pos=(400, 300))
+# 	    self.txt = TextLabel(text="Time for bed.", pos=(400, 300), color=Color(1,0,0))
+# 	    self.txt.update_text("Hello.", color=(0,0,1))
 # 	    self.anim = AnimGroup()
 # 	    self.anim.add(self.txt)
 # 	    self.canvas.add(self.anim)
@@ -59,12 +60,16 @@ class TextLabel(InstructionGroup):
 	def update_text(self, text, color):
 		label = CoreLabel(text=text, font_size=self.font)
 		label.refresh()
-		self.text = label.texture
-		self.item.texture = self.text
-		print(self.text)
-		self.ratio = self.text.size[0]/self.text.size[1]
+		self.remove(self.color)
 		self.color = Color(*color)
 		self.add(self.color)
+
+		self.text = label.texture
+		self.item.texture = self.text
+		self.item.size = self.text.size
+		self.add(self.item)
+		
+		self.ratio = self.text.size[0]/self.text.size[1]
 
 
 # run(MainWidget, None)
