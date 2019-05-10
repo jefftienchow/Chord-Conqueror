@@ -100,17 +100,13 @@ class ChordMatchDisplay(InstructionGroup) :
         #drawign section
         x = 50
         y = Window.height/2
-<<<<<<< HEAD
-        self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
-        self.add(self.label)
-=======
+        # self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
+        # self.add(self.label)
         if self.label is None:
-            self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, pos=(x, y - 50), font=20, color=Color(*color))
+            self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
             self.add(self.label)
         else:
-            print(color)
-            self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color_name, color)
->>>>>>> d7af0baa8fc6a6d2274c8c789a2ae90b8c563462
+            self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color, to_rgb[color])
         self.diags = []
         for option in self.options:
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color = self.color_mapping[chord])

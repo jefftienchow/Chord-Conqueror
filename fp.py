@@ -19,7 +19,7 @@ from ChordDetector import ChordDetector
 
 vel = Window.height
 nowbar_height = 100
-colors = ["red", "green", "blue", "yellow", "purple", "light_blue"]
+colors = ["green", "red", "yellow", "blue", "purple", "light_blue"]
 
 class MainWidget(BaseWidget):
     def __init__(self, song):
