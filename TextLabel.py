@@ -30,7 +30,7 @@ class TextLabel(InstructionGroup):
 		self.t = 0
 		self.size_func = anim
 		self.font = font
-		label = CoreLabel(text=text, font_size=self.font)
+		label = CoreLabel(text=text, font_size=self.font, font_name='Verdana')
 		label.refresh()
 		self.text = label.texture
 		self.color = color

@@ -49,12 +49,12 @@ class ChordMatchDisplay(InstructionGroup) :
         # Text Labels
         self.color = Color(1,1,1)
         self.add(self.color)
-        self.instrucions1 = TextLabel("Each colored section in the bar above corresponds to a different chord in the song.  Press P to play/pause!", pos=(50, 475), font=15, color=Color(1,0,0))
+        self.instrucions1 = TextLabel("Each colored section in the bar above represents a different chord.  Press P to play/pause the song!", pos=(50, 475), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
-        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor.", pos=(50, 450), font=15, color=Color(1,0,0))
+        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor.", pos=(50, 450), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
 
-        self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,0,0))
+        self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,1,1))
         self.add(self.move_on)
 
         self.anim = AnimGroup()
