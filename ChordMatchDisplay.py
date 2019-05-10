@@ -105,7 +105,7 @@ class ChordMatchDisplay(InstructionGroup) :
             self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
             self.add(self.label)
         else:
-            print(color)
+
             self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color, to_rgb[color])
         self.diags = []
         for option in self.options:

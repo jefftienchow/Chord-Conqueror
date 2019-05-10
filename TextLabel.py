@@ -61,14 +61,13 @@ class TextLabel(InstructionGroup):
 		label = CoreLabel(text=text, font_size=self.font)
 		label.refresh()
 		self.remove(self.color)
+		self.remove(self.item)
 		self.color = Color(*color)
 		self.add(self.color)
-
 		self.text = label.texture
 		self.item.texture = self.text
 		self.item.size = self.text.size
 		self.add(self.item)
-		
 		self.ratio = self.text.size[0]/self.text.size[1]
 
 

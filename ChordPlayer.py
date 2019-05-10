@@ -67,7 +67,7 @@ class ChordPlayer(object):
         #print("this is: " ,self.color_mapping[self.current_chord])
         # print("cur is", self.current_chord)
         # print(self.chord_order)
-        self.display.show_options(self.chord_order[self.current_chord], color=self.color_mapping[self.chord_order[self.current_chord]])
+        self.display.show_options(self.chord_order[self.current_chord], self.color_mapping[self.chord_order[self.current_chord]])
 
 
         self.replay_section()
