@@ -242,11 +242,8 @@ class MainWidget(BaseWidget):
         self.chordPlayer.on_update(self.time)
 
 print (sys.argv)
-try:
-    run(MainWidget,sys.argv[1])
-except:
-    run(MainWidget, "BrownEyedGirl")
+run(MainWidget,sys.argv[1])
+
     
         # if self.midi2 is not None:
         #     self.midi2.on_update()
-

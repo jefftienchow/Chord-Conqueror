@@ -66,8 +66,8 @@ class ProgressBar(InstructionGroup):
     def on_update(self, time):
         xpos = (time - self.start_time) * 700 /self.duration + 50
         self.cursor.pos = (xpos, 500)
-        if xpos == self.last_pos and self.controller.bg.pause == False and self.controller.bg.stop == True:
-            print("HERE")
+        # if xpos == self.last_pos and self.controller.bg.pause == False and self.controller.bg.stop == True:
+        #     print("HERE")
         self.last_pos=xpos
         # if self.cursor.pos[0] > self.end_time *700:
         #     self.controller.p

@@ -69,12 +69,12 @@ class ChordPlayer(object):
             #else, do self.current_chord_idx %= len(self.chord_order)
 
         current_section = self.chords[self.chord_order[self.current_chord_idx]]
-        print(current_section)
+        #print(current_section)
         self.start_section = current_section - 1
-        print(self.start_section)
-        print(self.current_chord_idx)
+        #print(self.start_section)
+        #print(self.current_chord_idx)
         if self.current_chord_idx != len(self.chord_order) - 1:
-            print(self.end_section)
+            #(self.end_section)
             self.end_section = self.chords[self.chord_order[self.current_chord_idx+1]] + 2
         else:
             self.end_section = self.start_section + 4
@@ -99,6 +99,7 @@ class ChordPlayer(object):
 
     # called by MainWidget
     def on_button_down(self, chord):
+        print(chord)
         if not self.done:
             if chord == self.chord_order[self.current_chord_idx]:
                 self.display.correct(chord, True)

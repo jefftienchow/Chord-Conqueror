@@ -70,7 +70,7 @@ class SongData(object):
             barline_time = float(tokens[0])
 
             # case where there is a strumming pattern and a chord
-            try:
+            if len(tokens) > 1:
                 strum_pattern, chord = tokens[1].split(',')
                 if chord not in self.chords:
                     self.chords.append(chord)
@@ -79,7 +79,7 @@ class SongData(object):
                 else:
                     strum_pattern = int(strum_pattern)
             # case where there chord, strumming pattern are None
-            except ValueError:
+            else:
                 strum_pattern, chord = (None, None)
 
             

@@ -112,7 +112,7 @@ class ChordDiagram(InstructionGroup):
 			line = Line(points=[self.x + self.size * .1, y, self.x + self.size * 1.5, y], width=width, cap='round')
 			string.add(line)
 			self.add(string)
-		print(self.string_heights)
+		#print(self.string_heights)
 		# nut
 		x = self.x + self.size * .1
 		nut = InstructionGroup()
@@ -123,10 +123,8 @@ class ChordDiagram(InstructionGroup):
 
 		# chord fingering
 		# if chord is hard-coded, get the frets from the dict.  else, use the passed-in list of frets
-		try:
-			self.indices = self.Chords[chord]
-		except:
-			self.indices = chord
+		self.indices = self.Chords[chord]
+
 		for index, fret in enumerate(self.indices):
 			
 			finger = InstructionGroup()

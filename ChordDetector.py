@@ -25,23 +25,21 @@ class ChordDetector(object):
     def on_strum(self, note):
         string = note[0]
         note = note[1]
-        chord = False
-        # print(string, self.cur_strings)
-        #assuming self.hold means that we are playing a chord
-        if not self.strumming:
+        if not self.strumming: # reset if we haven't strummed in a while
             self.new_chord(string, note)
         else:
-            if string in self.cur_strings:
-                self.new_chord(string,note) #might want to also play a miss?
-            else:
+            if string in self.cur_strings: # if we're playing a string again, this is probably a new chord?
+                self.new_chord(string,note) # might want to also play a miss?
+            else: # otherwise, we're adding to the same current chord
                 self.cur_notes.add(note)
                 self.cur_strings.append(string)
-                if len(self.cur_notes) >= 4:
+                if len(self.cur_notes) >= 4: # if 4 notes, then we want to see what chord this is
                     chord = self.detect_chord(self.cur_notes)
 
-                    if self.chord_played and self.chord_detected != chord:
+                    if self.chord_played and self.chord_detected != chord: # if we already played a chord, is the new note adding to the chord?
                         self.callback(chord)
-                    elif not self.chord_played:
+                        print("why not same??")
+                    elif not self.chord_played: #
                         self.chord_detected = chord
                         self.chord_played = True
                         self.callback(chord)
