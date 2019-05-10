@@ -16,6 +16,7 @@ from ProgressBar import ProgressBar
 import sys
 from kivy.uix.label import CoreLabel
 from ChordDetector import ChordDetector
+from TextLabel import *
 
 vel = Window.height
 nowbar_height = 100
@@ -38,7 +39,7 @@ class MainWidget(BaseWidget):
         self.chords = self.data.get_chords()
         for i in range(len(self.chords)):
             self.color_mapping[self.chords[i]] = colors[i]
-        print(self.color_mapping)
+        # print(self.color_mapping)
         self.detector = ChordDetector()
 
         #display, player for chord learning part
@@ -46,12 +47,13 @@ class MainWidget(BaseWidget):
 
         self.start_section = 12
         self.end_section = 23
+        #BrownEyedGirl 12 and 23
+        #Riptide 92 108
         self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
 
         self.canvas.add(self.chordDisplay)
-        #BrownEyedGirl 12 and 23
-        #Riptide 92 108
+        
         # self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
         self.controller.set_start(int(self.data.get_sections()[self.start_section][0]))
         self.controller.set_stop(int(self.data.get_sections()[self.end_section][0]))
@@ -59,7 +61,8 @@ class MainWidget(BaseWidget):
         # self.canvas.add(self.progress_bar)
         self.objects = []
 
-        self.title = self.create_label("Chord Learning", (50, Window.height - 40), Color(1, 0, 0))
+        self.title = TextLabel("Chord Learning", pos=(50, Window.height - 40), font=30)
+        self.canvas.add(self.title)
 
 
 
@@ -77,24 +80,14 @@ class MainWidget(BaseWidget):
         self.time = 0
 
 
-
-
-    def create_label(self, text, pos, color = None):
-        label = CoreLabel(text=text, font_size=20)
-        label.refresh()
-        text = label.texture
-        if color:
-            self.canvas.add(color)
-        item = Rectangle(size=text.size, pos=pos, texture=text)
-        self.canvas.add(item)
-        return item
-
     def modify_text(self, label, new_text):
         text_label = CoreLabel(text=new_text, font_size = 20)
         text_label.refresh()
         label.texture = text_label.texture
 
     def init_section_2(self):
+        self.pause_menu = TextLabel("Press P to play/pause!", pos=(Window.width/2, Window.height/2), align='center', font=25)
+        self.canvas.add(self.pause_menu)
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
 
@@ -144,6 +137,12 @@ class MainWidget(BaseWidget):
         # play / pause toggle
         if keycode[1] == 'p':
             self.controller.toggle()
+
+            if self.playing:
+                self.canvas.add(self.pause_menu)
+            else:
+                self.canvas.remove(self.pause_menu)
+            
             self.playing = not self.playing
             self.started = True
 
@@ -241,7 +240,7 @@ class MainWidget(BaseWidget):
         self.time += kivyClock.frametime
         self.chordDisplay.on_update(frame)
         self.chordPlayer.on_update(self.time)
-        # self.progress_bar.on_update(frame / 44100)
+
 print (sys.argv)
 try:
     run(MainWidget,sys.argv[1])

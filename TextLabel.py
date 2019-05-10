@@ -30,7 +30,7 @@ class TextLabel(InstructionGroup):
 		self.t = 0
 		self.size_func = anim
 		self.font = font
-		label = CoreLabel(text=text, font_size=self.font)
+		label = CoreLabel(text=text, font_size=self.font, font_name='Verdana')
 		label.refresh()
 		self.text = label.texture
 		self.color = color
@@ -50,7 +50,7 @@ class TextLabel(InstructionGroup):
 			x, y = self.item.size
 			self.item.size = (size*self.ratio, size)
 			size_diff = (self.item.size[0] - x, self.item.size[1] - y)
-			print(self.item.size)
+			# print(self.item.size)
 			pos = self.item.pos
 			self.item.pos = (pos[0] - size_diff[0]/2, pos[1] - size_diff[1]/2)
 			self.t += dt

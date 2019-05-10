@@ -34,6 +34,7 @@ class Player(object):
         self.color_mapping = color_mapping
         self.detector = detector
         self.detector.set_callback(self.on_button_down)
+        self.cur_chord = None
 
     def get_score(self):
         return self.score
