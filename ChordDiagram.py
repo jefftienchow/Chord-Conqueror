@@ -169,6 +169,4 @@ class ChordDiagram(InstructionGroup):
 		if fret < 5:
 			self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[5-string])
 
-
-
 # run(MainWidget, "BrownEyedGirl")

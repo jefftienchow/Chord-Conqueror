@@ -105,7 +105,6 @@ class ChordMatchDisplay(InstructionGroup) :
             self.label = TextLabel("Which chord is the %s chord?  Strum the correct chord to move on." % color, pos=(x, y - 50), font=20, color=Color(*to_rgb[color]))
             self.add(self.label)
         else:
-
             self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color, to_rgb[color])
         self.diags = []
         for option in self.options:
@@ -162,6 +161,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.progress_bar.on_update(frame / 44100)
         self.anim.on_update()
     #erases everything from its canvas
+
     def cleanup(self):
         self.remove(self.color)
         self.progress_bar.cleanup()

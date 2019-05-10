@@ -110,7 +110,6 @@ class Player(object):
         if chord is not None:
             self.display.on_button_down(self.color_mapping[chord], None)
 
-
     def deduct(self):
         if self.score >= 50:
             self.score -= 50

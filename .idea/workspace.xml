@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db87c2ef-104c-401c-b0f1-ea5d729ef2b3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/ChordDiagram.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChordDiagram.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ChordMatchDisplay.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChordMatchDisplay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChordPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChordPlayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TextLabel.py" beforeDir="false" afterPath="$PROJECT_DIR$/TextLabel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fp.py" beforeDir="false" afterPath="$PROJECT_DIR$/fp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MIDIlistener.py" beforeDir="false" afterPath="$PROJECT_DIR$/MIDIlistener.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pictures/green.png" beforeDir="false" afterPath="$PROJECT_DIR$/pictures/green.png" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="239" column="20" selection-start-line="239" selection-start-column="20" selection-end-line="239" selection-end-column="20" />
+            <state relative-caret-position="154">
+              <caret line="72" column="85" lean-forward="true" selection-start-line="72" selection-start-column="85" selection-end-line="72" selection-end-column="85" />
               <folding>
                 <element signature="e#8#33#0" expanded="true" />
               </folding>
@@ -39,8 +40,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1870">
-              <caret line="112" selection-start-line="112" selection-end-line="112" />
+            <state relative-caret-position="257">
+              <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -48,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ChordMatchDisplay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+            <state relative-caret-position="18">
+              <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
               <folding>
                 <element signature="e#65#78#0" expanded="true" />
               </folding>
@@ -60,10 +61,19 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ChordDetector.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-576">
+              <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MIDIlistener.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="-1766">
               <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
               <folding>
                 <element signature="e#70#107#0" expanded="true" />
@@ -99,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ChordDiagram.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2431">
-              <caret line="143" column="33" selection-start-line="143" selection-start-column="28" selection-end-line="143" selection-end-column="33" />
+            <state relative-caret-position="223">
+              <caret line="168" column="20" lean-forward="true" selection-start-line="168" selection-start-column="20" selection-end-line="168" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -116,8 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>chordmatch</find>
-      <find>self.idx +=</find>
       <find>progress</find>
       <find>midi.on</find>
       <find>touch</find>
@@ -146,6 +154,8 @@
       <find>show</find>
       <find>pass</find>
       <find>midi</find>
+      <find>midiinpu</find>
+      <find>chord_order</find>
     </findStrings>
     <replaceStrings>
       <replace>print ('</replace>
@@ -167,21 +177,21 @@
         <option value="$PROJECT_DIR$/SongData.py" />
         <option value="$PROJECT_DIR$/Audio.py" />
         <option value="$PROJECT_DIR$/Note.py" />
-        <option value="$PROJECT_DIR$/MIDIlistener.py" />
-        <option value="$PROJECT_DIR$/Player.py" />
         <option value="$PROJECT_DIR$/Textured_Rectangle.py" />
         <option value="$PROJECT_DIR$/ProgressBar.py" />
         <option value="$PROJECT_DIR$/Display.py" />
-        <option value="$PROJECT_DIR$/ChordDiagram.py" />
         <option value="$PROJECT_DIR$/ChordPlayer.py" />
         <option value="$PROJECT_DIR$/fp.py" />
+        <option value="$PROJECT_DIR$/ChordDiagram.py" />
         <option value="$PROJECT_DIR$/ChordMatchDisplay.py" />
+        <option value="$PROJECT_DIR$/Player.py" />
+        <option value="$PROJECT_DIR$/MIDIlistener.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="823" />
-    <option name="y" value="63" />
+    <option name="x" value="207" />
+    <option name="y" value="108" />
     <option name="width" value="1180" />
     <option name="height" value="930" />
   </component>
@@ -255,6 +265,34 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="ChordDiagram" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="fp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ChordDiagram.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ChordDiagram" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -272,13 +310,13 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.08526107" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21017845" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32937685" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.23087819" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -354,13 +392,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/gfxutil.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="96" column="24" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Audio.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
@@ -417,13 +448,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ChordDetector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TextLabel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -464,16 +488,6 @@
     <entry file="file://$PROJECT_DIR$/annotations/BrownEyedGirlAnnotation.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Player.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
-          <caret line="112" selection-start-line="112" selection-end-line="112" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Display.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3893">
@@ -494,23 +508,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ChordDiagram.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2431">
-          <caret line="143" column="33" selection-start-line="143" selection-start-column="28" selection-end-line="143" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="239" column="20" selection-start-line="239" selection-start-column="20" selection-end-line="239" selection-end-column="20" />
-          <folding>
-            <element signature="e#8#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ChordPlayer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
@@ -518,9 +515,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ChordDiagram.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="168" column="20" lean-forward="true" selection-start-line="168" selection-start-column="20" selection-end-line="168" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/gfxutil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="100" column="27" lean-forward="true" selection-start-line="100" selection-start-column="27" selection-end-line="100" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Player.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="72" column="85" lean-forward="true" selection-start-line="72" selection-start-column="85" selection-end-line="72" selection-end-column="85" />
+          <folding>
+            <element signature="e#8#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MIDIlistener.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="-1766">
           <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
           <folding>
             <element signature="e#70#107#0" expanded="true" />
@@ -530,11 +561,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ChordMatchDisplay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+        <state relative-caret-position="18">
+          <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
           <folding>
             <element signature="e#65#78#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ChordDetector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-576">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
         </state>
       </provider>
     </entry>
