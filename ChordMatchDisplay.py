@@ -32,8 +32,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.data = data
         self.controller = controller
 
-        self.color = Color(1,1,1)
-        self.add(self.color)
+        
 
 
         self.chords = []
@@ -48,6 +47,8 @@ class ChordMatchDisplay(InstructionGroup) :
         self.chord_order = self.progress_bar.chord_order
 
         # Text Labels
+        self.color = Color(1,1,1)
+        self.add(self.color)
         self.instrucions1 = TextLabel("Each colored section in the bar above corresponds to a different chord in the song.  Press P to play/pause!", pos=(50, 475), font=15, color=Color(1,0,0))
         self.add(self.instrucions1)
         self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor.", pos=(50, 450), font=15, color=Color(1,0,0))
@@ -76,8 +77,8 @@ class ChordMatchDisplay(InstructionGroup) :
     def show_options(self, chord, color):
 
         self.options.add(chord)
-        print(self.allchords)
-        print("ALL CHORDS")
+        # print(self.allchords)
+        # print("ALL CHORDS")
 
         while len(self.options)< 3:
             self.options.add(random.choice(self.allchords))
@@ -116,8 +117,8 @@ class ChordMatchDisplay(InstructionGroup) :
             self.diags.append(diag)
 
     def on_update_diagram(self, string, fret):
-        print(string)
-        print(fret)
+        # print(string)
+        # print(fret)
         for diag in self.diags:
             diag.on_update(string,fret)
 

@@ -38,7 +38,7 @@ class MainWidget(BaseWidget):
         self.chords = self.data.get_chords()
         for i in range(len(self.chords)):
             self.color_mapping[self.chords[i]] = colors[i]
-        print(self.color_mapping)
+        # print(self.color_mapping)
         self.detector = ChordDetector()
 
         #display, player for chord learning part
@@ -69,7 +69,7 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-            pass
+            #pass
             self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram)
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
@@ -201,7 +201,7 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
-        #self.midi.on_update()
+        self.midi.on_update()
 
         # if self.player.get_streak() >= 5:
         #
@@ -233,7 +233,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midi.on_update()
+        self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
@@ -241,7 +241,7 @@ class MainWidget(BaseWidget):
         self.time += kivyClock.frametime
         self.chordDisplay.on_update(frame)
         self.chordPlayer.on_update(self.time)
-        # self.progress_bar.on_update(frame / 44100)
+
 print (sys.argv)
 try:
     run(MainWidget,sys.argv[1])
