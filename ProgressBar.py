@@ -19,15 +19,15 @@ class ProgressBar(InstructionGroup):
         self.last_pos = 0
 
 
-        self.chord_order = {}
+        self.chord_order = []
 
         x_loc = 50
         for i in range(start, end):
             length = (sections[i + 1][0] - sections[i][0]) * 700 / self.duration
 
             if sections[i][1]:
-                if sections[i][1] not in self.chord_order:
-                    self.chord_order[sections[i][1]] = i
+                if all([sections[i][1] != tup[0] for tup in self.chord_order]):
+                    self.chord_order.append((sections[i][1], i))
                 color = self.color_mapping[sections[i][1]]
                 rectangle = Rectangle(texture=Image("pictures/" + color + ".png").texture, pos=(x_loc, 500),
                                       size=(length, 50))

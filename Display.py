@@ -239,15 +239,9 @@ class ButtonDisplay(InstructionGroup):
         self.add(self.border)
         self.time = 0
 
-        self.inside_color = Color(0,0,0,.5)
-        self.add(self.inside_color)
-        self.inside = Rectangle(pos = (pos[0] + 5, pos[1] + 5), size = (Window.width/2-10, 10))
-        self.add(self.inside)
-
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
         self.border_color.rgb = to_rgb[color]
-        self.inside_color.a = .2
         self.time = 0
 
     # back to normal state

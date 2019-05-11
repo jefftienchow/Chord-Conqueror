@@ -31,6 +31,8 @@ class ChordMatchDisplay(InstructionGroup) :
         self.color_mapping = color_mapping
         self.data = data
         self.controller = controller
+        self.start = start
+        self.end = end
 
         
 
