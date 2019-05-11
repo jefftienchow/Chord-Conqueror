@@ -1,6 +1,7 @@
 from common.mixer import *
 from common.wavegen import *
 from common.wavesrc import *
+from common.synth import *
 
 
 # creates the Audio driver
@@ -9,12 +10,20 @@ from common.wavesrc import *
 class AudioController(object):
     def __init__(self, song_name):
         super(AudioController, self).__init__()
+        self.song = song_name.split("/")[1]
         self.audio = Audio(2)
         self.mixer = Mixer()
         self.bg = WaveGenerator(WaveFile(song_name + ".wav"),False)
         self.mixer.add(self.bg)
         self.audio.set_generator(self.mixer)
         self.buffers = []
+        self.synth = Synth('./data/FluidR3_GM.sf2')
+        self.mixer.add(self.synth)
+        self.channel = 2
+        self.program =  (0, 24)
+        self.synth.program(self.channel, self.program[0], self.program[1])
+
+        self.shift = {"BrownEyedGirl": 0, "WithoutMe": -1, "Riptide": 1}
 
     # start / stop the song
     def toggle(self):
@@ -48,3 +57,13 @@ class AudioController(object):
     def on_update(self):
         self.audio.on_update()
         return self.bg.get_frame()
+
+    def play_synth_note(self,note):
+        if self.synth:
+            self.synth.noteon(2, note + self.shift[self.song], 100)
+        pass
+
+    def note_off(self, note):
+        if self.synth:
+            self.synth.noteoff(2, note + self.shift[self.song])
+

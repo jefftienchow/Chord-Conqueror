@@ -2,6 +2,7 @@
 
 from common.core import *
 from common.gfxutil import *
+from common.synth import *
 
 from Audio import AudioController
 from Display import *
@@ -84,8 +85,9 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-            
-            self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram)
+
+            self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
+
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
 
@@ -104,6 +106,7 @@ class MainWidget(BaseWidget):
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
         self.counting = False
         self.canvas.add(self.anim)
+        self.controller.synth = None
 
     def on_touch_down(self, touch):
         if self.mainmenustarted:
@@ -261,6 +264,7 @@ class MainWidget(BaseWidget):
 
     def updatemenu(self):
         self.MainMenu.on_update()
+
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
