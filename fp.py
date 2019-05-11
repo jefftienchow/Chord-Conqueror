@@ -17,6 +17,7 @@ import sys
 from kivy.uix.label import CoreLabel
 from ChordDetector import ChordDetector
 from TextLabel import *
+from MainMenu import MainMenuDisplay
 
 vel = Window.height
 nowbar_height = 100
@@ -25,12 +26,20 @@ colors = ["green", "red", "yellow", "blue", "purple", "light_blue"]
 class MainWidget(BaseWidget):
     def __init__(self, song):
         super(MainWidget, self).__init__()
+        print(song)
         self.playing = False
         self.started = False
+        self.mainmenustarted = True
         self.section2_started = False
         self.streak = False
+        # self.choose_song(song, (12,23))
 
 
+        self.MainMenu = MainMenuDisplay(self.choose_song)
+        self.canvas.add(self.MainMenu)
+       
+
+    def choose_song(self, song, start_end):
         self.data = SongData("annotations/" + song + "AnnotationFull.txt")
 
         self.controller = AudioController("music/"+ song)
@@ -45,10 +54,13 @@ class MainWidget(BaseWidget):
         #display, player for chord learning part
 
 
-        self.start_section = 12
-        self.end_section = 23
+        self.start_section = start_end[0]
+        self.end_section = start_end[1]
+        print(self.start_section, self.end_section)
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
+
+    def draw_section_1(self):
         self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
 
@@ -78,7 +90,7 @@ class MainWidget(BaseWidget):
             print("No MIDI inputs found! Please plug in MIDI device!")
 
         self.time = 0
-
+        pass
 
     def modify_text(self, label, new_text):
         text_label = CoreLabel(text=new_text, font_size = 20)
@@ -92,7 +104,9 @@ class MainWidget(BaseWidget):
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
 
     def on_touch_down(self, touch):
-        if not self.section2_started:
+        if self.mainmenustarted:
+            self.MainMenu.on_touch_down(touch)
+        elif not self.section2_started:
             if touch:
                 self.chordDisplay.on_touch_down(touch)
 
@@ -103,6 +117,11 @@ class MainWidget(BaseWidget):
             self.handle_down_section1(keycode, modifiers)
 
     def handle_down_section1(self, keycode, modifiers):
+        if keycode[1] == "enter" and self.mainmenustarted:
+            self.mainmenustarted = False
+            self.MainMenu.cleanup()
+            self.canvas.remove(self.MainMenu)
+            self.draw_section_1()
         if keycode[1] == "p":
             self.controller.toggle()
 
@@ -128,9 +147,9 @@ class MainWidget(BaseWidget):
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
                 self.canvas.remove(self.title)
-        if keycode[1] == "spacebar":
+        if keycode[1] == "spacebar" and not self.mainmenustarted:
             self.chordPlayer.new_section()
-        if keycode[1] == "r":
+        if keycode[1] == "r" and not self.mainmenustarted:
             self.chordPlayer.replay_section()
 
     def handle_down_section2(self, keycode, modifiers):
@@ -190,6 +209,8 @@ class MainWidget(BaseWidget):
             self.ps2.stop()
 
     def on_update(self) :
+        if self.mainmenustarted:
+            return
         if self.section2_started:
             self.update_section2()
         else:
@@ -229,7 +250,8 @@ class MainWidget(BaseWidget):
 
         #     self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
         #     self.label.text += "Press \"R\" to restart"
-
+    def updatemenu(self):
+        self.MainMenu.on_update()
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
