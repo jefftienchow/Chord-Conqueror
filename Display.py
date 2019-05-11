@@ -117,7 +117,6 @@ class BeatMatchDisplay(InstructionGroup):
         self.button.on_update(dt)
 
     def toggle(self):
-        print('omg toggled')
         self.paused = not self.paused
 
 # display for a single gem at a position with a color (if desired)

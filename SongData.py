@@ -68,9 +68,8 @@ class SongData(object):
 
             tokens = self.tokens_from_line(line)
             barline_time = float(tokens[0])
-
             # case where there is a strumming pattern and a chord
-            if len(tokens) > 1:
+            if ',' in tokens[1]:
                 strum_pattern, chord = tokens[1].split(',')
                 if chord not in self.chords:
                     self.chords.append(chord)

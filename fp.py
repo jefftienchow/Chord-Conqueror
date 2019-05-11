@@ -42,7 +42,7 @@ class MainWidget(BaseWidget):
     def choose_song(self, song, start_end):
         self.data = SongData("annotations/" + song + "AnnotationFull.txt")
 
-        self.controller = AudioController("music/"+ song)
+        self.controller = AudioController("music/" + song)
 
         self.color_mapping = {}
         self.chords = self.data.get_chords()
@@ -102,6 +102,7 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.pause_menu)
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
+        self.counting = False
 
     def on_touch_down(self, touch):
         if self.mainmenustarted:
@@ -155,15 +156,24 @@ class MainWidget(BaseWidget):
     def handle_down_section2(self, keycode, modifiers):
         # play / pause toggle
         if keycode[1] == 'p':
-            self.controller.toggle()
-            self.player.toggle()
 
-            if self.playing:
+            if not self.playing and self.counting:
+                self.canvas.remove(self.counter)
                 self.canvas.add(self.pause_menu)
+                self.counting = False
+            elif self.playing:
+                self.canvas.add(self.pause_menu)
+                self.controller.toggle()
+                self.player.toggle()
+                self.playing = False
             else:
                 self.canvas.remove(self.pause_menu)
-            
-            self.playing = not self.playing
+                self.counting = True
+                self.count_time = 0
+                self.counter = TextLabel("3", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
+                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
+                self.count = 3
+                self.canvas.add(self.counter)
             self.started = True
 
         if keycode[1] == 'r':
@@ -179,6 +189,10 @@ class MainWidget(BaseWidget):
 
 
         print(keycode[1])
+
+    def count_down(self):
+        self.add(self.counter)
+        self.counting = True
 
     def on_key_up(self, keycode):
         pass
@@ -222,34 +236,29 @@ class MainWidget(BaseWidget):
         self.time = frame / 44100
         self.display.on_update(self.time)
         self.player.on_update(self.time)
+        if self.counting:
+            self.count_time += kivyClock.frametime
+            if self.count_time < 2 and self.count_time >= 1 and self.count == 3:
+                self.canvas.remove(self.counter)
+                self.counter = TextLabel("2", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
+                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
+                self.canvas.add(self.counter)
+                self.count = 2
+            elif self.count_time < 3 and self.count_time >= 2 and self.count == 2:
+                self.canvas.remove(self.counter)
+                self.counter = TextLabel("1", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
+                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
+                self.canvas.add(self.counter)
+                self.count = 1
+            elif self.count_time >= 3 and self.count == 1:
+                self.controller.toggle()
+                self.player.toggle()
+                self.counting = False
+                self.canvas.remove(self.counter)
+                self.playing = not self.playing
+
         #self.midi.on_update()
 
-        # if self.player.get_streak() >= 5:
-        #
-        #     self.label.text += "                                                  Streak: %d   2x Bonus" % self.player.get_streak()
-        #     if self.player.get_streak() == 5:
-        #         self.animate_streak()
-        # else:
-        #     self.stop_streak()
-
-        # if not self.player.get_done():
-        #     self.label.text = "Press \"P\" to "
-        #     if self.playing:
-        #         self.label.text += "pause.\n"
-        #     elif self.started:
-        #         self.label.text += "unpause\n"
-        #         self.label.text += "Press \"R\" to restart\n"
-
-        #     else:
-        #         self.label.text += "begin.\n"
-        #     self.label.text += "score: %d\n" % self.player.get_score()
-        #
-        # else:
-        #     self.label.text = "Final score is: %d\n" % self.player.get_score()
-        #     self.label.text += "Accuracy is: %d %%\n" % self.player.get_accuracy()
-
-        #     self.label.text += "Highest streak: %d\n" % self.player.get_max_streak()
-        #     self.label.text += "Press \"R\" to restart"
     def updatemenu(self):
         self.MainMenu.on_update()
     def update_section1(self):
