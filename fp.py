@@ -35,7 +35,6 @@ class MainWidget(BaseWidget):
         self.anim = AnimGroup()
         # self.choose_song(song, (12,23))
 
-
         self.MainMenu = MainMenuDisplay(self.choose_song)
         self.canvas.add(self.MainMenu)
        
