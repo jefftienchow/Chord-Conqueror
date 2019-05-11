@@ -22,16 +22,17 @@ from MainMenu import MainMenuDisplay
 vel = Window.height
 nowbar_height = 100
 colors = ["green", "red", "yellow", "blue", "purple", "light_blue"]
+count_anim = ((0, 40), (.98, 100), (.99, 0))
 
 class MainWidget(BaseWidget):
-    def __init__(self, song):
+    def __init__(self):
         super(MainWidget, self).__init__()
-        print(song)
         self.playing = False
         self.started = False
         self.mainmenustarted = True
         self.section2_started = False
         self.streak = False
+        self.anim = AnimGroup()
         # self.choose_song(song, (12,23))
 
 
@@ -103,6 +104,7 @@ class MainWidget(BaseWidget):
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
         self.counting = False
+        self.canvas.add(self.anim)
 
     def on_touch_down(self, touch):
         if self.mainmenustarted:
@@ -171,9 +173,9 @@ class MainWidget(BaseWidget):
                 self.counting = True
                 self.count_time = 0
                 self.counter = TextLabel("3", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
-                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
+                                         anim=KFAnim(*count_anim))
                 self.count = 3
-                self.canvas.add(self.counter)
+                self.anim.add(self.counter)
             self.started = True
 
         if keycode[1] == 'r':
@@ -239,23 +241,22 @@ class MainWidget(BaseWidget):
         if self.counting:
             self.count_time += kivyClock.frametime
             if self.count_time < 2 and self.count_time >= 1 and self.count == 3:
-                self.canvas.remove(self.counter)
                 self.counter = TextLabel("2", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
-                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
-                self.canvas.add(self.counter)
+                                         anim=KFAnim(*count_anim))
+                self.anim.add(self.counter)
                 self.count = 2
             elif self.count_time < 3 and self.count_time >= 2 and self.count == 2:
-                self.canvas.remove(self.counter)
                 self.counter = TextLabel("1", pos=(Window.width / 2, Window.height / 2), align='center', font=100,
-                                         anim=KFAnim((0, 40), (1.5, 60), (1.7, 0)))
-                self.canvas.add(self.counter)
+                                         anim=KFAnim(*count_anim))
+                self.anim.add(self.counter)
                 self.count = 1
             elif self.count_time >= 3 and self.count == 1:
                 self.controller.toggle()
                 self.player.toggle()
                 self.counting = False
-                self.canvas.remove(self.counter)
                 self.playing = not self.playing
+
+        self.anim.on_update()
 
         #self.midi.on_update()
 
@@ -273,8 +274,7 @@ class MainWidget(BaseWidget):
         self.chordDisplay.on_update(frame)
         self.chordPlayer.on_update(self.time)
 
-print (sys.argv)
-run(MainWidget,sys.argv[1])
+run(MainWidget)
 
     
         # if self.midi2 is not None:

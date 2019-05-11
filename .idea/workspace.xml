@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db87c2ef-104c-401c-b0f1-ea5d729ef2b3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Display.py" beforeDir="false" afterPath="$PROJECT_DIR$/Display.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SongData.py" beforeDir="false" afterPath="$PROJECT_DIR$/SongData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fp.py" beforeDir="false" afterPath="$PROJECT_DIR$/fp.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,11 +16,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="167" column="36" lean-forward="true" selection-start-line="167" selection-start-column="36" selection-end-line="167" selection-end-column="36" />
+            <state relative-caret-position="323">
+              <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="e#8#33#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/common/core.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
             </state>
           </provider>
         </entry>
@@ -122,7 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>finger.add</find>
       <find>color =</find>
       <find>chordpla</find>
       <find>show</find>
@@ -152,6 +158,7 @@
       <find>pause</find>
       <find>end</find>
       <find>self.counter</find>
+      <find>counter</find>
     </findStrings>
     <replaceStrings>
       <replace>print ('</replace>
@@ -167,7 +174,6 @@
         <option value="$PROJECT_DIR$/Songdata.py" />
         <option value="$PROJECT_DIR$/../../6.033/wal-sys.py" />
         <option value="$PROJECT_DIR$/annotations/BrownEyedGirlAnnotationFull.txt" />
-        <option value="$PROJECT_DIR$/common/core.py" />
         <option value="$PROJECT_DIR$/common/wavegen.py" />
         <option value="$PROJECT_DIR$/Audio.py" />
         <option value="$PROJECT_DIR$/Note.py" />
@@ -181,13 +187,14 @@
         <option value="$PROJECT_DIR$/ChordDiagram.py" />
         <option value="$PROJECT_DIR$/SongData.py" />
         <option value="$PROJECT_DIR$/Display.py" />
+        <option value="$PROJECT_DIR$/common/core.py" />
         <option value="$PROJECT_DIR$/fp.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="885" />
-    <option name="y" value="42" />
+    <option name="x" value="353" />
+    <option name="y" value="-9" />
     <option name="width" value="1180" />
     <option name="height" value="930" />
   </component>
@@ -306,13 +313,13 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21017845" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21017845" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32937685" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.23087819" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.23087819" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -407,13 +414,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/particle/texture.png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="84" column="4" selection-start-line="84" selection-start-column="4" selection-end-line="84" selection-end-column="4" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/music/BrownEyedGirlRegions.sv">
       <provider selected="true" editor-type-id="text-editor" />
@@ -575,10 +575,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/common/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="167" column="36" lean-forward="true" selection-start-line="167" selection-start-column="36" selection-end-line="167" selection-end-column="36" />
+        <state relative-caret-position="323">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
           <folding>
             <element signature="e#8#33#0" expanded="true" />
           </folding>
