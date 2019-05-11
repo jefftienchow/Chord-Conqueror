@@ -16,20 +16,20 @@ from TextLabel import TextLabel
 from kivy.uix.label import CoreLabel
 from common.gfxutil import *
 
-songs = ["BrownEyedGirl", "Riptide", "KillerQueen"]
+songs = ["BrownEyedGirl", "Riptide", "WithoutMe"]
 start_end = [(12, 23), (92,108), (12,23)]
 class MainMenuDisplay(InstructionGroup):
     
     def __init__(self,choose_song):
         super(MainMenuDisplay, self).__init__()
-        self.label = TextLabel(text = "Click on a song to select it, and press ENTER to confirm", pos = (0,0))
+        self.label = TextLabel(text = "Click on a song to select it, and press ENTER to confirm", pos = (0,0), font=Window.height/30)
         self.add(self.label)
         self.buttons = []
         self.choose_song = choose_song
         x = Window.width - 1/6*Window.width
         y = 200
         i = 0
-        label = CoreLabel(text="CHOOSE A SONG", font_size = 70)
+        label = CoreLabel(text="CHOOSE A SONG", font_size = Window.height/10)
         label.refresh()
         text = label.texture
 
@@ -40,7 +40,7 @@ class MainMenuDisplay(InstructionGroup):
             self.buttons.append(button)
             self.add(button)
             i+=1
-            y += 200
+            y += Window.height/7
 
 
     def on_touch_down(self, touch):
@@ -64,7 +64,7 @@ class SongButtons(InstructionGroup):
 
 
 		#added lable for texturing the buttons
-		label = CoreLabel(text=song, font_size = 40)
+		label = CoreLabel(text=song, font_size = Window.height/20)
 		label.refresh()
 		text = label.texture
 		self.size =text.size
