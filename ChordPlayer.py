@@ -84,14 +84,17 @@ class ChordPlayer(object):
 
     # called by MainWidget
     def on_button_down(self, chord):
-        print(chord)
+
         if not self.done:
-            if chord == self.chord_order[self.current_chord_idx]:
+            print(self.chord_order[self.current_chord_idx - 1][0])
+            if chord == self.chord_order[self.current_chord_idx - 1][0]:
+                print('Correct', chord, self.chord_order[self.current_chord_idx - 1])
                 self.display.correct(chord, True)
                 self.detected.add(chord)
-                self.current_chord_idx%=len(self.chord_order)
+                # self.current_chord_idx%=len(self.chord_order)
                 self.new_section()
             else:
+                print('Incorrect', chord, self.chord_order[self.current_chord_idx - 1][0])
                 self.display.wrong()
 
     # called by MainWidget
