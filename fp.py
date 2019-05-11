@@ -257,6 +257,7 @@ class MainWidget(BaseWidget):
 
 
         self.midi.on_update()
+        self.anim.on_update()
 
     def updatemenu(self):
         self.MainMenu.on_update()
