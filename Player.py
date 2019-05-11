@@ -45,6 +45,9 @@ class Player(object):
     def get_done(self):
         return self.idx == len(self.gem_data)
 
+    def toggle(self):
+        self.display.toggle()
+
     def reset(self):
         self.done = False
         self.streak = 0

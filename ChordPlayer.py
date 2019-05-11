@@ -77,9 +77,7 @@ class ChordPlayer(object):
     def finished(self):
         self.done = True
         self.display.label.update_text("Congrats!  You guessed all the chords correctly.  Press 1 to continue.", (1,1,1))
-        
-        
-        
+
     def wrong(self):
         self.display.wrong()
         self.controller.play_sfx()

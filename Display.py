@@ -15,6 +15,8 @@ class BeatMatchDisplay(InstructionGroup):
     def __init__(self, data, color_mapping):
         super(BeatMatchDisplay, self).__init__()
 
+        self.objects = set()
+        self.paused = True
         self.color_mapping = color_mapping
 
         self.gem_data = data.get_gems()
@@ -62,6 +64,7 @@ class BeatMatchDisplay(InstructionGroup):
 
         self.add(self.button)
 
+
     def reset(self):
         for gem in self.gems:
             gem.reset()
@@ -97,11 +100,25 @@ class BeatMatchDisplay(InstructionGroup):
                 object.on_update(time)
             if object.on_screen and not object.added:
                 self.add(object)
+                self.objects.add(object)
                 object.added = True
             elif object.added and not object.removed and not object.on_screen:
                 self.remove(object)
+                self.objects.remove(object)
                 object.removed = True
+
+        for object in self.objects | {self.button}:
+            if self.paused:
+                object.darken()
+            else:
+                object.brighten()
+
+
         self.button.on_update(dt)
+
+    def toggle(self):
+        print('omg toggled')
+        self.paused = not self.paused
 
 # display for a single gem at a position with a color (if desired)
 class BarDisplay(InstructionGroup):
@@ -114,7 +131,7 @@ class BarDisplay(InstructionGroup):
 
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.bar = Rectangle(pos=(0,self.ypos), size = (Window.width/2 + 200, 2))
+        self.bar = Rectangle(pos=(100,self.ypos), size = (Window.width/2, 2))
         self.add(self.bar)
 
         self.vel = vel
@@ -132,8 +149,13 @@ class BarDisplay(InstructionGroup):
 
         # bar comes down and hits nowbar height at its corresponding time
         self.ypos = nowbar_height + (self.time_loc - time) * vel
+        self.bar.pos = (100, self.ypos)
 
-        self.bar.pos = (0, self.ypos)
+    def darken(self):
+        self.color.a = .2
+
+    def brighten(self):
+        self.color.a = .7
 
 class ChordDisplay(InstructionGroup):
     def __init__(self, chord, time_loc, color=Color(1,1,1)):
@@ -145,7 +167,7 @@ class ChordDisplay(InstructionGroup):
         self.size = 125
         self.ypos = nowbar_height + (self.time_loc - self.time) * vel
 
-        self.box = ChordDiagram(self.size, (650, self.ypos), chord, color)
+        self.box = ChordDiagram(self.size, (600, self.ypos), chord, color)
         self.add(self.box)
 
         self.vel = vel
@@ -169,7 +191,13 @@ class ChordDisplay(InstructionGroup):
         else:
             self.ypos = nowbar_height + (self.next_time - time) * vel
         
-        self.box.set_pos((Window.height, self.ypos))
+        self.box.set_pos((550, self.ypos))
+
+    def darken(self):
+        self.box.darken()
+
+    def brighten(self):
+        self.box.brighten()
 
 # display for a single gem at a position with a color (if desired)
 class GemDisplay(InstructionGroup):
@@ -193,6 +221,7 @@ class GemDisplay(InstructionGroup):
         self.notes = []
         self.added = False
         self.removed = False
+        self.a = 1
 
     @property
     def on_screen(self):
@@ -211,6 +240,7 @@ class GemDisplay(InstructionGroup):
     # change to display a passed gem
     def on_pass(self):
         self.color.a = .3
+        self.a = .3
 
     def reset(self):
         self.color.a = 1
@@ -228,6 +258,12 @@ class GemDisplay(InstructionGroup):
         for note in self.notes:
             note.on_update(dt)
 
+    def darken(self):
+        self.color.a = .2
+
+    def brighten(self):
+        self.color.a = self.a
+
 # Displays one button on the nowbar
 class ButtonDisplay(InstructionGroup):
     def __init__(self, pos):
@@ -238,6 +274,7 @@ class ButtonDisplay(InstructionGroup):
         self.border = Rectangle(texture=Image("pictures/black.png").texture,pos=pos, size=(Window.width/2, 20))
         self.add(self.border)
         self.time = 0
+        self.darkened = True
 
     # displays when button is down (and if it hit a gem)
     def on_down(self, color, hit):
@@ -250,5 +287,13 @@ class ButtonDisplay(InstructionGroup):
 
     def on_update(self, dt):
         self.time += dt
-        if self.time > .2:
+        if self.time > .2 and not self.darkened:
             self.border_color.rgb = (1, 1, 1)
+
+    def darken(self):
+        self.border_color.a = .2
+        self.darkened = True
+
+    def brighten(self):
+        self.border_color.a = 1
+        self.darkened = False

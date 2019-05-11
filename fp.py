@@ -137,6 +137,7 @@ class MainWidget(BaseWidget):
         # play / pause toggle
         if keycode[1] == 'p':
             self.controller.toggle()
+            self.player.toggle()
 
             if self.playing:
                 self.canvas.add(self.pause_menu)

@@ -55,8 +55,10 @@ class ChordDiagram(InstructionGroup):
 	def __init__(self, size=400, pos=(0,0), chord='G', color="black"):
 		super(ChordDiagram, self).__init__()
 
-
+		self.colors = []
 		self.add(PushMatrix())
+
+
 		self.translate = Translate(*pos)
 		self.add(self.translate)
 
@@ -69,7 +71,9 @@ class ChordDiagram(InstructionGroup):
 		y2 = self.y + self.size * .8
 
 		fretboard = InstructionGroup()
-		fretboard.add(Color(139/255,69/255,19/255))
+		board_color = Color(139/255,69/255,19/255)
+		fretboard.add(board_color)
+		self.colors.append(board_color)
 		background = Rectangle(pos=(x, y1), size=(self.size * 1.4, self.size * .6))
 		fretboard.add(background)
 		self.add(fretboard)
@@ -78,9 +82,11 @@ class ChordDiagram(InstructionGroup):
 		last_x = x
 		self.finger_placements = [x]
 		scale_length = self.size * 6
-		for i in range(5):
+		for i in range(4):
 			fret = InstructionGroup()
-			fret.add(Color(238/255, 238/255, 224/255))
+			fret_color = Color(238/255, 238/255, 224/255)
+			fret.add(fret_color)
+			self.colors.append(fret_color)
 			x = last_x + scale_length/17.817
 			self.finger_placements.append((last_x + x)/2)
 			last_x = x
@@ -92,7 +98,9 @@ class ChordDiagram(InstructionGroup):
 		# fret marker
 		x_dot = self.finger_placements[3]
 		dot = InstructionGroup()
-		dot.add(Color(1,1,1))
+		dot_color = Color(1,1,1)
+		dot.add(dot_color)
+		self.colors.append(dot_color)
 		circle = CEllipse(cpos=(x_dot, self.y + self.size/2), csize=(self.size*.06, self.size*.06))
 		dot.add(circle)
 		self.add(dot)
@@ -102,10 +110,14 @@ class ChordDiagram(InstructionGroup):
 		for i in range(6):
 			string = InstructionGroup()
 			if i < 3:	# brass strings
-				string.add(Color(181/255, 166/255, 66/255))
+				string_color = Color(181/255, 166/255, 66/255)
+				string.add(string_color)
+				self.colors.append(string_color)
 				width = size/100
 			else:
-				string.add(Color(180/255, 180/255, 180/255))
+				string_color = Color(180/255, 180/255, 180/255)
+				string.add(string_color)
+				self.colors.append(string_color)
 				width = size/200
 			y = self.y + self.size * (.25 + .1 * i)
 			self.string_heights.append(y)
@@ -116,7 +128,9 @@ class ChordDiagram(InstructionGroup):
 		# nut
 		x = self.x + self.size * .1
 		nut = InstructionGroup()
-		nut.add(Color(238/255, 238/255, 224/255))
+		nut_color = Color(238/255, 238/255, 224/255)
+		nut.add(nut_color)
+		self.colors.append(nut_color)
 		line = Line(points=[x, y1, x, y2], width=self.size/50, cap='square')
 		nut.add(line)
 		self.add(nut)
@@ -128,9 +142,13 @@ class ChordDiagram(InstructionGroup):
 		for index, fret in enumerate(self.indices):
 			
 			finger = InstructionGroup()
-			finger.add(Color(*to_rgb[color]))# TO DO: handle muted strings
+			finger_color = Color(*to_rgb[color])
+			finger.add(finger_color)
+			self.colors.append(finger_color)# TO DO: handle muted strings
 			if fret == -1:
-				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]), color= Color(*to_rgb[color]))
+				mute_color = Color(*to_rgb[color])
+				self.colors.append(mute_color)
+				x = Mute(size=self.size*.07, pos=(self.finger_placements[0], self.string_heights[index]), color= mute_color)
 				finger.add(x)
 			else:
 				dot = CEllipse(cpos=(self.finger_placements[fret], self.string_heights[index]), csize=(self.size*.1, self.size*.1))
@@ -139,8 +157,11 @@ class ChordDiagram(InstructionGroup):
 
 		# border
 		border = InstructionGroup()
+
 		self.color = to_rgb[color]
-		border.add(Color(*self.color))
+		border_color = Color(*self.color)
+		border.add(border_color)
+		self.colors.append(border_color)
 		line = Line(points=[self.x, self.y, self.x, self.y + self.size, self.x + self.size * 1.6, self.y + self.size, self.x + self.size * 1.6, self.y],
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)
@@ -148,9 +169,10 @@ class ChordDiagram(InstructionGroup):
 
 		self.fingers = []
 
-		finger_colors = Color(*self.color)
-		finger_colors.a = .3
-		self.add(finger_colors)
+		self.finger_colors = Color(*self.color)
+		self.finger_colors.a = .3
+		self.add(self.finger_colors)
+		self.colors.append(self.finger_colors)
 		for i in range(6):
 			dot = CEllipse(cpos = (self.finger_placements[0], self.string_heights[i]), csize=(self.size*.1, self.size*.1))
 			self.fingers.append(dot)
@@ -164,7 +186,18 @@ class ChordDiagram(InstructionGroup):
 		self.color.rgb = rgb
 
 	def on_update(self, string, fret): #info: string, fret
-		if fret < 5:
+		if fret < 4:
 			self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[5-string])
+
+	def darken(self):
+		for color in self.colors:
+			color.a = .2
+
+	def brighten(self):
+		for color in self.colors:
+			if color == self.finger_colors:
+				color.a = .3
+			else:
+				color.a = 1
 
 # run(MainWidget, "BrownEyedGirl")
