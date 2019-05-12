@@ -18,6 +18,7 @@ from common.gfxutil import *
 
 songs = ["BrownEyedGirl", "Riptide", "WithoutMe"]
 start_end = [(12, 23), (92,108), (12,23)]
+keys = ["G Major", "a minor", ""]
 class MainMenuDisplay(InstructionGroup):
     
     def __init__(self,choose_song):

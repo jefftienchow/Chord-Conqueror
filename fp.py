@@ -85,8 +85,8 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-
-            self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
+            pass
+            #self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
 
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
@@ -259,7 +259,7 @@ class MainWidget(BaseWidget):
                 self.playing = not self.playing
 
 
-        self.midi.on_update()
+        #self.midi.on_update()
         self.anim.on_update()
 
     def updatemenu(self):
@@ -268,7 +268,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:

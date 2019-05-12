@@ -77,7 +77,9 @@ class ChordMatchDisplay(InstructionGroup) :
 
 
     def show_options(self, chord, color):
-
+        if self.move_on:
+            self.remove(self.move_on)
+            self.move_on = None
         self.options.add(chord)
         # print(self.allchords)
         # print("ALL CHORDS")
