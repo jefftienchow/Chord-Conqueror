@@ -40,7 +40,7 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.MainMenu)
        
 
-    def choose_song(self, song, start_end):
+    def choose_song(self, song, start_end, key):
         self.data = SongData("annotations/" + song + "AnnotationFull.txt")
 
         self.controller = AudioController("music/" + song)
@@ -58,11 +58,12 @@ class MainWidget(BaseWidget):
         self.start_section = start_end[0]
         self.end_section = start_end[1]
         print(self.start_section, self.end_section)
+        self.key = key
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
 
     def draw_section_1(self):
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section, self.key)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
 
         self.canvas.add(self.chordDisplay)

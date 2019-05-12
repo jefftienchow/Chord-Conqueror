@@ -18,7 +18,7 @@ from common.gfxutil import *
 
 songs = ["BrownEyedGirl", "Riptide", "WithoutMe"]
 start_end = [(12, 23), (92,108), (12,23)]
-keys = ["G Major", "a minor", ""]
+keys = ["G Major", "C Major", "e minor"]
 class MainMenuDisplay(InstructionGroup):
     
     def __init__(self,choose_song):
@@ -37,7 +37,7 @@ class MainMenuDisplay(InstructionGroup):
         title = Rectangle(texture = text, pos =( Window.width/2-text.size[0]/2, Window.height*3/4), size = text.size)
         self.add(title)
         for song in songs:
-            button = SongButtons(y = y, song = song, start_end = start_end[i])
+            button = SongButtons(y = y, song = song, start_end = start_end[i], key=keys[i])
             self.buttons.append(button)
             self.add(button)
             i+=1
@@ -46,9 +46,9 @@ class MainMenuDisplay(InstructionGroup):
 
     def on_touch_down(self, touch):
     	for button in self.buttons:
-    		inside, song, start_end = button.check_inside(touch.pos[0], touch.pos[1])
+    		inside, song, start_end, key = button.check_inside(touch.pos[0], touch.pos[1])
     		if inside:
-    			self.choose_song(song, start_end)
+    			self.choose_song(song, start_end, key)
     def cleanup(self):
     	self.remove(self.label)
     	for button in self.buttons:
@@ -56,10 +56,11 @@ class MainMenuDisplay(InstructionGroup):
 
 
 class SongButtons(InstructionGroup):
-	def __init__(self, y, song, start_end):
+	def __init__(self, y, song, start_end, key):
 		super(SongButtons, self).__init__()
 		self.start_end = start_end
 		self.song = song
+		self.key = key
 		self.color = Color(*(1,1,1))
 		self.add(self.color)
 
@@ -78,12 +79,12 @@ class SongButtons(InstructionGroup):
 	def click(self):
 		self.color.a = .2
 		# print("IM CLICKED",self.song)
-		return True, self.song, self.start_end
+		return True, self.song, self.start_end, self.key
 
 	def unclick(self):
 		self.color.a = 1
 		# print("IM UNCLICKED", self.song)
-		return False, None, self.start_end
+		return False, None, self.start_end, self.key
 
 	def check_inside(self,x,y):
 		if x >=self.pos[0] and x <=self.pos[0] + self.size[0]:
