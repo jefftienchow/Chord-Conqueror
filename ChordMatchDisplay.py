@@ -123,7 +123,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.optiondiags.clear()
     
     def draw_chord(self, chord):
-        if self.x  >= Window.width:
+        if self.x  >= Window.width - self.diagramHeight:
             self.y += self.diagramHeight + 20
             self.x = 70
         diag = ChordDiagram(self.diagramHeight, (self.x,self.y), chord = chord, color = self.color_mapping[chord] )

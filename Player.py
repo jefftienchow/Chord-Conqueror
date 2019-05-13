@@ -85,6 +85,9 @@ class Player(object):
                     self.streak += 1
                     self.hits += 1
                     self.max_streak = max(self.streak, self.max_streak)
+                    self.display.anim_group.add(
+                    TextLabel("Perfect!", pos=(110 + Window.width / 4, 200), font=30, align='center',
+                              anim=KFAnim((0, 30), (.3, 40), (.301, 0)), color=Color(0,1,0)))
                     if self.streak >= 3:
                         self.score += 100
                         # new streak handling
@@ -102,6 +105,9 @@ class Player(object):
 
             elif chord == self.cur_chord:
                 self.correct()
+                self.score += 10
+                self.display.anim_group.add(TextLabel("Correct",pos=(110 + Window.width / 4, 175), align='center',font=20,
+                                         anim=KFAnim((0,20), (.3,30), (.301, 0))))
 
             # a temporal miss
             elif self.idx > 0:
@@ -115,8 +121,6 @@ class Player(object):
             self.display.on_button_down(self.color_mapping[chord], None)
 
     def deduct(self):
-        if self.score >= 50:
-            self.score -= 50
         self.streak = 0
         self.main.stop_streak()
 

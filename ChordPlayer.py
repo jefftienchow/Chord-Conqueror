@@ -69,7 +69,7 @@ class ChordPlayer(object):
             return
         chord = self.chord_order[self.current_chord_idx][0]
         self.current_section = self.chord_order[self.current_chord_idx][1]
-        self.start_section = self.current_section - 2
+        self.start_section = self.current_section - 1
         self.end_section = self.current_section + 2
         self.display.show_options(chord, self.color_mapping[chord])
         self.replay_section()

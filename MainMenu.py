@@ -101,9 +101,6 @@ class EndMenuDisplay(InstructionGroup):
 		self.label = TextLabel("You finished the song!  What would you like to do next?", pos=(Window.width/2, Window.height*3/4), font=Window.height/30, align='center')
 		self.add(self.label)
 
-		self.label2 = TextLabel(text = "Click on an option to select it, and press ENTER to confirm", pos = (0,0), font=Window.height/30)
-		self.add(self.label2)
-
 		self.menu = GeneralButton(Window.height*1/3, "Return to Main Menu", return_to_menu)
 		self.add(self.menu)
 
@@ -124,7 +121,6 @@ class EndMenuDisplay(InstructionGroup):
 
 	def cleanup(self):
 		self.remove(self.label)
-		self.remove(self.label2)
 		for button in self.buttons:
 			self.remove(button)
 

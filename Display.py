@@ -5,6 +5,7 @@ from Note import Note
 from ChordDiagram import ChordDiagram
 from common.gfxutil import *
 from kivy.core.image import Image
+from TextLabel import TextLabel
 
 vel = Window.height/2.5
 nowbar_height = 100
@@ -14,7 +15,6 @@ to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(30/255, 
 class BeatMatchDisplay(InstructionGroup):
     def __init__(self, data, color_mapping):
         super(BeatMatchDisplay, self).__init__()
-
         self.objects = set()
         self.paused = True
         self.color_mapping = color_mapping
@@ -64,6 +64,11 @@ class BeatMatchDisplay(InstructionGroup):
 
         self.add(self.button)
 
+        self.score_label = TextLabel("Score: 0", pos=(Window.width/2-125, Window.height-100), font=40)
+        self.add(self.score_label)
+
+    def set_player(self, player):
+        self.player = player
 
     def reset(self):
         for gem in self.gems:
@@ -116,8 +121,10 @@ class BeatMatchDisplay(InstructionGroup):
             else:
                 object.brighten()
 
+        self.anim_group.on_update()
 
         self.button.on_update(dt)
+        self.score_label.update_text("Score: " + str(self.player.get_score()), (1,1,1))
         return continue_flag
 
     def toggle(self):
@@ -240,7 +247,7 @@ class GemDisplay(InstructionGroup):
 
         # creates the hit effect where notes animations are added
         for i in range(9):
-            note = Note((Window.width/2 - 100, nowbar_height), to_rgb[self.color_data], i * 40)
+            note = Note((Window.width/4 + 100 - 20, nowbar_height), to_rgb[self.color_data], i * 40)
             self.add(note)
             self.notes.append(note)
 

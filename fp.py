@@ -82,6 +82,8 @@ class MainWidget(BaseWidget):
         raise Exception('App was quit')
 
     def restart(self):
+        if self.EndMenu:
+            self.EndMenu.cleanup()
         self.canvas.clear()
         self.playing = False
         self.started = False
@@ -166,10 +168,11 @@ class MainWidget(BaseWidget):
 
     def init_section_2(self):
         self.time = 0
-        self.pause_menu = TextLabel("Press P to play/pause!\n\nPress R to restart the song!\n\nPress BACKSPACE to return to MAIN MENU", pos=(Window.width/2, Window.height/2), align='center', font=25)
+        self.pause_menu = TextLabel("Press P to play/pause!\n\nPress BACKSPACE to return to MAIN MENU", pos=(Window.width/2, Window.height/2), align='center', font=25)
         self.canvas.add(self.pause_menu)
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
+        self.display.set_player(self.player)
         self.counting = False
         self.canvas.add(self.anim)
 
@@ -252,13 +255,13 @@ class MainWidget(BaseWidget):
                 self.anim.add(self.counter)
             self.started = True
 
-        if keycode[1] == 'r':
-            if not self.playing or self.player.get_done():
-                self.controller.reset()
-                self.player.reset()
-                self.display.reset()
-                self.playing = False
-                self.started = False
+        # if keycode[1] == 'r':
+        #     if not self.playing or self.player.get_done():
+        #         self.controller.reset()
+        #         self.player.reset()
+        #         self.display.reset()
+        #         self.playing = False
+        #         self.started = False
         if keycode[1] == 'backspace' and not self.playing and not self.counting:
             self.restart()
 
@@ -322,7 +325,7 @@ class MainWidget(BaseWidget):
         if not continue_flag and self.started:
             print('end menu')
             self.canvas.clear()
-            self.EndMenu = EndMenuDisplay(self.load_main_menu, self.replay_song, self.quit)
+            self.EndMenu = EndMenuDisplay(self.restart, self.replay_song, self.quit)
             self.playing = False
             self.started = False
             self.endmenustarted = True
