@@ -6,7 +6,7 @@ from ChordDiagram import ChordDiagram
 from common.gfxutil import *
 from kivy.core.image import Image
 
-vel = Window.height/3
+vel = Window.height/2.5
 nowbar_height = 100
 to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0)}
 
