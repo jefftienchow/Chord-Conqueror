@@ -42,7 +42,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.diagrams = []
         self.diagramWidth = Window.width/(len(self.color_mapping)+1)
         self.diagramHeight = self.diagramWidth/1.6
-        self.x = 0
+        self.x = 70
         self.y =0
 
         self.progress_bar = ProgressBar(self.data.get_sections(), start, end, self.color_mapping, self.controller)
@@ -125,7 +125,7 @@ class ChordMatchDisplay(InstructionGroup) :
     def draw_chord(self, chord):
         if self.x  >= Window.width:
             self.y += self.diagramHeight + 20
-            self.x = 0
+            self.x = 70
         diag = ChordDiagram(self.diagramHeight, (self.x,self.y), chord = chord, color = self.color_mapping[chord] )
         self.add(diag)
         self.diagrams.append(diag)

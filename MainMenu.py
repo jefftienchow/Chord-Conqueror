@@ -17,7 +17,7 @@ from kivy.uix.label import CoreLabel
 from common.gfxutil import *
 
 songs = ["BrownEyedGirl", "Riptide", "WithoutMe"]
-start_end = [(12, 23), (92,108), (12,23)]
+start_end = [(12, 23), (69,79), (12,23)]
 keys = ["G Major", "C Major", "e minor"]
 class MainMenuDisplay(InstructionGroup):
     

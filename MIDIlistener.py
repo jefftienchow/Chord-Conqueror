@@ -32,7 +32,7 @@ class MIDIInput(object):
                 timer = time.time()
                 #get the MIDI input
                 msg = self.midiin.get_message()
-
+                #print(msg)
                 #if input received
                 while msg != None:
                     message, deltatime = msg

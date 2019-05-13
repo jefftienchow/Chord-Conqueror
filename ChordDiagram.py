@@ -25,7 +25,7 @@ from TextLabel import TextLabel
 #     def on_update(self):
 #     	pass
 
-to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(0, 0, 1), "green": (0, 1, 0), "yellow": (1, 1, 0), "black": (0,0,0)}
+to_rgb = {"red":(1, 0, 0), "purple": (148 / 255, 0, 211 / 255), "blue":(30/255, 144/255, 1), "green": (0, 1, 0), "yellow": (1, 1, 0), "black": (0,0,0)}
 class Mute(InstructionGroup):
 	def __init__(self, size=20, pos=(100,100), color=Color(50/255,1,0)):
 		super(Mute, self).__init__()
@@ -169,7 +169,7 @@ class ChordDiagram(InstructionGroup):
 		border.add(line)
 		self.add(border)
 
-		font_size = 25 - 3*len(chord)
+		font_size = 20 - 2*len(chord)
 		self.label = TextLabel(chord, pos=(self.x-40, self.y + self.size/3), font=font_size, color= border_color)
 		self.add(self.label)
 
@@ -192,7 +192,7 @@ class ChordDiagram(InstructionGroup):
 		self.color.rgb = rgb
 
 	def on_update(self, string, fret): #info: string, fret
-		if fret < 4:
+		if fret < 5:
 			self.fingers[string].cpos = (self.finger_placements[fret], self.string_heights[5-string])
 
 	def darken(self):

@@ -43,6 +43,7 @@ class MainWidget(BaseWidget):
 
         self.MainMenu = MainMenuDisplay(self.choose_song)
         self.canvas.add(self.MainMenu)
+        self.learning_started = False
        
 
     def load_main_menu(self):
@@ -82,7 +83,6 @@ class MainWidget(BaseWidget):
 
     def restart(self):
         self.canvas.clear()
-        self.controller = None
         self.playing = False
         self.started = False
         self.mainmenustarted = True
@@ -90,6 +90,8 @@ class MainWidget(BaseWidget):
         self.endmenustarted = False
         self.streak = False
         self.anim = AnimGroup()
+        self.learning_started = False
+        self.midi.midiin.close_port()
         # self.choose_song(song, (12,23))
 
         self.MainMenu = MainMenuDisplay(self.choose_song)
@@ -101,6 +103,7 @@ class MainWidget(BaseWidget):
     def choose_song(self, song, start_end, key):
         self.data = SongData("annotations/" + song + "AnnotationFull.txt")
         if self.controller is None:
+            print("BEING FIXED PLEASE")
             self.controller = AudioController("music/" + song)
         else:
             self.controller.song = song
@@ -127,10 +130,11 @@ class MainWidget(BaseWidget):
 
     def draw_section_1(self):
         self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section, self.key)
-        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
-
         self.canvas.add(self.chordDisplay)
-        
+
+        self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping, self)
+
+
         # self.progress_bar = ProgressBar(self.data.get_sections(), 92, 108, self.color_mapping, self.controller)
         self.controller.set_start(int(self.data.get_sections()[self.start_section][0]))
         self.controller.set_stop(int(self.data.get_sections()[self.end_section][0]))
@@ -148,15 +152,12 @@ class MainWidget(BaseWidget):
         for chord in self.chords:
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
-        try:
-            pass
-            #self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
-
-        except:
-            print("No MIDI inputs found! Please plug in MIDI device!")
+        print("midi init @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
+        #print("No MIDI inputs found! Please plug in MIDI device!")
 
         self.time = 0
-        pass
+
 
     def modify_text(self, label, new_text):
         text_label = CoreLabel(text=new_text, font_size = 20)
@@ -171,7 +172,6 @@ class MainWidget(BaseWidget):
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
         self.counting = False
         self.canvas.add(self.anim)
-        self.controller.synth = None
 
     def on_touch_down(self, touch):
         print(touch)
@@ -223,8 +223,9 @@ class MainWidget(BaseWidget):
                 self.controller.set_start(0)
                 self.controller.set_stop(999999)
                 self.canvas.remove(self.title)
-        if keycode[1] == "spacebar" and not self.mainmenustarted:
+        if keycode[1] == "spacebar" and not self.mainmenustarted and not self.learning_started:
             self.chordPlayer.new_section()
+            self.learning_started = True
         if keycode[1] == "r" and not self.mainmenustarted:
             self.chordPlayer.replay_section()
 
@@ -347,7 +348,7 @@ class MainWidget(BaseWidget):
                 self.playing = not self.playing
 
 
-        #self.midi.on_update()
+        self.midi.on_update()
         self.anim.on_update()
 
     def updatemenu(self):
@@ -356,8 +357,8 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        #self.midi.on_update()
-
+        self.midi.on_update()
+        print (self.midi.last_note)
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
         #     self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'

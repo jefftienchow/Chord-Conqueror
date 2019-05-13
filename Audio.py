@@ -10,10 +10,11 @@ from common.synth import *
 class AudioController(object):
     def __init__(self, song_name):
         super(AudioController, self).__init__()
-        self.song = song_name.split("/")[1]
+        self.set_song(song_name)
+
         self.audio = Audio(2)
         self.mixer = Mixer()
-        self.bg = WaveGenerator(WaveFile(song_name + ".wav"),False)
+
         self.mixer.add(self.bg)
         self.audio.set_generator(self.mixer)
         self.buffers = []
@@ -22,13 +23,16 @@ class AudioController(object):
         self.channel = 2
         self.program =  (0, 24)
         self.synth.program(self.channel, self.program[0], self.program[1])
-
         self.shift = {"BrownEyedGirl": 0, "WithoutMe": -1, "Riptide": 1}
 
     # start / stop the song
+    def set_song(self, song_name):
+        self.song = song_name.split("/")[1]
+        self.bg = WaveGenerator(WaveFile(song_name + ".wav"), False)
     def toggle(self):
         self.bg.play_toggle()
-
+    def reset_synth(self):
+        self.synth = Synth('./data/FluidR3_GM.sf2')
     def reset(self):
         self.bg.reset()
 
@@ -60,6 +64,7 @@ class AudioController(object):
         return self.bg.get_frame()
 
     def play_synth_note(self,note):
+        print("SCREAM ")
         if self.synth:
             self.synth.noteon(2, note + self.shift[self.song], 100)
         pass

@@ -10,8 +10,9 @@ name_to_midi = {"a": 69, "b": 71, "c": 72, "d": 74, "e": 76, "f": 77, "g": 79}
 # Handles game logic and keeps score.
 # Controls the display and the audio
 class ChordPlayer(object):
-    def __init__(self, display, audio_ctrl, detector,data, mapping):
+    def __init__(self, display, audio_ctrl, detector,data, mapping, main):
         super(ChordPlayer, self).__init__()
+        self.main = main
         self.color_mapping = mapping
         self.detector = detector
         self.data = data
@@ -41,8 +42,8 @@ class ChordPlayer(object):
 
         self.current_chord_idx = 0
         self.chord_played = False
-        self.start_section = 0
-        self.end_section = None
+        self.start_section = self.start
+        self.end_section = self.end
         self.done = False
         # self.current_section = 92
 
@@ -85,7 +86,7 @@ class ChordPlayer(object):
     # called by MainWidget
     def on_button_down(self, chord):
 
-        if not self.done:
+        if not self.done and self.main.learning_started:
             print(self.chord_order[self.current_chord_idx - 1][0])
             if chord == self.chord_order[self.current_chord_idx - 1][0]:
                 print('Correct', chord, self.chord_order[self.current_chord_idx - 1])

@@ -13,7 +13,7 @@ nowbar_height = 100
 color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 class MainWidget(BaseWidget) :
-    def __init__(self, NONE):
+    def __init__(self):
         super(MainWidget, self).__init__()
         #creates MIDI listener object
         self.MIDI = MIDIInput()
@@ -34,4 +34,4 @@ class MainWidget(BaseWidget) :
         self.label.text += str(self.MIDI.current_notes)
         self.MIDI.on_update()
 
-run(MainWidget, None)
+run(MainWidget)

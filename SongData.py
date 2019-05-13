@@ -92,7 +92,14 @@ class SongData(object):
         #     if cur_chord != data[i][1]:
         #         self.sections.append((float(data[i][0]),data[i][1]))
         #         cur_chord = data[i][1]
-        self.sections = [(data[i+1][0],chords[i]) for i in range(len(chords))]
+        self.sections = []
+        cur_chord = None
+        for i in range(len(chords)):
+            if chords[i] != cur_chord:
+                self.sections.append((data[i+1][0], chords[i]))
+                cur_chord = chords[i]
+
+
         riptide_gems = []
         tempo_map = TempoMap(data)
         assert(len(patterns) == len(chords))
