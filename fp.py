@@ -38,6 +38,7 @@ class MainWidget(BaseWidget):
         self.endmenustarted = False
         self.streak = False
         self.anim = AnimGroup()
+        self.EndMenu = None
         # self.choose_song(song, (12,23))
 
         self.MainMenu = MainMenuDisplay(self.choose_song)
@@ -46,7 +47,8 @@ class MainWidget(BaseWidget):
 
     def load_main_menu(self):
         print('main menu')
-        self.EndMenu.cleanup()
+        if self.EndMenu:
+            self.EndMenu.cleanup()
         self.playing = False
         self.started = False
         self.mainmenustarted = True
@@ -77,6 +79,21 @@ class MainWidget(BaseWidget):
     def quit(self):
         print('quit')
         raise Exception('App was quit')
+
+    def restart(self):
+        self.canvas.clear()
+        self.controller = None
+        self.playing = False
+        self.started = False
+        self.mainmenustarted = True
+        self.section2_started = False
+        self.endmenustarted = False
+        self.streak = False
+        self.anim = AnimGroup()
+        # self.choose_song(song, (12,23))
+
+        self.MainMenu = MainMenuDisplay(self.choose_song)
+        self.canvas.add(self.MainMenu)
 
 
 
@@ -148,7 +165,7 @@ class MainWidget(BaseWidget):
 
     def init_section_2(self):
         self.time = 0
-        self.pause_menu = TextLabel("Press P to play/pause!", pos=(Window.width/2, Window.height/2), align='center', font=25)
+        self.pause_menu = TextLabel("Press P to play/pause!\n\nPress R to restart the song!\n\nPress BACKSPACE to return to MAIN MENU", pos=(Window.width/2, Window.height/2), align='center', font=25)
         self.canvas.add(self.pause_menu)
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
         self.player = Player(self.data, self.display, self.controller, self.color_mapping, self.detector, self)
@@ -241,6 +258,8 @@ class MainWidget(BaseWidget):
                 self.display.reset()
                 self.playing = False
                 self.started = False
+        if keycode[1] == 'backspace' and not self.playing and not self.counting:
+            self.restart()
 
         if keycode[1] == 'm':
             self.controller.set_mute(True)
