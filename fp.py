@@ -3,6 +3,8 @@
 from common.core import *
 from common.gfxutil import *
 from common.synth import *
+from common.wavegen import *
+from common.wavesrc import *
 
 from Audio import AudioController
 from Display import *
@@ -18,7 +20,7 @@ import sys
 from kivy.uix.label import CoreLabel
 from ChordDetector import ChordDetector
 from TextLabel import *
-from MainMenu import MainMenuDisplay
+from MainMenu import *
 
 vel = Window.height
 nowbar_height = 100
@@ -28,10 +30,12 @@ count_anim = ((0, 40), (.98, 100), (.99, 0))
 class MainWidget(BaseWidget):
     def __init__(self):
         super(MainWidget, self).__init__()
+        self.controller = None
         self.playing = False
         self.started = False
         self.mainmenustarted = True
         self.section2_started = False
+        self.endmenustarted = False
         self.streak = False
         self.anim = AnimGroup()
         # self.choose_song(song, (12,23))
@@ -40,10 +44,52 @@ class MainWidget(BaseWidget):
         self.canvas.add(self.MainMenu)
        
 
-    def choose_song(self, song, start_end):
-        self.data = SongData("annotations/" + song + "AnnotationFull.txt")
+    def load_main_menu(self):
+        print('main menu')
+        self.EndMenu.cleanup()
+        self.playing = False
+        self.started = False
+        self.mainmenustarted = True
+        self.section2_started = False
+        self.endmenustarted = False
+        
 
-        self.controller = AudioController("music/" + song)
+        self.MainMenu = MainMenuDisplay(self.choose_song)
+        self.canvas.add(self.MainMenu)
+
+    def replay_song(self):
+        print('replay song')
+        self.canvas.remove(self.EndMenu)
+        self.mainmenustarted = False
+        self.endmenustarted = False
+        self.init_section_2()
+        self.canvas.add(self.display)
+        self.controller.reset()
+        self.player.reset()
+        self.display.reset()
+        self.playing = False
+        self.started = False
+        self.time = 0
+        self.section2_started = True
+        self.controller.set_start(0)
+        self.controller.set_stop(999999)
+
+    def quit(self):
+        print('quit')
+        raise Exception('App was quit')
+
+
+
+
+    def choose_song(self, song, start_end, key):
+        self.data = SongData("annotations/" + song + "AnnotationFull.txt")
+        if self.controller is None:
+            self.controller = AudioController("music/" + song)
+        else:
+            self.controller.song = song
+            self.controller.mixer.remove(self.controller.bg)
+            self.controller.bg = WaveGenerator(WaveFile("music/" + song + ".wav"),False)
+            self.controller.mixer.add(self.controller.bg)
 
         self.color_mapping = {}
         self.chords = self.data.get_chords()
@@ -58,11 +104,12 @@ class MainWidget(BaseWidget):
         self.start_section = start_end[0]
         self.end_section = start_end[1]
         print(self.start_section, self.end_section)
+        self.key = key
         #BrownEyedGirl 12 and 23
         #Riptide 92 108
 
     def draw_section_1(self):
-        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section)
+        self.chordDisplay = ChordMatchDisplay(self.color_mapping,self.data, self.controller, self.start_section, self.end_section, self.key)
         self.chordPlayer = ChordPlayer(self.chordDisplay, self.controller, self.detector, self.data, self.color_mapping)
 
         self.canvas.add(self.chordDisplay)
@@ -85,8 +132,8 @@ class MainWidget(BaseWidget):
             # self.player.add_chord(chord)
             self.detector.add_chord(chord)
         try:
-
-            self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
+            pass
+            #self.midi = MIDIInput(self.detector.on_strum, self.chordDisplay.on_update_diagram, self.controller.play_synth_note, self.controller.note_off)
 
         except:
             print("No MIDI inputs found! Please plug in MIDI device!")
@@ -100,6 +147,7 @@ class MainWidget(BaseWidget):
         label.texture = text_label.texture
 
     def init_section_2(self):
+        self.time = 0
         self.pause_menu = TextLabel("Press P to play/pause!", pos=(Window.width/2, Window.height/2), align='center', font=25)
         self.canvas.add(self.pause_menu)
         self.display = BeatMatchDisplay(self.data, self.color_mapping)
@@ -109,11 +157,17 @@ class MainWidget(BaseWidget):
         self.controller.synth = None
 
     def on_touch_down(self, touch):
+        print(touch)
         if self.mainmenustarted:
             self.MainMenu.on_touch_down(touch)
+        
         elif not self.section2_started:
             if touch:
                 self.chordDisplay.on_touch_down(touch)
+
+        if self.endmenustarted:
+            print('end', touch)
+            self.EndMenu.on_touch_down(touch)
 
     def on_key_down(self, keycode, modifiers):
         if self.section2_started:
@@ -191,6 +245,11 @@ class MainWidget(BaseWidget):
         if keycode[1] == 'm':
             self.controller.set_mute(True)
 
+        if keycode[1] == "enter" and self.endmenustarted:
+            self.endmenustarted = False
+            self.EndMenu.cleanup()
+            self.canvas.remove(self.EndMenu)
+
 
         print(keycode[1])
 
@@ -227,7 +286,7 @@ class MainWidget(BaseWidget):
             self.ps2.stop()
 
     def on_update(self) :
-        if self.mainmenustarted:
+        if self.mainmenustarted or self.endmenustarted:
             return
         if self.section2_started:
             self.update_section2()
@@ -238,7 +297,17 @@ class MainWidget(BaseWidget):
         frame = self.controller.on_update()
 
         self.time = frame / 44100
-        self.display.on_update(self.time)
+        continue_flag = self.display.on_update(self.time)
+        # song is over, display end menu
+        if not continue_flag and self.started:
+            print('end menu')
+            self.canvas.clear()
+            self.EndMenu = EndMenuDisplay(self.load_main_menu, self.replay_song, self.quit)
+            self.playing = False
+            self.started = False
+            self.endmenustarted = True
+            self.canvas.add(self.EndMenu)
+            return
         self.player.on_update(self.time)
         if self.counting:
             self.count_time += kivyClock.frametime
@@ -259,7 +328,7 @@ class MainWidget(BaseWidget):
                 self.playing = not self.playing
 
 
-        self.midi.on_update()
+        #self.midi.on_update()
         self.anim.on_update()
 
     def updatemenu(self):
@@ -268,7 +337,7 @@ class MainWidget(BaseWidget):
     def update_section1(self):
         # section 1 of the game updates
         frame = self.controller.on_update()
-        self.midi.on_update()
+        #self.midi.on_update()
 
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:

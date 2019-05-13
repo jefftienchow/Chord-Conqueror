@@ -85,7 +85,7 @@ class Player(object):
                     self.streak += 1
                     self.hits += 1
                     self.max_streak = max(self.streak, self.max_streak)
-                    if self.streak >= 1:
+                    if self.streak >= 3:
                         self.score += 100
                         # new streak handling
                         #self.display.add(TextLabel(text='STREAK: %d' % self.get_streak(), pos=(400, 500)))

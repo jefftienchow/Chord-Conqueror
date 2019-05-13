@@ -47,9 +47,10 @@ class AudioController(object):
 
     # play a sound-fx (miss sound)
     def play_sfx(self):
-        gen = WaveGenerator(WaveFile("music/Miss_sound.wav"))
-        self.mixer.add(gen)
-        gen.play_toggle()
+        pass
+        # gen = WaveGenerator(WaveFile("music/Miss_sound.wav"))
+        # self.mixer.add(gen)
+        # gen.play_toggle()
 
 
 

@@ -23,8 +23,9 @@ color_mapping = {1:(1,0,0), 2:(1,1,0), 3: (0,1,0), 4: (0,1,1), 5:(0,0,1)}
 
 #Expects inpput chords in the following format [(ROOT, quality, seventhBOOL, chordName]
 class ChordMatchDisplay(InstructionGroup) :
-    def __init__(self,color_mapping,data,controller, start, end):
+    def __init__(self,color_mapping,data,controller, start, end, key):
         super(ChordMatchDisplay, self).__init__()
+        self.key = key
         self.diags = []
         self.label = None
 
@@ -53,7 +54,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.add(self.color)
         self.instrucions1 = TextLabel("Each colored section in the bar above represents a different chord.  Press P to play/pause the song!", pos=(50, 475), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
-        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor.", pos=(50, 450), font=15, color=Color(1,1,1))
+        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor. This song is in %s" % self.key, pos=(50, 450), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
 
         self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,1,1))
@@ -77,7 +78,9 @@ class ChordMatchDisplay(InstructionGroup) :
 
 
     def show_options(self, chord, color):
-
+        if self.move_on:
+            self.remove(self.move_on)
+            self.move_on = None
         self.options.add(chord)
         # print(self.allchords)
         # print("ALL CHORDS")

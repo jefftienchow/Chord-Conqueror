@@ -49,7 +49,7 @@ class MIDIInput(object):
                         #separate message into Note and velocity
                         # print(message)
                         string = message[0]
-                        note_on = message[2] > 80
+                        note_on = message[2] > 65
                         midiNote = message[1]
                         velocity = message[2]
 
