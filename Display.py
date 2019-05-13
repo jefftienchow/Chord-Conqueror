@@ -93,11 +93,14 @@ class BeatMatchDisplay(InstructionGroup):
     def on_update(self, time):
         dt = time - self.time
         self.time = time
-
+        continue_flag = True
         for object in self.gems + self.bars + self.diagrams:
             #object.on_update(time)
             if not object.removed:
-                object.on_update(time)
+                flag = object.on_update(time)
+                if isinstance(flag, bool):
+                    continue_flag = flag
+
             if object.on_screen and not object.added:
                 self.add(object)
                 self.objects.add(object)
@@ -115,6 +118,7 @@ class BeatMatchDisplay(InstructionGroup):
 
 
         self.button.on_update(dt)
+        return continue_flag
 
     def toggle(self):
         self.paused = not self.paused
@@ -185,12 +189,16 @@ class ChordDisplay(InstructionGroup):
 
         if self.time < self.time_loc:
             self.ypos = nowbar_height + (self.time_loc - time) * vel
+        # catches end of song, returns flag to initialize end menu
+        elif self.next_time is None:
+            return False
         elif self.time > self.time_loc and self.time < self.next_time:
             self.ypos = nowbar_height
         else:
             self.ypos = nowbar_height + (self.next_time - time) * vel
         
         self.box.set_pos((550, self.ypos))
+        return True
 
     def darken(self):
         self.box.darken()
