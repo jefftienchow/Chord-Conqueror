@@ -54,7 +54,7 @@ class ChordMatchDisplay(InstructionGroup) :
         self.add(self.color)
         self.instrucions1 = TextLabel("Each colored section in the bar above represents a different chord.  Press P to play/pause the song!", pos=(50, 475), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
-        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor. This song is in %s" % self.key, pos=(50, 450), font=15, color=Color(1,1,1))
+        self.instrucions1 = TextLabel("Click anywhere on the bar to set the cursor. This song is in %s." % self.key, pos=(50, 450), font=15, color=Color(1,1,1))
         self.add(self.instrucions1)
 
         self.move_on = TextLabel("When you are ready, press the space bar to guess the chords in the song!", pos=(50,400), font=15, color=Color(1,1,1))
@@ -88,23 +88,7 @@ class ChordMatchDisplay(InstructionGroup) :
         while len(self.options)< 3:
             self.options.add(random.choice(self.allchords))
 
-
-
-
-        # for i in range(2):
-        #     choice = random.choice(self.allchords)
-        #     print(choice)
-        #     while choice not in self.options and choice != chord:
-        #         choice = random.choice(self.allchords)
-        #         print(choice)
-        #     print("DIFFERENT FROM: " + chord )
-        #     print(choice)
-        #     self.options.append(choice)
-        # random.shuffle(self.options)
-        # print(self.options)
-
-        #drawign section
-        x = 50
+        x = 70
         y = Window.height/2
 
         if self.label is None:
@@ -113,7 +97,12 @@ class ChordMatchDisplay(InstructionGroup) :
         else:
             self.label.update_text("Which chord is the %s chord?  Strum the correct chord to move on." % color, to_rgb[color])
         self.diags = []
+        # self.diag_labels = []
         for option in self.options:
+            # label = TextLabel(option, pos=(x,y - 50), font= 20)
+            # self.add(self.label)
+            # self.diag_labels.append(label)
+
             diag = ChordDiagram(self.diagramHeight, (x,y), chord = option, color = self.color_mapping[chord])
             x +=self.diagramWidth + self.diagramWidth/2
             self.add(diag)

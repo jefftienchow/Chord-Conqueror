@@ -7,6 +7,8 @@ from common.gfxutil import *
 from kivy.graphics.instructions import InstructionGroup
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics import PushMatrix, PopMatrix, Translate, Scale, Rotate
+from TextLabel import TextLabel
+
 
 # class MainWidget(BaseWidget) :
 #     def __init__(self, hi):
@@ -166,6 +168,10 @@ class ChordDiagram(InstructionGroup):
 							 width=self.size/100, joint='miter', close=True)
 		border.add(line)
 		self.add(border)
+
+		font_size = 25 - 3*len(chord)
+		self.label = TextLabel(chord, pos=(self.x-40, self.y + self.size/3), font=font_size, color= border_color)
+		self.add(self.label)
 
 		self.fingers = []
 
