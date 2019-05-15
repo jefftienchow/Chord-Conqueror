@@ -4,7 +4,7 @@
   <sourcePositionVariance x="0.00" y="0.00"/>
   <speed value="100.00"/>
   <speedVariance value="30.00"/>
-  <particleLifeSpan value="4.28"/>
+  <particleLifeSpan value="2.28"/>
   <particleLifespanVariance value="1.9000"/>
   <angle value="270.00"/>
   <angleVariance value="211.43"/>
@@ -13,11 +13,11 @@
   <tangentialAcceleration value="0.00"/>
   <radialAccelVariance value="0.00"/>
   <tangentialAccelVariance value="0.00"/>
-  <startColor red="0.43" green="0.31" blue="0.00" alpha="0.62"/>
+  <startColor red="0.43" green="0.31" blue="0.00" alpha="0.82"/>
   <startColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
   <finishColor red="0.26" green="0.31" blue="1" alpha="0.00"/>
   <finishColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
-  <maxParticles value="500"/>
+  <maxParticles value="50"/>
   <startParticleSize value="70.00"/>
   <startParticleSizeVariance value="49.53"/>
   <finishParticleSize value="10.00"/>

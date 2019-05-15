@@ -95,7 +95,8 @@ class ChordPlayer(object):
                 # self.current_chord_idx%=len(self.chord_order)
                 self.new_section()
             else:
-                print('Incorrect', chord, self.chord_order[self.current_chord_idx - 1][0])
+                print('Incorrect', chord)
+                print('Expected', self.chord_order[self.current_chord_idx-1][0])
                 self.display.wrong()
 
     # called by MainWidget

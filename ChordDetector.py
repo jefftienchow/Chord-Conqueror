@@ -21,6 +21,7 @@ class ChordDetector(object):
         self.cur_notes.add(note)
         self.cur_strings.append(string)
         self.chord_played = False
+        print('new chord is being made with start note: ', note)
 
     def on_strum(self, note):
         string = note[0]
@@ -43,7 +44,6 @@ class ChordDetector(object):
                         self.chord_detected = chord
                         self.chord_played = True
                         self.callback(chord)
-
 
     def add_chord(self, chord):
         if chord[-1] == "7":
@@ -85,13 +85,16 @@ class ChordDetector(object):
                 if not match:
                     chord_matched = False
             if chord_matched:
+                print('chord detected: ', chord)
                 return chord
         return None
 
     def on_update(self, dt):
         if self.strumming:
+            self.strum_time += dt
             if self.strum_time > .2:
                 self.strumming = False
                 self.strum_time = 0
                 self.cur_strings.clear()
                 self.cur_notes.clear()
+                print('chord cleared')

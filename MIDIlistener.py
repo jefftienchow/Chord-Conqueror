@@ -49,7 +49,7 @@ class MIDIInput(object):
                         #separate message into Note and velocity
                         # print(message)
                         string = message[0]
-                        note_on = message[2] > 65
+                        note_on = message[2] > 80
                         midiNote = message[1]
                         velocity = message[2]
 
@@ -61,17 +61,14 @@ class MIDIInput(object):
                             self.last_note = midiNote
                             self.last_string = string
                             self.callback((str(self.last_string),str(self.last_note)))
+                            print("string is: ",(str(self.last_string)))
+                            print("note is :",str(self.last_note))
                             self.callback3(midiNote)
                         #note not being played, so don't add/remove from active notes
                         else:
                             if midiNote in self.current_notes:
                                 self.current_notes.remove(midiNote)
-
                     else:
-
-
-
-
                         if (len(message) == 8 and message[4] == 1):
                             string = message[5]
                             midiNote = message[6]
@@ -79,9 +76,8 @@ class MIDIInput(object):
                             # print(midiNote - STRING_TO_MIDINOTE[string])
                             self.callback2(string-1, midiNote - STRING_TO_MIDINOTE[string])
                             self.callback4(self.last_note_fret[string-1])
-                            print(self.last_note_fret[string-1], midiNote)
+                            #print(self.last_note_fret[string-1], midiNote)
                             self.last_note_fret[string-1] = midiNote
-                            print("HERE")
                             # self.callback2(str(string) + " has finger on fret #:" + str(int(midiNote)-STRING_TO_MIDINOTE[string]))
                     msg = self.midiin.get_message()
                     

@@ -244,6 +244,8 @@ class GemDisplay(InstructionGroup):
     # change to display this gem being hit
     def on_hit(self):
         self.color.a = 0
+        self.a = 0
+        print('color being set to 0')
 
         # creates the hit effect where notes animations are added
         for i in range(9):

@@ -64,7 +64,6 @@ class AudioController(object):
         return self.bg.get_frame()
 
     def play_synth_note(self,note):
-        print("SCREAM ")
         if self.synth:
             self.synth.noteon(2, note + self.shift[self.song], 100)
         pass

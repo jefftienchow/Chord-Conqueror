@@ -44,6 +44,7 @@ class MainWidget(BaseWidget):
         self.MainMenu = MainMenuDisplay(self.choose_song)
         self.canvas.add(self.MainMenu)
         self.learning_started = False
+        self.song_selected = False
        
 
     def load_main_menu(self):
@@ -95,6 +96,8 @@ class MainWidget(BaseWidget):
         self.learning_started = False
         self.midi.midiin.close_port()
         # self.choose_song(song, (12,23))
+
+        self.song_selected = False
 
         self.MainMenu = MainMenuDisplay(self.choose_song)
         self.canvas.add(self.MainMenu)
@@ -179,7 +182,8 @@ class MainWidget(BaseWidget):
     def on_touch_down(self, touch):
         print(touch)
         if self.mainmenustarted:
-            self.MainMenu.on_touch_down(touch)
+            if self.MainMenu.on_touch_down(touch):
+                self.song_selected = True
         
         elif not self.section2_started:
             if touch:
@@ -196,7 +200,7 @@ class MainWidget(BaseWidget):
             self.handle_down_section1(keycode, modifiers)
 
     def handle_down_section1(self, keycode, modifiers):
-        if keycode[1] == "enter" and self.mainmenustarted:
+        if keycode[1] == "enter" and self.mainmenustarted and self.song_selected:
             self.mainmenustarted = False
             self.MainMenu.cleanup()
             self.canvas.remove(self.MainMenu)
@@ -272,9 +276,6 @@ class MainWidget(BaseWidget):
             self.endmenustarted = False
             self.EndMenu.cleanup()
             self.canvas.remove(self.EndMenu)
-
-
-        print(keycode[1])
 
     def count_down(self):
         self.add(self.counter)
@@ -361,7 +362,7 @@ class MainWidget(BaseWidget):
         # section 1 of the game updates
         frame = self.controller.on_update()
         self.midi.on_update()
-        print (self.midi.last_note)
+        #print (self.midi.last_note)
         # self.label.text = '\n LEARNED CHORDS: ' + str(self.chordDisplay.chords)
         # if len(self.chordDisplay.chords) == 5:
         #     self.label.text += '\nDONE! Press 1 to continue to Chord Conqueror'
